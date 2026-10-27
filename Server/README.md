@@ -135,21 +135,6 @@ Server/
 └── .gitignore
 ```
 
-## 🚫 Excluded from this repository
-
-The following paths are intentionally kept out of the GitHub source snapshot:
-
-```text
-graphify-out/
-lib/
-sql/
-tools/teleport/
-tools/gdr/
-tools/discordbot/
-tools/dklunox_home/
-tools/dklunoxdiscordAI/
-```
-
 The `lib/` directory contains generated static libraries that the Makefiles can rebuild. SQL scripts and the excluded tools are not part of this source snapshot; obtain any database migrations or operational tools you need through the project's authorized distribution.
 
 ## 📜 Third-party notices
