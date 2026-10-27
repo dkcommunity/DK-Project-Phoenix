@@ -1,0 +1,27 @@
+//////////////////////////////////////////////////////////////////////
+//
+// Filename    : GCShowGuildInfoHandler.cpp
+// Written By  : 
+//
+//////////////////////////////////////////////////////////////////////
+
+// include files
+#include "Client_PCH.h"
+#include "GCShowGuildInfo.h"
+#include "ClientDef.h"
+#include "UIFunction.h"
+//////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////
+void GCShowGuildInfoHandler::execute ( GCShowGuildInfo * pPacket , Player * pPlayer )
+	 
+{
+	__BEGIN_TRY
+	
+#ifdef __GAME_CLIENT__
+	//std::cout << pPacket->toString() << std::endl;
+	UI_ShowGuildInfo(pPacket);
+#endif
+
+	__END_CATCH
+}

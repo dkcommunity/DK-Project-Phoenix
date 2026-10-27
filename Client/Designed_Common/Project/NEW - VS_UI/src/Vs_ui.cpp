@@ -1,0 +1,6639 @@
+// VS_UI.cpp
+
+#include "client_PCH.h"
+#include "VS_UI.h"
+#include "crash_trace_tool.h"
+// 2026-05-18 ImGui Hibrit Admin Menu — Phoenix sprite cursor gate icin
+#include "Debug/PhoenixImGui.h"
+#include "Debug/PhoenixAuctionHouseHUD.h"
+#include "VS_UI_Mouse_pointer.h"
+#include "VS_UI_Message.h"
+#include "VS_UI_Description.h"
+#include "VS_UI_Filepath.h"
+#include "KeyAccelerator.h"
+#include "UserOption.h"
+#include "AcceleratorManager.h"
+#include "MParty.h"
+#include "CImm.h"
+#include "MZoneTable.h"
+#include "debuginfo.h"
+#include "MEventManager.h"
+#include "MGameStringTable.H"
+#include "SkinManager.h"
+#include "assert.h"
+#include "MHelpDef.h"
+#include "VS_UI_GPS.H"
+// 2026-09-02: Reborn Option portu
+#include "VS_UI_OptionRenewal.h"
+CImm *gpC_Imm = NULL;
+
+void PhoenixSetAuctionHouseItemDescriptor(int x, int y, MItem* pItem)
+{
+	if(pItem == NULL)
+		return;
+
+	g_descriptor_manager.Set(DID_ITEM, x, y, (void*)pItem, 0, 0, true, 9000);
+}
+
+#if __CONTENTS(__GPS_ADD)
+extern C_VS_UI_GPS						*gpC_Gps;
+#endif //__GPS_ADD
+
+#if __CONTENTS(__BLITZ_COUPON_EVENT)
+#include "UIDialog.h"
+#endif //__BLITZ_COUPON_EVENT
+#if __CONTENTS(__PET_MIXINGFORGE)
+#include "VS_UI_PetMixingForge.h"
+#endif //__PET_MIXINGFORGE
+
+//----------------------------------------------------------------------------
+// Local defines
+//----------------------------------------------------------------------------
+#define INTERFACE_BLINK_MILLISEC		150
+#define PREV_KEYSTATE					0x40000000
+
+C_VS_UI_DIALOG * gpC_dialog_confirm_item_bay_messagebox = NULL;
+
+//----------------------------------------------------------------------------
+// Function prototype
+//----------------------------------------------------------------------------
+void _AcquireMouseFocusHandler();
+void _UnacquireMouseFocusHandler();
+void _AcquireDisappearHandler();
+void _Timer_InterfaceBlink();
+
+#ifndef _LIB
+void ShowItem_MouseControl(UINT message, int _x, int _y);
+void ShowItem_KeyboardControl(UINT message, UINT key, long extra);
+void ShowItem();
+
+int g_ui_item_max = 0;
+// for sound..
+void InitSound();
+void UnInitSound();
+#endif
+
+extern HWND	g_hWnd;
+
+//----------------------------------------------------------------------------
+// Globals data
+//----------------------------------------------------------------------------
+C_VS_UI	gC_vs_ui;
+
+bool gbl_global_empty_move = false;
+
+void ExecF_MouseItemToZone(C_VS_UI_DIALOG * p_this_dialog, id_t id);
+
+//
+// g_interface_blink_tid
+//
+// Title/Game���� ���������� ����ϴ� blink timer.
+//
+timer_id_t	g_interface_blink_tid = INVALID_TID;
+bool gbl_ask_go_biling_page_running;
+
+
+UINT			g_blink_value = 0;
+
+#ifndef _LIB
+bool	gbl_game_mode;
+#endif
+
+//----------------------------------------------------------------------------
+// Operations
+//----------------------------------------------------------------------------
+void _Timer_InterfaceBlink()
+{
+	if (g_blink_value == INTERFACE_BLINK_VALUE_MAX-1)
+		g_blink_value = 0;
+
+	g_blink_value++;
+}
+
+void _AcquireMouseFocusHandler()
+{
+	UNSET_BACKGROUND_MOUSE_FOCUS
+}
+
+void _UnacquireMouseFocusHandler()
+{
+	SET_BACKGROUND_MOUSE_FOCUS;
+	g_descriptor_manager.Unset();
+}
+
+void _AcquireDisappearHandler()
+{
+	SET_BACKGROUND_MOUSE_FOCUS;
+}
+
+void	ExecF_GoBilingPage(C_VS_UI_DIALOG *p_this_dialog, id_t id)
+{
+	switch(id)
+	{
+	case DIALOG_EXECID_OK :
+		gpC_base->SendMessage(UI_GO_BILING_PAGE, TRUE);
+		gbl_ask_go_biling_page_running= false;
+		break;
+	case DIALOG_EXECID_EXIT :
+	case DIALOG_EXECID_CANCEL :
+		gpC_base->SendMessage(UI_GO_BILING_PAGE, FALSE);
+		gbl_ask_go_biling_page_running= false;
+		break;
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+// DI�� ������� ���� ���, ctrl+space bar�� ���� message�� �߻����� �ʱ� ������,
+// (�� �׷��� ���� ��) �ܺο��� DI�� message�� �޴´�.
+//
+/////////////////////////////////////////////////////////////////////////////////
+
+void C_VS_UI::HotKey_Mark()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Mark();
+}
+
+//void C_VS_UI::HotKey_WindowToggle()
+//{
+//	if (m_pC_game)
+//		m_pC_game->HotKey_WindowToggle();
+//}
+
+void C_VS_UI::HotKey_Inventory(bool IsCheckSubInventory)	
+{
+	if (m_pC_game)
+	{
+		m_pC_game->HotKey_Inventory(IsCheckSubInventory);
+	}
+}
+
+void C_VS_UI::HotKey_Gear()		
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Gear();
+}
+
+#if __CONTENTS(__GEAR_SWAP_CHANGE)		// C_VS_UI::HotKey_GearChange()
+	void C_VS_UI::HotKey_GearChange()		
+	{
+		if (m_pC_game)
+			m_pC_game->HotKey_GearChange();
+	}
+
+	void C_VS_UI::HotKey_GearChangeShow()		
+	{
+		if (m_pC_game)
+			m_pC_game->HotKey_GearChangeShow();
+	}
+#endif	//__GEAR_SWAP_CHANGE
+
+void C_VS_UI::HotKey_QuickItemSlot()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_QuickItemSlot();
+}
+
+void C_VS_UI::HotKey_Party()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Party();
+}
+
+void C_VS_UI::HotKey_CharInfo()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_CharInfo();
+}
+
+void C_VS_UI::HotKey_Grade1Info()
+{
+	CT_HOTKEY("C_VS_UI::HotKey_Grade1Info entry m_pC_game=%p", (void*)m_pC_game);
+	CT_HOTKEY("C_VS_UI::HotKey_Grade1Info silent return before C_VS_UI_GAME dispatch");
+	return;
+	if (m_pC_game)
+		m_pC_game->HotKey_Grade1Info();
+}
+
+void C_VS_UI::HotKey_Grade2Info()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Grade2Info();
+}
+
+void C_VS_UI::HotKey_Grade3Info()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Grade3Info();
+}
+
+void C_VS_UI::HotKey_Help()
+{
+	if(m_pC_game && !gC_ci->GetCompositionMode())
+		m_pC_game->HotKey_Help();
+}
+
+void C_VS_UI::HotKey_SkillInfo()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_SkillInfo();
+}
+
+void C_VS_UI::HotKey_WorldMap()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_WorldMap();
+}
+
+void C_VS_UI::HotKey_Minimap()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Minimap();
+}
+
+void C_VS_UI::HotKey_Skill()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Skill();
+}
+void C_VS_UI::CloseSkillChooseWindow()
+{
+	if(m_pC_game)
+		m_pC_game->CloseSkillChooseWindow();
+}
+void C_VS_UI::HotKey_Chat_Up()			// ctrl + PgUp
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Chat_Up();
+}
+
+void C_VS_UI::HotKey_Chat_Dn()			// ctrl + PgDn
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Chat_Dn();
+}
+
+void C_VS_UI::HotKey_Tribe_Prior()			// alt + PgUp
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Tribe_Prior();
+}
+
+void C_VS_UI::HotKey_Tribe_Next()			// alt + PgDn
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Tribe_Next();
+}
+
+void C_VS_UI::HotKey_Guild_Info()			// ctrl	+ v
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Guild_Info();
+}
+
+void C_VS_UI::HotKey_Guild_Member_List()		// ctrl	+ l
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Guild_Member_List();
+}
+
+void C_VS_UI::HotKey_Coer_Attack()			// ctrl	+ o
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Coer_Attack();
+}
+
+
+// by svi
+#if __CONTENTS(__AUTO_ATTACT)	//__AUTO_ATTACT
+void C_VS_UI::HotKey_Auto_Attack()			// ctrl	+ j
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Auto_Attack();
+}
+#endif  //__AUTO_ATTACT
+// end
+
+void C_VS_UI::HotKey_Sysrq()				// sysrq
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Sysrq();
+}
+
+void C_VS_UI::HotKey_Slash()				// ctrl + /
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Slash();
+}
+
+void C_VS_UI::HotKey_Background_Music()		//ä�� ���ɾ� /�����
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Background_Music();
+}
+
+void C_VS_UI::HotKey_Effect_Music()			//ä�� ���ɾ� /ȿ����
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Effect_Music();
+}
+
+void C_VS_UI::HotKey_Where()				//ä�� ���ɾ� /���
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Where();
+}
+
+void C_VS_UI::HotKey_Chat_Help()			//ä�� ���ɾ� /ä�õ���
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Chat_Help();
+}
+
+void C_VS_UI::HotKey_ZoneChat()		// ctrl + z
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_ZoneChat();
+}
+void C_VS_UI::HotKey_GuildChat()		// ctrl + g
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_GuildChat();
+}
+void C_VS_UI::HotKey_UnionChat()		// ctrl + d
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_UnionChat();
+}
+void C_VS_UI::HotKey_Whisper()		// ctrl + w
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Whisper();
+}
+void C_VS_UI::HotKey_ExtendChat()		// ctrl + e
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_ExtendChat();
+}
+
+void C_VS_UI::HotKey_ESC()			
+{
+	if (m_pC_game && !gC_ci->GetCompositionMode())
+		m_pC_game->HotKey_ESC();
+}
+
+void C_VS_UI::HotKey_F1()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F1();
+}
+
+void C_VS_UI::HotKey_F2()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F2();
+}
+
+void C_VS_UI::HotKey_F3()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F3();
+}
+
+void C_VS_UI::HotKey_F4()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F4();
+}
+
+void C_VS_UI::HotKey_F5()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F5();
+}
+
+void C_VS_UI::HotKey_F6()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F6();
+}
+
+void C_VS_UI::HotKey_F7()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F7();
+}
+
+void C_VS_UI::HotKey_F8()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F8();
+}
+
+void C_VS_UI::HotKey_F9()				
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F9();
+}
+
+void C_VS_UI::HotKey_F10()			
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F10();
+}
+
+void C_VS_UI::HotKey_F11()			
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F11();
+}
+
+void C_VS_UI::HotKey_F12()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_F12();
+}
+
+void C_VS_UI::Hotkey_Function(int FKey)
+{
+	if (m_pC_game)
+		m_pC_game->Hotkey_Function(FKey);
+}
+
+void C_VS_UI::HotKey_PartyChat()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_PartyChat();
+}
+
+void C_VS_UI:: HotKey_NormalChat()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_NormalChat();
+}
+
+void C_VS_UI::HotKey_Quest()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_Quest();
+}
+
+void C_VS_UI::HotKey_MailBox()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_MailBox();
+}
+
+void C_VS_UI::HotKey_PetInfo()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_PetInfo();
+}
+
+void C_VS_UI::HotKey_SummonPet()
+{
+	if (m_pC_game)
+		m_pC_game->HotKey_SummonPet();
+}
+
+//-----------------------------------------------------------------------------
+// PickUpItem
+//
+// Client -> UI
+// Item�� ������.
+//-----------------------------------------------------------------------------
+void C_VS_UI::PickUpItem(MItem * p_item, int item_x, int item_y)
+{
+	gpC_mouse_pointer->PickUpItem(p_item, item_x, item_y);
+}
+
+//-----------------------------------------------------------------------------
+// DropItem
+//
+// Item�� ���������� ����߷ȴ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::DropItem()
+{
+	gpC_mouse_pointer->DropItem();
+}
+
+//-----------------------------------------------------------------------------
+// Lock/Unlock Item
+//
+// Lock�Ǹ� Item ����/����/�ٲٱⰡ �Ұ���������. Unlock�� �װ��� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::LockItem()
+{
+	if (m_pC_game)
+		m_pC_game->LockItem();
+}
+
+void C_VS_UI::UnlockItem()
+{
+	if (m_pC_game)
+		m_pC_game->UnlockItem();
+}
+
+//-----------------------------------------------------------------------------
+// Lock/Unlock item trade
+//
+// Item sell/buy interface�� ����ǰ��־ lock�Ǹ� ���������� '����'�� �Ұ���
+// ������.
+//-----------------------------------------------------------------------------
+void	C_VS_UI::LockItemTrade()
+{
+	if (m_pC_game)
+		m_pC_game->LockItemTrade();
+}
+
+void	C_VS_UI::UnlockItemTrade()
+{
+	if (m_pC_game)
+		m_pC_game->UnlockItemTrade();
+}
+
+//-----------------------------------------------------------------------------
+// Lock/Unlock gear item
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::LockGear()
+{
+	if (m_pC_game)
+		m_pC_game->LockGear();
+}
+
+void C_VS_UI::UnlockGear()
+{
+	if (m_pC_game)
+		m_pC_game->UnlockGear();
+}
+
+/*-----------------------------------------------------------------------------
+- AddChatToHistory
+- Chat history�� str�� �߰��Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_VS_UI::AddChatToHistory(char * str, char * sz_id, CHAT_LINE_CONDITION condition, DWORD color)
+{
+	if (m_pC_game)
+		m_pC_game->AddChatToHistory(str, sz_id, condition, color);
+}
+
+
+/*-----------------------------------------------------------------------------
+- ChangeToSlayerInterface
+- Slayer interface�� �ٲ۴�.
+
+  ���� Interface�� free�Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_VS_UI::ChangeToSlayerInterface()
+{
+	if (m_pC_game)
+	{
+		m_pC_game->ChangeToSlayerInterface();
+		CloseOption();
+		DeleteNew(m_pC_option);
+	}
+}
+
+/*-----------------------------------------------------------------------------
+- ChangeToVampireInterface
+- Vampire interface�� �ٲ۴�.
+-----------------------------------------------------------------------------*/
+void C_VS_UI::ChangeToVampireInterface()
+{
+	if (m_pC_game)
+	{
+		m_pC_game->ChangeToVampireInterface();	
+		CloseOption();
+		DeleteNew(m_pC_option);
+	}
+}
+
+//-----------------------------------------------------------------------------
+// DeleteCharacter
+//
+// slot�� �ִ� character�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::DeleteCharacter(int slot)
+{
+	if (m_pC_title)
+		m_pC_title->DeleteCharacter(slot);
+}
+
+//-----------------------------------------------------------------------------
+// NewCharacterCreateOk
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::NewCharacterCreateOk()
+{
+	if (m_pC_title)
+		m_pC_title->NewCharacterCreateOk();
+}
+
+//-----------------------------------------------------------------------------
+// StartCharacterManager
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::StartCharacterManager(bool back)
+{
+	if (m_pC_title)
+		m_pC_title->StartCharacterManager(back);
+}
+
+//-----------------------------------------------------------------------------
+// StartServerSelect
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::StartServerSelect(bool bGroup)
+{
+	if (m_pC_title)
+		m_pC_title->StartServerSelect(bGroup);
+}
+
+//-----------------------------------------------------------------------------
+// GetZoneID
+//
+//-----------------------------------------------------------------------------
+int C_VS_UI::GetZoneID()
+{
+	if (m_pC_game)
+		return m_pC_game->GetZoneID();
+	return 0;
+}
+
+
+//-----------------------------------------------------------------------------
+// SetZoneName
+//
+// ZoneName�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetZone(int zone_id)
+{
+	if (m_pC_game)
+		m_pC_game->SetZone(zone_id);
+}
+
+void C_VS_UI::SetBlock(int x, int y)
+{
+	if (m_pC_game)
+		m_pC_game->SetBlock(x,y);
+}
+
+//-----------------------------------------------------------------------------
+// SetTime
+//
+// Time�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetTime(const char * str)
+{
+	if (m_pC_game)
+		m_pC_game->SetTime(str);
+}
+
+//-----------------------------------------------------------------------------
+// SetDate
+//
+// Date�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetDate(const char * str)
+{
+	if (m_pC_game)
+		m_pC_game->SetDate(str);
+}
+
+//-----------------------------------------------------------------------------
+// SetXY
+//
+// ����ǥ�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetXY(int x, int y)
+{
+	if (m_pC_game)
+		m_pC_game->SetXY(x, y);
+}
+
+//-----------------------------------------------------------------------------
+// SetSize
+//
+// map size�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetSize(SIZE size)
+{
+	if (m_pC_game)
+		m_pC_game->SetSize(size);
+}
+
+//-----------------------------------------------------------------------------
+// SetSafetyZone
+//
+// �̴ϸ� �������븦 �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetSafetyZone(RECT rect, bool my_zone)
+{
+	if (m_pC_game)
+		m_pC_game->SetSafetyZone(rect, my_zone);
+}
+
+
+//-----------------------------------------------------------------------------
+// SetNPC
+//
+// �̴ϸ� NPC�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+//struct MINIMAP_NPC
+//{
+//	int x;
+//	int y;
+//	int id;
+//};
+void C_VS_UI::SetNPC(MINIMAP_NPC npc)
+{
+	if (m_pC_game)
+		m_pC_game->SetNPC(npc);
+}
+
+void C_VS_UI::ClearNPC()
+{
+	if(m_pC_game)
+		m_pC_game->ClearNPC();
+}
+
+//-----------------------------------------------------------------------------
+// SetNPC
+//
+// �̴ϸ� NPC�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetNPC(int x, int y, int id, const char* name)
+{
+	MINIMAP_NPC npc;// = {x, y, id};
+	npc.x=x;
+	npc.y=y;
+	npc.id=id;
+	npc.name = name;
+	
+	if (m_pC_game)
+		m_pC_game->SetNPC(npc);
+}
+
+//-----------------------------------------------------------------------------
+// SetPortal
+//
+// �̴ϸ� ��Ż�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetPortal(RECT rect, int id)
+{
+	if (m_pC_game)
+		m_pC_game->SetPortal(rect, id);
+}
+
+
+//-----------------------------------------------------------------------------
+// SetPortal
+//
+// �̴ϸ� ��Ż�� �����Ѵ�.
+//-----------------------------------------------------------------------------
+//void C_VS_UI::SetPortal(int x, int y)
+//{
+//	if (m_pC_game)
+//		m_pC_game->SetPortal(x, y);
+//}
+
+//-----------------------------------------------------------------------------
+// ClearAllCharacter
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::ClearAllCharacter()
+{
+	if (m_pC_title)
+		m_pC_title->ClearAllCharacter();
+}
+
+//-----------------------------------------------------------------------------
+// 
+//
+// 
+//-----------------------------------------------------------------------------
+bool C_VS_UI::MouseControl(UINT message, int x, int y)
+{
+#ifdef _LIB
+	if(g_pEventManager->GetEventByFlag(EVENTFLAG_DENY_INPUT_MOUSE))
+		return false;
+#endif
+	
+	gpC_mouse_pointer->Set(message, x, y);
+
+	if (message == M_MOVING)
+	{
+		g_descriptor_manager.Unset();
+	}
+#ifdef _LIB
+	if(m_pC_game != NULL && m_pC_game->IsRunningWebBrowser())
+	{
+		if(m_pC_game->IsInRectPointWebBrowser(x, y))
+			return false;
+	}
+#endif
+
+	bool ret = gpC_window_manager->MouseControl(message, x, y);
+	if(m_pC_game != NULL)m_pC_game->MouseControlExtra(message, x, y);
+
+#ifndef _LIB
+	if (gbl_game_mode && !ret)
+		ShowItem_MouseControl(message, x, y);
+#endif
+
+	//
+	// pick up�� Item�� ������, Item�� �ٴڿ� ����߸���. - Game �߿���..
+	//
+	if (ret == false && (message == M_LEFTBUTTON_DOWN || message == M_LB_DOUBLECLICK))
+	{
+		if (gpC_mouse_pointer->IsPickUpItem())
+		{
+
+
+
+#if __CONTENTS(__GAMEOPTION_ITEMBAY_MESSAGEBOX)
+			if(g_pUserOption->DoNotShowItemBayMessageBox)			//�������� ������ ���� �����ڳİ� �����.
+			{
+				DeleteNew( gpC_dialog_confirm_item_bay_messagebox );
+
+				Point	ptPos				= gC_vs_ui.GetInventoryPosition();
+				Point	ptWH				= gC_vs_ui.GetInventoryGetWidthAndHeight();
+
+				ptPos.x	= ptPos.x + 15;
+				ptPos.y	= ptPos.y + 70;
+
+				gpC_dialog_confirm_item_bay_messagebox = new C_VS_UI_DIALOG(ptPos.x, ptPos.y,2,0, ExecF_MouseItemToZone, DIALOG_OK|DIALOG_CANCEL);
+				char * pp_msg = (*g_pGameStringTable)[UI_STRING_MESSAGE_CONFIRM_ITEM_DROP].GetString();
+				gpC_dialog_confirm_item_bay_messagebox->SetMessage( &pp_msg, 1, SMO_NOFIT );
+				gpC_dialog_confirm_item_bay_messagebox->Start();		
+			}
+			else
+			{
+				gpC_base->SendMessage(UI_ITEM_DROP_TO_CLIENT, 0, 0, gpC_mouse_pointer->GetPickUpItem());
+			}
+#else
+			gpC_base->SendMessage(UI_ITEM_DROP_TO_CLIENT, 0, 0, gpC_mouse_pointer->GetPickUpItem());
+#endif	// __GAMEOPTION_ITEMBAY_MESSAGEBOX
+		
+
+
+
+
+
+#ifdef _LIB
+			//
+			// Client���� Item�� ����߸��鼭 �̵��ϴ� ���� ���� ���� UI �Է����� return �Ѵ�.
+			//
+			return true; // Item�� ������ ���� ���� ����߸��� �� ���� Client �Է��� ����.
+#endif
+		}
+	}
+
+	if (!ret && (message == M_WHEEL_UP || message == M_WHEEL_DOWN))
+	{
+		ChangeSkillWheel(message == M_WHEEL_UP);
+	}
+
+	if(!ret && ( message == M_CENTERBUTTON_DOWN) )
+	{
+		if(m_pC_game != NULL)
+			m_pC_game->HotKey_Skill();
+	}
+
+	return ret;
+}
+
+void C_VS_UI::DIKeyboardControl(CDirectInput::E_KEYBOARD_EVENT event, DWORD scan_code)
+{
+	const bool traceGrade1Key = (scan_code == DIK_R);
+	if (traceGrade1Key)
+	{
+		CT_HOTKEY("DIKeyboardControl entry event=%d scan=%lu keyAccel=%p dxInput=%p userOption=%p accelMode=%d inputMode=%d",
+			(int)event, (unsigned long)scan_code, (void*)g_pKeyAccelerator, (void*)g_pDXInput,
+			(void*)g_pUserOption, IsAccelMode() ? 1 : 0, IsInputMode() ? 1 : 0);
+	}
+#ifdef OUTPUT_DEBUG
+//	DEBUG_ADD("[C_VS_UI] DIKeyboardControl");
+#endif
+#ifdef _LIB
+	if(g_pEventManager != NULL && g_pEventManager->GetEventByFlag(EVENTFLAG_DENY_INPUT_KEYBOARD))
+	{
+		if (traceGrade1Key)
+			CT_HOTKEY("DIKeyboardControl return: EVENTFLAG_DENY_INPUT_KEYBOARD");
+		return;
+	}
+#endif
+	
+
+	if( g_pKeyAccelerator == NULL || g_pDXInput == NULL || g_pUserOption == NULL )
+	{
+		if (traceGrade1Key)
+			CT_HOTKEY("DIKeyboardControl return: missing globals keyAccel=%p dxInput=%p userOption=%p",
+				(void*)g_pKeyAccelerator, (void*)g_pDXInput, (void*)g_pUserOption);
+		return;
+	}
+	
+	if(scan_code == DIK_ESCAPE)
+	{
+		if(IsRunningWebBrowser())
+		{
+			CloseWebBrowser(); 
+			ShowCursor(FALSE);
+			g_pDXInput->Clear() ; 
+			return ;
+		}
+		
+		if(IsRunningOption())
+		{
+			CloseOption();
+
+			switch(g_eRaceInterface)
+			{
+			case RACE_SLAYER:
+				PlaySound(SOUND_SLAYER_BUTTON);
+				break;
+
+			case RACE_VAMPIRE:
+				PlaySound(SOUND_VAMPIRE_BUTTON);			
+				break;
+
+			case RACE_OUSTERS:
+				PlaySound(SOUND_OUSTERS_INTERFACE);
+				break;
+			}
+
+#ifdef OUTPUT_DEBUG
+//			DEBUG_ADD("[C_VS_UI] DIKeyboardControl ESCAPE");
+#endif
+			return;
+		}
+
+		if(IsRunningGameMenu())
+		{
+			CloseGameMenu();
+			switch(g_eRaceInterface)
+			{
+			case RACE_SLAYER:
+				PlaySound(SOUND_SLAYER_BUTTON);
+				break;
+
+			case RACE_VAMPIRE:
+				PlaySound(SOUND_VAMPIRE_BUTTON);
+				break;
+
+			case RACE_OUSTERS:
+				PlaySound(SOUND_OUSTERS_INTERFACE);
+				break;
+			}
+
+#ifdef OUTPUT_DEBUG
+//			DEBUG_ADD("[C_VS_UI] DIKeyboardControl Close Game Menu");
+#endif
+			return;
+		}
+	}
+	else
+	{
+		if(IsRunningWebBrowser())	
+			return ;
+		
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// ��� �޴� ����
+	// 2026-05-12 GUVENLIK FIX: Operator (admin) menusu Phoenix'te sirf
+	// client-side attrOperator bayragi ile gate'liydi:
+	//   - OPERATORTYPE_MACADDRESS (Client.cpp:1759) — local MAC kontrol,
+	//     manipulable.
+	//   - OPERATORTYPE_RELEASELOG (Client.cpp:1766) — `#if _DEBUG` ile true;
+	//     debug build deploy = herkes admin.
+	//   - OPERATORTYPE_PLAYERSHAPE — cosmetic flag.
+	// Server tarafinda admin verification packet'i (GCSetAdminMode benzeri)
+	// MEVCUT DEGIL — hicbir flag server-trusted degil. Production'da
+	// player'lar Operator menusunu acabiliyorlardi (item spawn, monster
+	// summon, vs.) - kritik suistimal.
+	// Production-safe: handler tamamen devre disi. Server-side admin
+	// verification eklenince (DB admin column + GCSetAdminMode packet
+	// handler) #if'i 1 yapip re-enable.
+	// 2026-05-15 Fix #24 (Phase 2 — proper auth restored):
+	//
+	// VS6 referans implementasyonu geri uygulandi. Auth zincir:
+	//   1. DB Player.Competence column (0=GOD/Admin, 1=DM, 2=HELPER, 3=PLAYER)
+	//   2. Server load: Slayer/Vampire/Ousters m_Competence + m_CompetenceShape
+	//   3. Server packet: PCSlayerInfo3/Vampire/Ousters3.setCompetence(m_CompetenceShape)
+	//   4. Client Add* handler: if oi.getCompetence()==0 -> SetCreatureType(*_OPERATOR)
+	//   5. Client gate: g_pPlayer->IsOperator() == (m_CreatureType IN [*_OPERATOR])
+	//
+	// Phoenix'te bu zincir DOGRUYDU ama char-create INSERT (CLCreatePCHandler.cpp)
+	// Competence + CompetenceShape kolonlarini set etmiyordu — DB default 0
+	// ile newbie chars admin gibi gozukuyordu. Server INSERT fix + DB
+	// migration ile cozulduktan sonra bu gate sadece gercek admin chars'a
+	// acik kalir.
+	// VS6 referans gate — vs_ui_lib TU'sunda g_pPlayer (MPlayer*) declared
+	// degil (mimari ayrim). g_pUserInformation->attrOperator bayragi VS6'da
+	// da auth kanali — login flow OPERATORTYPE_MACADDRESS/RELEASELOG/
+	// PLAYERSHAPE ile set ediliyor. Bu flag client-side; production'da
+	// gerçek server-verified gate icin DB Competence column + GCSetAdminMode
+	// packet handler eklenmeli (gelecek faz).
+	if(g_pUserInformation != NULL &&
+		(g_pUserInformation->attrOperator.GetValue() & OPERATORTYPE_AUTHMASK) != 0)
+	{
+		if (g_pDXInput->KeyDown(DIK_LSHIFT) && g_pDXInput->KeyDown(DIK_RSHIFT))
+		{
+			ToggleOperator();
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////
+
+
+	if((gpC_window_manager != NULL && gpC_window_manager->GetTopmostWindow() != NULL &&
+		gpC_window_manager->GetTopmostWindow()->GetAttributes()->keyboard_control == true) ||
+		IsRunningNamingChange())
+	{
+#ifdef OUTPUT_DEBUG
+//		DEBUG_ADD("[C_VS_UI] DIKeyboardControl FALSE");
+#endif
+		if (traceGrade1Key)
+			CT_HOTKEY("DIKeyboardControl return: modal text window has keyboard_control");
+		return;
+	}
+
+	if(scan_code == DIK_LCONTROL || scan_code == DIK_RCONTROL ||
+		scan_code == DIK_LALT || scan_code == DIK_RALT ||
+		scan_code == DIK_LSHIFT || scan_code == DIK_RSHIFT)
+	{
+#ifdef OUTPUT_DEBUG
+//		DEBUG_ADD("[C_VS_UI]oardControl Control");
+#endif
+		return;
+	}
+
+	WORD pressed_key = scan_code;
+
+	if (g_pDXInput->KeyDown(DIK_LCONTROL) || g_pDXInput->KeyDown(DIK_RCONTROL))
+	{
+		pressed_key = ACCEL_ADD_CONTROL( pressed_key );
+		if (traceGrade1Key)
+			CT_HOTKEY("DIKeyboardControl modifier pass1: control applied pressed_key=0x%04X", (unsigned)pressed_key);
+
+		// Control+ESC�� ����Ű�� ����� �� ����
+		if(scan_code == SCANCODE_ESC)
+		{
+#ifdef OUTPUT_DEBUG
+//			DEBUG_ADD("[C_VS_UI] DIKeyboardControl Control+ESC");
+#endif
+			return;
+		}
+	}
+
+	if (g_pDXInput->KeyDown(DIK_LALT) || g_pDXInput->KeyDown(DIK_RALT))
+	{
+//		pressed_key = ACCEL_ADD_ALT( pressed_key );
+		
+		// Alt+Tab�� ����Ű�� ����� �� ����
+		if(scan_code == SCANCODE_TAB)
+		{
+#ifdef OUTPUT_DEBUG
+//			DEBUG_ADD("[C_VS_UI] DIKeyboardControl ALT+TAB");
+#endif
+			return;
+		}
+	}
+
+	// function key�� ����Ű�� �� �� ����
+	if(m_bl_accel_mode && (scan_code >= DIK_F1 && scan_code <= DIK_F10 || scan_code >= DIK_F11 && scan_code <= DIK_F12))
+	{
+#ifdef OUTPUT_DEBUG
+//		DEBUG_ADD("[C_VS_UI] DIKeyboardControl Function Key");
+#endif
+		return;
+	}
+
+	if(m_bl_accel_mode &&
+		(scan_code == SCANCODE_ESC)
+		)
+	{
+		m_bl_accel_mode = false;
+		m_bl_hotkey = true;
+	}
+
+	if (g_pDXInput->KeyDown(DIK_LCONTROL) || g_pDXInput->KeyDown(DIK_RCONTROL))
+		pressed_key = ACCEL_ADD_CONTROL( pressed_key );
+
+	if (g_pDXInput->KeyDown(DIK_LALT) || g_pDXInput->KeyDown(DIK_RALT))
+		pressed_key = ACCEL_ADD_ALT( pressed_key );
+
+	if (g_pDXInput->KeyDown(DIK_LSHIFT) || g_pDXInput->KeyDown(DIK_RSHIFT))
+		pressed_key = ACCEL_ADD_SHIFT( pressed_key );	
+
+	if (traceGrade1Key)
+	{
+		CT_HOTKEY("DIKeyboardControl before input-filter pressed_key=0x%04X ctrl=%d alt=%d shift=%d useEnterChat=%d inputMode=%d",
+			(unsigned)pressed_key,
+			ACCEL_HAS_CONTROL(pressed_key) ? 1 : 0,
+			ACCEL_HAS_ALT(pressed_key) ? 1 : 0,
+			ACCEL_HAS_SHIFT(pressed_key) ? 1 : 0,
+			g_pUserOption->UseEnterChat ? 1 : 0,
+			gC_vs_ui.IsInputMode() ? 1 : 0);
+	}
+
+	if(!IsAccelMode() && 
+		(
+			!g_pUserOption->UseEnterChat && !ACCEL_HAS_CONTROL(pressed_key) && !ACCEL_HAS_ALT(pressed_key)
+			|| g_pUserOption->UseEnterChat && gC_vs_ui.IsInputMode() &&  !ACCEL_HAS_CONTROL(pressed_key) && !ACCEL_HAS_ALT(pressed_key)
+			|| gpC_window_manager->GetWindowbyName("FriendAddInput")
+			|| gpC_window_manager->GetWindowbyName("FriendInfo")
+		))
+	{
+		BYTE key = ACCEL_GET_KEY(pressed_key);
+		if(key >= SCANCODE_1 && key <= SCANCODE_0 || 
+			key >= SCANCODE_Q && key <= SCANCODE_RBRACKET ||
+			key >= SCANCODE_A && key <= SCANCODE_GRAVE ||
+			key >= SCANCODE_BACKSLASH && key <= SCANCODE_SLASH ||
+			key == SCANCODE_SPACE)
+		{
+#ifdef OUTPUT_DEBUG
+//			DEBUG_ADD("[C_VS_UI] DIKeyboardControl AccelMode");
+#endif
+			if (traceGrade1Key)
+				CT_HOTKEY("DIKeyboardControl return: text/input filter swallowed key=0x%02X pressed_key=0x%04X", (unsigned)key, (unsigned)pressed_key);
+			return;
+		}
+	}
+
+
+	if(m_bl_accel_mode)
+	{
+		// �̹� ��ϵ� ��Ű�� ��� ����
+		// GetAcceleratorSimilar�� ���� �ȵȴ�
+		// Tab, Control+Tab������ ���� �ƾȵǱ� �����̴�
+		BYTE accel = g_pKeyAccelerator->GetAccelerator( pressed_key );
+		if (traceGrade1Key)
+			CT_HOTKEY("DIKeyboardControl accel-mode GetAccelerator pressed_key=0x%04X accel=%u", (unsigned)pressed_key, (unsigned)accel);
+		
+		if(accel != ACCEL_NULL)
+		{
+#ifdef OUTPUT_DEBUG
+//			DEBUG_ADD("[C_VS_UI] DIKeyboardControl Accel NULL");
+#endif
+			if (traceGrade1Key)
+				CT_HOTKEY("DIKeyboardControl return: accel-mode key already bound accel=%u", (unsigned)accel);
+			return;
+		}
+
+		g_pKeyAccelerator->SetAcceleratorKey( m_iAccel, pressed_key );
+		if (traceGrade1Key)
+			CT_HOTKEY("DIKeyboardControl accel-mode SetAcceleratorKey target=%d pressed_key=0x%04X", (int)m_iAccel, (unsigned)pressed_key);
+
+		m_bl_accel_mode = false;
+		m_bl_hotkey = true;
+	}
+	else
+	{
+		BYTE accel = g_pKeyAccelerator->GetAcceleratorSimilar( pressed_key );
+		if (traceGrade1Key)
+			CT_HOTKEY("DIKeyboardControl GetAcceleratorSimilar pressed_key=0x%04X accel=%u expectedGrade1=%u", (unsigned)pressed_key, (unsigned)accel, (unsigned)ACCEL_GRADE1INFO);
+
+		// accel�� ������!
+		// ä�ø�尡 �ƴҶ��� ä�� ����Ű �ȸ԰�! 
+		if(accel !=0 /*&& 
+			(
+				(!g_pUserOption->UseEnterChat || g_pUserOption->UseEnterChat && gC_vs_ui.IsInputMode()) || // ä�� ����϶�
+				(accel != ACCEL_CHAT && accel != ACCEL_GUILD_CHAT && accel != ACCEL_ZONE_CHAT && accel != ACCEL_WHISPER && accel != ACCEL_PARTY_CHAT ) // ä�� ����Ű�� �ƴϰ�,
+			)*/
+		)
+		{
+			if (traceGrade1Key)
+				CT_HOTKEY("DIKeyboardControl executing accel=%u", (unsigned)accel);
+			g_pAcceleratorManager->Execute( accel );
+			if (traceGrade1Key)
+				CT_HOTKEY("DIKeyboardControl executed accel=%u", (unsigned)accel);
+			m_bl_hotkey = true;	
+		}
+		else
+		{
+			if (traceGrade1Key)
+				CT_HOTKEY("DIKeyboardControl no accelerator resolved for pressed_key=0x%04X", (unsigned)pressed_key);
+			m_bl_hotkey = false;
+		}
+	}
+#ifdef OUTPUT_DEBUG
+//	DEBUG_ADD("[C_VS_UI] DIKeyboardControl OK");
+#endif
+	
+}
+
+//-----------------------------------------------------------------------------
+// KeyboardControl
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::KeyboardControl(UINT message, UINT key, long extra)
+{
+#ifdef _LIB
+	if(g_pEventManager != NULL && g_pEventManager->GetEventByFlag(EVENTFLAG_DENY_INPUT_KEYBOARD))
+		return;
+#endif
+
+	if( gpC_window_manager == NULL )
+		return;
+	
+#ifdef OUTPUT_DEBUG
+//	DEBUG_ADD("[C_VS_UI] KeyboardControl");
+#endif
+//	const int CTRL_GARBAGE = 229;
+//	if(key == CTRL_GARBAGE) return ;
+
+#ifndef _LIB
+	if (gbl_game_mode)
+		ShowItem_KeyboardControl(message, key, extra);
+#endif
+
+//	if(m_bl_hotkey)return;
+
+//	if (m_pC_title)
+//	{
+		gpC_window_manager->KeyboardControl(message, key, extra);
+		m_bl_hotkey = false;
+//		return;
+//	}
+		
+
+//	const int CTRL_GARBAGE = 229;
+
+//	unsigned char scan_code = SCAN_CODE(extra);
+
+//	if(key != CTRL_GARBAGE && key != VK_CONTROL)
+//	{
+//		bool bPressedCtrl	= (GetKeyState(VK_CONTROL) < 0);
+//		bool bPressedAlt	= (GetKeyState(VK_MENU) < 0);
+//		bool bPressedShift	= (GetKeyState(VK_SHIFT) < 0);
+//		
+//		WORD pressed_key = scan_code;
+//		
+//		if (bPressedCtrl) 	pressed_key = ACCEL_ADD_CONTROL( pressed_key );
+//		if (bPressedAlt) 	pressed_key = ACCEL_ADD_ALT( pressed_key );
+//		if (bPressedShift) 	pressed_key = ACCEL_ADD_SHIFT( pressed_key );	
+//		
+//		BYTE accel = g_pKeyAccelerator->GetAcceleratorSimilar( pressed_key );
+//		
+//		if (message == WM_KEYDOWN && !AlreadyPress(message, extra))
+//		{
+//			if(g_pAcceleratorManager->Execute( accel ) == false)
+//			{
+//				gpC_window_manager->KeyboardControl(message, key, extra);
+//			}
+//		}
+//		else
+//		{
+//			gpC_window_manager->KeyboardControl(message, key, extra);
+//		}
+//	}
+/*
+
+	//
+	//---------
+	// !������
+	//---------
+	// ctrl+space�� ������ VK_SPACE�� ���� �ʴ´�. - �˼� ����
+	// ������ scan code�� ������� ��ȿ�ϴ�. �׷��� scan code�� VK_SPACE���
+	// ����Ѵ�. �׷��� �̻��ϰ� ���� ctrl+space �޽����� �� �� �´�.
+	// �ٸ� �� ���θ� �׽�Ʈ�غ����� �ʾ����� ���ݱ����� �׷���.
+	//
+	// �� �� �� �ٸ� ���� ������ long key ���� ó������ 25 �������� 229���
+	// ���̴�. �� �� �ϳ��� ���� ����� OS���� ȣȯ�������� �߻���Ű���� ������
+	// �� �� ����. �׽�Ʈ�� �ٷδ� Windows ME������ Windows 2000����ó�� ����������.
+	// �̰����κ��� Windows98������ �������� ���̴�.
+	//
+	//--------------
+	// hot-key ��å
+	//--------------
+	//
+	// �ϳ��� key�� ���ÿ� �ٸ� �� ���� ������ �ϴ� ���� ���� ���ؼ�, hot-key�� ó���Ǹ�
+	// window�� ���� ���ϰ� �Ѵ�.
+	//
+
+	//
+	// CTRL_GARBAGE
+	//
+	// scan_code�� �̿��ϴ� ���, ctrl�� �Բ� ������ ���δ� �� ���� ���� ������ �� ����
+	// �ٸ����� ���´�. �̰��� �ѱ��� �Է��ϰ� �ִ� ����(ImeRunning() == true)�� �߰ߵǾ���.
+	// �� ���� �ݵ�� �����ؾ� �Ѵ�.
+	//
+	const int CTRL_GARBAGE = 229;
+	if(key != CTRL_GARBAGE)
+	{
+		int a = 0;
+	}
+
+	if (message == WM_KEYDOWN)
+	{
+		switch (key)
+		{
+			case VK_F1:
+				if (!AlreadyPress(message, extra))
+					HotKey_F1();
+				return;
+
+			case VK_F2:
+				if (!AlreadyPress(message, extra))
+					HotKey_F2();
+				return;
+
+			case VK_F3:
+				if (!AlreadyPress(message, extra))
+					HotKey_F3();
+				return;
+
+			case VK_F4:
+				if (!AlreadyPress(message, extra))
+					HotKey_F4();
+				return;
+
+			case VK_F5:
+				if (!AlreadyPress(message, extra))
+					HotKey_F5();
+				return;
+
+			case VK_F6:
+				if (!AlreadyPress(message, extra))
+					HotKey_F6();
+				return;
+
+			case VK_F7:
+				if (!AlreadyPress(message, extra))
+					HotKey_F7();
+				return;
+
+			case VK_F8:
+				if (!AlreadyPress(message, extra))
+					HotKey_F8();
+				return;
+
+			case VK_F9:
+				if (!AlreadyPress(message, extra))
+					HotKey_F9();
+				return;
+
+			case VK_F10:
+				//HotKey_F10();
+				return;
+
+			case VK_F11:
+				if (!AlreadyPress(message, extra))
+					HotKey_F11();
+				return;
+
+			case VK_F12:
+				if (!AlreadyPress(message, extra))
+					HotKey_F12();
+				return;
+
+			case VK_ESCAPE:
+				if (!AlreadyPress(message, extra))
+					HotKey_ESC();
+				return;
+
+			case VK_TAB:
+				if (g_GetCtrlPushState() == true)
+				{
+					if (!AlreadyPress(message, extra))
+						HotKey_Gear();
+				}
+				else
+				{
+					if (!AlreadyPress(message, extra))
+						HotKey_Inventory();
+				}
+				return;
+		}
+
+		unsigned char scan_code = SCAN_CODE(extra);
+		if (key != CTRL_GARBAGE)
+		{
+			int a = 0;
+		}
+
+		switch (scan_code)
+		{
+		case SCANCODE_X:	//ctrl+x
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_Mark();
+					break;
+
+		case SCANCODE_M:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_Minimap();
+					break; // break!
+					
+		case SCANCODE_I:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_CharInfo();
+					break; // break!
+					
+		case SCANCODE_S:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_Skill();
+					break; // break!
+					
+		case SCANCODE_TILDE:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_QuickItemSlot();
+					break; // break!
+					
+		case SCANCODE_E:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_ExtendChat();
+					break;
+					
+		case SCANCODE_C:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_Chat();
+					break;
+					
+		case SCANCODE_Z:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_ZoneChat();
+					break;
+					
+		case SCANCODE_G:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_GuildChat();
+					break;
+
+		case SCANCODE_P:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_Party();
+					break;
+			
+		case SCANCODE_H:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_Help();
+					break;
+			
+		case SCANCODE_K:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_SkillInfo();
+					break;
+			
+		case SCANCODE_W:
+			if (key != CTRL_GARBAGE)
+				if (g_GetCtrlPushState() == true)
+					if (!AlreadyPress(message, extra))
+						HotKey_Whisper();
+					break;
+
+			//
+			// 2000.12.22.
+			// ctrl(��) + space�� WinME/Win98������ �������·� ���´�. Win2000������
+			// ���������� ���´�. ��... �� ������ ���� �ذ��� �� �����Ƿ� Dinput����
+			// ó���Ѵ�.				
+			//---------------------------------------------------------------------------
+			//			case SCANCODE_SPACE:
+			//				if (key != CTRL_GARBAGE)
+			//				{
+			//					if (g_GetCtrlPushState() == true)
+			//					{
+			//						if (!AlreadyPress(message, extra))
+			//							HotKey_WindowToggle();
+			//						return;
+			//					}
+			//				}
+			//				break;
+			//
+			//case SCANCODE_TAB:
+			//	if (g_GetCtrlPushState() == true)
+			//	{
+			//		if (!AlreadyPress(message, extra))
+			//			HotKey_Gear();
+			//	}
+			//	else
+			//	{
+			//		if (!AlreadyPress(message, extra))
+			//			HotKey_Inventory();
+			//	}
+			//	return;
+				
+			//case SCANCODE_ESC:
+			//	if (!AlreadyPress(message, extra))
+			//		HotKey_ESC();
+			//	return;
+		} // 'switch (scan_code)'
+	}
+
+	//
+	// ignore hot-key & all ctrl push
+	//
+	// WM_KEYDOWN/WM_KEYUP
+	//
+	if (g_GetCtrlPushState() == false)
+	{
+		//switch (key)
+		//{
+			// VK_F1 ~ test�ϸ� ��� Ű�� �ȴ�����! Ȳ��...
+			
+//			case VK_F1:
+//				break;
+//			case VK_F2:
+//				break;
+//			case VK_F3:
+//				break;
+//			case VK_F4:
+//				break;
+//			case VK_F5:
+//				break;
+//			case VK_F6:
+//				break;
+//			case VK_F7:
+//				break;
+//			case VK_F8:
+//				break;
+				
+		//	case VK_ESCAPE:
+		//		break;
+		//	case VK_TAB:
+		//		break;
+
+		//	default:
+				gpC_window_manager->KeyboardControl(message, key, extra);
+		//}
+	}
+*/
+#ifdef OUTPUT_DEBUG
+//	DEBUG_ADD("[C_VS_UI] KeyboardControl OK");
+#endif
+}
+
+//-----------------------------------------------------------------------------
+// StartTitle
+//
+//	�ʱ�ȭ���� �����߿��� ��� �Ǵ� ���̹Ƿ� �޸� �Ҵ��� ���⼭ �Ѵ�.
+// �ʱ�ȭ�� ��Ȳ�� ����Ǹ� �޸𸮸� �����Ͽ��� �Ѵ�.
+//
+// �̹� Title�� �����߿� �־ "Server�� ���� ���" �ٽ� Login �κ����� 
+// �;��ϱ� ������ �� �� �̻� StartTitle() �� �� �ִ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::StartTitle()
+{
+	gC_ci->Init();
+	if (gpC_base->EventOccured() == true)
+		gpC_base->FinishEvent();
+
+	EndGame();
+
+	if(m_pC_title != NULL)
+	{
+		DeleteNew(m_pC_title);
+	}
+
+	m_pC_title = new C_VS_UI_TITLE;				
+
+	m_pC_title->Start();
+}
+
+//-----------------------------------------------------------------------------
+// EndTitle
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::EndTitle()
+{
+	if(m_pC_title != NULL)
+		DeleteNew(m_pC_title);
+}
+
+//-----------------------------------------------------------------------------
+// StartGame
+//
+// �� �� �̻� ������ �� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::StartGame()
+{
+	EndTitle();
+
+	if (m_pC_game != NULL)
+	{
+//		m_pC_game->SetSaveSet(true);
+		DeleteNew(m_pC_game);
+		m_pC_game = NULL;
+//		_Error(FAILED_JOB);
+	}
+
+	m_pC_game = new C_VS_UI_GAME;
+
+//	if(!bl_load_set)
+	gpC_vs_ui_window_manager->SetDefault();
+
+	m_pC_game->Start();
+
+#ifndef _LIB
+	gbl_game_mode = true;
+#endif
+}
+
+//-----------------------------------------------------------------------------
+// EndGame
+//
+// StartGame()���� �Ҵ��� memory�� �����Ͽ��� �Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::EndGame()
+{
+	if(m_pC_game != NULL)
+		DeleteNew(m_pC_game);
+
+	DropItem();
+
+#ifndef _LIB
+	gbl_game_mode = false;
+#endif
+}
+
+//-----------------------------------------------------------------------------
+// Process
+//
+// UI ó���κ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::Process()
+{
+	gC_timer2.Execute();
+	gpC_base->DispatchMessage();
+
+	gpC_process_runner->Process();
+
+	gpC_window_manager->Process();
+
+#if __CONTENTS(__MOVE_ZONE)
+	gpC_mouse_pointer->Process();
+#endif //__MOVE_ZONE
+
+	// UI only process
+	if (gbl_global_empty_move)
+	{
+		MouseControl(M_MOVING, gpC_mouse_pointer->GetX(), gpC_mouse_pointer->GetY());
+		gbl_global_empty_move = false;
+	}
+}
+
+
+void C_VS_UI::UnselectSkill()
+{
+	if(m_pC_game)
+		m_pC_game->UnselectSkill();
+}
+
+void C_VS_UI::ChangeSkillWheel(bool direct)
+{
+	if(m_pC_game)
+		m_pC_game->ChangeSkillWheel(direct);
+}
+
+void C_VS_UI::SelectSkill(int id)
+{
+	if(m_pC_game)
+		m_pC_game->SelectSkill(id);
+}
+
+//-----------------------------------------------------------------------------
+// ShowItem
+//
+// Item pickup/drop test funtions.
+// 
+// -> ONLY TEST <-
+//-----------------------------------------------------------------------------
+#ifndef _LIB
+#include "VS_UI_Mouse_pointer.h"
+#include "VS_UI_Item.h"
+#include "Mitem.h"
+//extern MItemManager	g_item_manager;
+extern MItemManager		g_item_manager;
+extern int				g_item_list_size;
+const int				g_item_show_x = 20;
+const int				g_item_show_y = 120;
+const int				g_item_show_w = 8;
+const int				g_item_show_h = 4;
+const int				g_item_gap	  = 90;
+int						g_item_page   = 0; // ��� �������� ����ϱ� ���ؼ�.
+int						g_item_select = NOT_SELECTED;
+
+extern bool				gbl_show_item;
+
+#define	OPTIONEXT_ITEM_COLOR	495
+
+void ShowItem()
+{
+	///// -- Test
+	// Show all Item.
+
+	if(gbl_show_item == false)return;
+
+	int i_index;
+	for (int j = 0; j < g_item_show_h; j++)
+		for (int i = 0; i < g_item_show_w; i++)
+		{
+			i_index = g_item_page*(g_item_show_w*g_item_show_h) + j*g_item_show_w+i;
+			if (i_index >= g_item_list_size)
+				break;
+			
+			MItem* pItem = g_item_manager.GetItemToModify(i_index);
+
+			if (pItem!=NULL)
+			{
+				SPRITE_ID id = pItem->GetInventoryFrameID(); // frame id = data id
+
+				if (gpC_mouse_pointer->GetPickUpItem()) // Item�� �����ٸ�.
+				{
+					if (gpC_mouse_pointer->GetPickUpItem() == pItem)
+						continue; // ������� �ʴ´�.
+				}			
+
+				int item_x = g_item_show_x+g_item_gap*i;
+				int item_y = g_item_show_y+g_item_gap*j;
+				//if (g_item_select == i_index)
+				//{
+
+#if __CONTENTS(__TUNING_ITEM)
+				if(pItem->IsTuningItem())
+					CIndexSprite::SetUsingColorSet(pItem->GetTuningItemColorSet(), 0 );
+				else
+#endif //__TUNING_ITEM
+				if(pItem->IsQuestItem())
+					CIndexSprite::SetUsingColorSet(pItem->GetQuestItemColorset(), 0 );
+				else if(pItem->IsUniqueItem())
+					CIndexSprite::SetUsingColorSet(pItem->GetUniqueItemColorset(), 0);
+						
+				else if(pItem->GetItemOptionColorSet() >= OPTIONEXT_ITEM_COLOR)   //pItem->IsItemOptionExt())
+					CIndexSprite::SetUsingColorSet(pItem->GetItemOptionExtColorSet(), 0 );
+				else
+					CIndexSprite::SetUsingColorSet(pItem->GetItemOptionColorSet(), 0);
+					gpC_item->Blt(item_x, item_y, id);
+			}
+		}
+	//*/
+}
+
+void ShowItem_MouseControl(UINT message, int _x, int _y)
+{
+	if(gbl_show_item == false)return;
+
+	int i_index;
+	g_item_select = NOT_SELECTED;
+
+//	gpC_mouse_pointer->Set((gbl_vampire_interface?MOUSE_CURSOR_VAMPIRE_NORMAL:MOUSE_CURSOR_SLAYER_NORMAL));
+
+	for (int j = 0; j < g_item_show_h; j++)
+		for (int i = 0; i < g_item_show_w; i++)
+		{
+			i_index = g_item_page*(g_item_show_w*g_item_show_h) + j*g_item_show_w+i;
+			if (i_index >= g_item_list_size)
+				break;
+
+			MItem* pItem = g_item_manager.GetItemToModify(i_index);
+
+			if (pItem!=NULL)
+			{
+				SPRITE_ID id = pItem->GetInventoryFrameID(); // frame id = data id
+
+				int item_x = g_item_show_x+g_item_gap*i;
+				int item_y = g_item_show_y+g_item_gap*j;
+
+				//CSprite * p_sprite = m_pC_item->GetSprite(id);
+				//if (p_sprite != NULL)
+				{
+					//if (p_sprite->IsColorPixel(_x-item_x, _y-item_y))
+					if (_x >= item_x && _x < item_x+g_item_gap &&
+						 _y >= item_y && _y < item_y+g_item_gap)
+					{
+						g_item_select = i_index;
+						
+						MItem* pSelectItem = g_item_manager.GetItemToModify( g_item_select );
+
+						if (pSelectItem != NULL)
+						{
+							g_descriptor_manager.Set(DID_ITEM, gpC_mouse_pointer->GetPointerX(), gpC_mouse_pointer->GetPointerY(), (void *)pSelectItem);
+						}
+					}
+				}
+			}
+		}
+
+	if (message == M_LEFTBUTTON_DOWN || message == M_LB_DOUBLECLICK) // selection.
+	{
+		if (g_item_select != NOT_SELECTED && gpC_mouse_pointer->GetPickUpItem() == NULL)
+		{
+			MItem* pSelectItem = g_item_manager.GetItem(g_item_select);
+
+			if (pSelectItem!=NULL)
+			{
+				MItem * p_item = MItem::NewItem(pSelectItem->GetItemClass());
+				p_item->SetItemType( pSelectItem->GetItemType() );	
+				p_item->SetItemOptionList( pSelectItem->GetItemOptionList() );
+				p_item->SetID( g_ui_item_max++ );
+
+				gpC_mouse_pointer->PickUpItem( p_item );
+			}			
+		}
+		else if (gpC_mouse_pointer->GetPickUpItem())
+		{
+			MItem* pItem = gpC_mouse_pointer->GetPickUpItem();
+
+			if (pItem!=NULL)
+			{
+				g_item_manager.AddItem( pItem );
+			}
+
+			gpC_mouse_pointer->DropItem();
+		}
+	}
+
+	if(message == M_WHEEL_UP)
+		ShowItem_KeyboardControl(WM_KEYDOWN, VK_UP, 0);
+
+	if(message == M_WHEEL_DOWN)
+		ShowItem_KeyboardControl(WM_KEYDOWN, VK_DOWN, 0);
+
+
+	if (message == M_RIGHTBUTTON_DOWN) // selection.
+	{
+		if (g_item_select != NOT_SELECTED && gpC_mouse_pointer->GetPickUpItem() == NULL)
+		{
+			MItem* pSelectItem = g_item_manager.GetItemToModify( g_item_select );
+			if(pSelectItem != NULL)
+			{
+				gC_vs_ui.RunDescDialog(DID_ITEM, (void *)pSelectItem);
+			}
+		}
+	}
+
+}
+
+void ShowItem_KeyboardControl(UINT message, UINT key, long extra)
+{
+	if (message == WM_KEYDOWN)
+	{
+		switch (key)
+		{
+			case VK_UP:
+				if (g_item_page > 0)
+					g_item_page--;
+				break;
+
+			case VK_DOWN:
+				if (g_item_page < g_item_list_size/(g_item_show_h*g_item_show_w))
+					g_item_page++;
+				break;
+		}
+	}
+}
+
+#endif
+
+//-----------------------------------------------------------------------------
+// Show
+//
+// UI ��ºκ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::Show()
+{
+	CT_Done("WnSh: C_VS_UI::Show ENTER pthis=%p", (void*)this);
+	CT_Done("VSUI: ENTER C_VS_UI::Show");
+#ifdef _LIB
+	if(g_pEventManager->GetEventByFlag(EVENTFLAG_NOT_DRAW_UI) != NULL)
+	{
+		return;
+	}
+#endif
+	
+#ifdef OUTPUT_DEBUG
+//	DEBUG_ADD("[C_VS_UI] Show");
+#endif
+#ifndef _LIB
+	if (gbl_game_mode)
+		ShowItem();
+#endif
+
+	CT_Done("VSUI: pre IsRunningProgress");
+	if(IsRunningProgress())			//���α׷��� �鰥�� �ٿ�Ǵ°� �־ ������ ���� ���̳� �ؼ� ��� �ٲ� // �Դٰ� �ӵ��� UP!
+	{
+		CT_Done("VSUI: pre m_pC_progress->Show()");
+		m_pC_progress->Show();
+		CT_Done("VSUI: post m_pC_progress->Show()");
+	}
+	else
+	{
+		CT_Done("VSUI: pre gpC_window_manager->Show()");
+		gpC_window_manager->Show();
+		CT_Done("VSUI: post gpC_window_manager->Show()");
+#if __CONTENTS(__QUEST_RENEWAL)	
+		if(gpC_Gps)
+		{
+			if(gpC_Gps->GetGpsShow())
+				gpC_Gps->GpsInfoReView();
+		}
+#endif // __QUEST_RENEWAL
+	}
+
+
+#ifndef _LIB
+extern bool gbl_info_show;
+if(gbl_info_show)
+{
+
+	// message
+	char msg_buf[512];
+	sprintf(msg_buf, "msg_queue = %d", gpC_base->GetMessageSize());
+	g_Print(0, TEXT_LINE(8), msg_buf);
+
+	char win_buf[100];
+	sprintf(win_buf, "m_focus_window = 0x%X", gpC_window_manager->GetMouseFocusedWindow());
+	g_Print(0, TEXT_LINE(9), win_buf);
+
+	sprintf(win_buf, "event flag = %d", gpC_base->EventOccured());
+	g_Print(0, TEXT_LINE(10), win_buf);
+
+	sprintf(win_buf, "item id = %d", g_item_select);
+	g_Print(0, TEXT_LINE(11), win_buf);
+
+//	sprintf(win_buf, "elevator = %d", gC_vs_ui.IsRunningElevator());
+//	g_Print(0, TEXT_LINE(12), win_buf);
+
+	if(gpC_window_manager->GetMouseFocusedWindow())
+	{
+		extern int g_mouse_x, g_mouse_y;
+		sprintf(win_buf, "point = (%d, %d)", g_mouse_x - gpC_window_manager->GetMouseFocusedWindow()->x, g_mouse_y - gpC_window_manager->GetMouseFocusedWindow()->y);
+		g_Print(0, TEXT_LINE(11), win_buf);
+	}
+
+extern EventButton *g_EventButton;
+	C_VS_UI_EVENT_BUTTON *button = (C_VS_UI_EVENT_BUTTON *)g_EventButton;
+
+	if(button)
+		sprintf(msg_buf, "EventButton(%d:%d) = %d, %d", button->GetID(), button->m_image_index, button->x, button->y);
+	else
+		sprintf(msg_buf, "EventButton Nothing");
+	g_Print(5, TEXT_LINE(24), msg_buf);
+
+}	
+
+//	sprintf(win_buf, "event flag = %d", gpC_base->EventOccured());
+//	g_Print(0, TEXT_LINE(10), win_buf);
+#endif
+
+	//��Ƽ�� ǥ�� ȭ��ǥ
+#define TILE_X			48
+#define TILE_Y			24
+#define	SECTOR_WIDTH	(g_pUserInformation->iResolution_x/TILE_X)//21
+#define	SECTOR_HEIGHT	(g_pUserInformation->iResolution_y/TILE_Y)//32
+#define WIDTH			(g_pUserInformation->iResolution_x-1)	//799 
+#define HEIGHT			(g_pUserInformation->iResolution_y-103)	//497
+#define CENTER_X		(g_pUserInformation->iResolution_x/2-1)	//399
+#define CENTER_Y		(g_pUserInformation->iResolution_y/2-51)	//249
+	if(!IsRunningProgress() && g_pParty != NULL && g_pParty->GetSize() > 0)
+	{
+		static C_SPRITE_PACK cursor(SPK_PARTY_CURSOR);
+		static DWORD dw_prev_tickcount = GetTickCount();
+		static int frame = 0;
+		static const POINT point_table[8] = { {-cursor.GetWidth(0)/2, 0}, 
+												{-cursor.GetWidth(10), -cursor.GetHeight(10)/2},
+												{-cursor.GetWidth(20), -cursor.GetHeight(20)},
+												{0, -cursor.GetHeight(30)/2}, 
+												{0, 0},
+												{-cursor.GetWidth(50), 0},
+												{-cursor.GetWidth(60), -cursor.GetHeight(60) },
+												{0, -cursor.GetHeight(70) },
+											};
+
+		if(dw_prev_tickcount+150 <= GetTickCount())
+		{
+			dw_prev_tickcount = GetTickCount();
+			frame = (frame +1)%10;
+		}
+
+		for(int i = 0; i < g_pParty->GetSize(); i++)
+		{
+			PARTY_INFO *info = g_pParty->GetMemberInfo(i);
+			
+			if(!info) continue;
+
+			int xgap = info->zoneX - GetX();
+			int ygap = info->zoneY - GetY();
+
+			bool bNotInSight = (abs(xgap) > SECTOR_WIDTH / 2 || abs(ygap) > SECTOR_HEIGHT / 2);
+
+			if(bNotInSight && info->zoneID == GetZoneID())
+			{
+				int __x = xgap * TILE_X;
+				int __y = ygap * TILE_Y;
+				int _x, _y;
+				int direct = 0;
+
+				if(__y == 0)
+				{
+					_x = min(WIDTH, max(0, __x+CENTER_X));
+					_y = CENTER_Y;
+					if(_x > CENTER_X)
+						direct = 10;
+					else
+						direct = 30;
+				}
+				else if(__x == 0)
+				{
+					_y = min(HEIGHT, max(0, __y+CENTER_Y));
+					_x = CENTER_X;
+					if(_y > CENTER_Y)
+						direct = 20;
+					else
+						direct = 0;
+				}
+				else if(__x != 0 && __y != 0)
+				{
+
+					double rate = (double)__y/(double)__x;
+					if(rate*(-CENTER_X) + CENTER_Y > 0 && rate*(-CENTER_X) + CENTER_Y < HEIGHT)
+					{
+						if(__x > 0)
+						{
+							_y = rate*(CENTER_X) + CENTER_Y;
+							direct = 10;
+						}
+						else
+						{
+							_y = rate*(-CENTER_X) + CENTER_Y;
+							direct = 30;
+						}
+						_x = min(WIDTH, max(0, __x+CENTER_X));
+					}
+					else
+					{
+						if(__y > 0)
+						{
+							_x = (CENTER_Y)/rate+CENTER_X;
+							direct = 20;
+						}
+						else
+						{
+							_x = (-CENTER_Y)/rate+CENTER_X;
+							direct = 0;
+						}
+						_y = min(HEIGHT, max(0, __y+CENTER_Y));
+					}
+				}
+				_x += point_table[direct/10].x;
+				_y += point_table[direct/10].y;
+				cursor.Blt(_x, _y, direct+frame);
+//				gpC_global_resource->m_pC_assemble_box_button_spk->Blt(_x, _y, C_GLOBAL_RESOURCE::AB_SLAYER_SCROLL_TAG);
+				if(gpC_mouse_pointer->GetX() > _x && gpC_mouse_pointer->GetX() < _x+20 && gpC_mouse_pointer->GetY() > _y && gpC_mouse_pointer->GetY() < _y +20)
+				{
+					static S_DEFAULT_HELP_STRING party_string;
+					party_string.sz_main_str = info->Name;
+					char xy[20];
+					char zonename[40];
+					wsprintf(xy, (*g_pGameStringTable)[UI_STRING_MESSAGE_ZONEINFO_XY].GetString(), info->zoneX, info->zoneY);
+					party_string.sz_sub_str = xy;
+					wsprintf(zonename, "%s", g_pZoneTable->Get(info->zoneID)->Name.GetString());
+					party_string.sz_main_str2 = zonename;
+					g_descriptor_manager.Set(DID_HELP, _x, _y, (void *)&party_string,0,0);
+				}
+			}
+		}
+	}
+
+	if(!IsRunningProgress())
+		PhoenixImGui::PrepareAuctionHouseLegacyTooltip();
+
+	if(!IsRunningProgress())
+		g_descriptor_manager.Show();
+
+#ifndef _LIB
+	if (gpC_press_button)
+	{
+		Rect rect(gpC_press_button->x, gpC_press_button->y-20, 80, 20);
+
+		if (gpC_base->m_p_DDSurface_back->Lock())
+		{
+			S_SURFACEINFO	surfaceinfo;
+			SetSurfaceInfo(&surfaceinfo, gpC_base->m_p_DDSurface_back->GetDDSD());
+
+			FillRect(&surfaceinfo, &rect, YELLOW);
+
+			gpC_base->m_p_DDSurface_back->Unlock();
+		}	
+
+		char buf[100];
+		sprintf(buf, "%dx%d", gpC_press_button->x, gpC_press_button->y);
+		g_Print(rect.x+7, rect.y+2, buf);
+	}
+#endif
+#ifdef OUTPUT_DEBUG
+//	DEBUG_ADD("[C_VS_UI] Show OK");
+#endif
+}
+
+//-----------------------------------------------------------------------------
+// DrawMousePointer
+//
+// Client�� Mouse pointer�� �ٽ� �׸��� ���� �� ����ϴ� Method. UI Loop��
+// �Ҹ����״�(Client�� �䱸��).
+//-----------------------------------------------------------------------------
+void C_VS_UI::DrawMousePointer()
+{
+#ifdef _LIB
+	if(g_pEventManager->GetEventByFlag(EVENTFLAG_NOT_DRAW_MOUSE_POINTER))
+		return;
+#endif
+
+	// 2026-05-18 ImGui Hibrit Admin Menu — DebugConsole acikken Phoenix sprite
+	// cursor cizimi atla. ImGui kendi software cursor cizer (MouseDrawCursor
+	// = true NewFrame'de dinamik set). Iki cursor overlap onleme.
+	if (PhoenixImGui::IsDebugConsoleVisible())
+		return;
+
+	gpC_mouse_pointer->Show();
+}
+
+// 2004, 10, 28, sobeit add start
+void C_VS_UI::DrawTargetArrow(int TargetX, int TargetY)
+{
+	gpC_mouse_pointer->DrawTargetArrow(TargetX, TargetY);
+}
+//-----------------------------------------------------------------------------
+// GetCurrentMousePointerInfo
+//
+// Client���� Mouse pointer buffer�� �����ϱ� ���� ������ ��� Method.
+//-----------------------------------------------------------------------------
+void C_VS_UI::GetCurrentMousePointerInfo(MOUSEPOINTER_INFO &info)
+{
+	info.x		= gpC_mouse_pointer->GetPointerX();
+	info.y		= gpC_mouse_pointer->GetPointerY();
+	info.width	= gpC_mouse_pointer->GetPointerW();
+	info.height = gpC_mouse_pointer->GetPointerH();
+}
+
+//-----------------------------------------------------------------------------
+// Progress SPK reuse cache (IsRunningProgress == m_pC_progress != NULL)
+//-----------------------------------------------------------------------------
+static C_VS_UI_PROGRESS *s_pProgressSpkCache = NULL;
+
+static C_VS_UI_PROGRESS *Phoenix_AcquireProgressWindow() {
+	if (s_pProgressSpkCache != NULL) {
+		C_VS_UI_PROGRESS *p = s_pProgressSpkCache;
+		s_pProgressSpkCache = NULL;
+		p->ReshuffleEventImage();
+		return p;
+	}
+	return new C_VS_UI_PROGRESS;
+}
+
+static void Phoenix_ParkProgressWindow(C_VS_UI_PROGRESS *p) {
+	if (p == NULL)
+		return;
+	if (s_pProgressSpkCache != NULL && s_pProgressSpkCache != p)
+		DeleteNew(s_pProgressSpkCache);
+	s_pProgressSpkCache = p;
+}
+
+static void Phoenix_ReleaseProgressCache() {
+	DeleteNew(s_pProgressSpkCache);
+	s_pProgressSpkCache = NULL;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI
+//
+// 
+//-----------------------------------------------------------------------------
+C_VS_UI::C_VS_UI()
+{
+	m_pC_game = NULL;
+	m_pC_title = NULL;
+	m_pC_progress = NULL;
+	m_pC_option = NULL;
+
+	m_pC_Win32Edite = NULL;
+	
+	m_bl_accel_mode = false;
+	m_iAccel = 0;
+	m_bl_hotkey = false;
+	gbl_ask_go_biling_page_running = false;
+	m_otherojectid = 0;
+	m_mode = 0;
+	
+#if __CONTENTS(__DYNAMIC_UI)
+	UnProgressFlg();
+#endif //__DYNAMIC_UI
+
+#if __CONTENTS(__MOVE_ZONE)
+	MoveZoneUi_Off();
+#endif //__MOVE_ZONE
+}
+
+//-----------------------------------------------------------------------------
+// ~C_VS_UI
+//
+//
+//-----------------------------------------------------------------------------
+C_VS_UI::~C_VS_UI()
+{	
+	Release();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningStorage
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningStorage() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningStorage();
+
+	return false;
+}
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningStorage
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningPetStorage() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningPetStorage();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningRepair
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningRepair() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningRepair();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningSilvering
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningSilvering() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSilvering();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningShop
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningShop() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningShop();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningSell
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningSell() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSell();
+
+	return false;
+}
+
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningExchange
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningExchange() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningExchange();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningBookcase by larosel
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningBookcase() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningBookcase();
+
+	return false;
+}
+/*
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningBriefing by larosel
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningBriefing() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningBriefing();
+
+	return false;
+}
+*/
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningComputer by larosel
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningComputer() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningComputer();
+
+	return false;
+}
+/*
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningTutorialExit by larosel
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningTutorialExit() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningTutorialExit();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// RunTutorialExitAsk
+//
+// �װŵ鱸 Ʃ�丮�� ������?�ϰ� ���´�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunTutorialExitAsk(const int select, const char* pName)
+{
+	if (m_pC_game)
+		m_pC_game->RunTutorialExitAsk(select, pName);
+}
+
+//-----------------------------------------------------------------------------
+// CloseTutorialExitAsk
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseTutorialExitAsk()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTutorialExitAsk();
+}
+*/
+//-----------------------------------------------------------------------------
+// C_VS_UI::RestoreWhenActivateGame
+//
+//
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RestoreWhenActivateGame()
+{
+	if (m_pC_game)
+		m_pC_game->RestoreWhenActivateGame();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::BackupPrevId
+//
+// login�� �� ������ �Է��� id�� �ڵ����� �̸� �Է½�Ű�� ���ؼ� file�� backup�Ѵ�.
+//-----------------------------------------------------------------------------
+void	C_VS_UI::BackupPrevId(const char * sz_id)
+{
+	if( strlen( sz_id ) >= 13 )
+		return;
+
+	strcpy(g_pUserOption->BackupID, sz_id);
+//	if (sz_id)
+//	{
+//		ofstream file(FILE_BACKUP_ID, ios::binary);
+//		if (file)
+//		{
+//			file.write(sz_id, strlen(sz_id));
+//		}
+//
+//		file.close();
+//	}
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::AlreadyPress
+//
+// ������ push�� ���¸� true�� ��ȯ�Ѵ�.
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::AlreadyPress(UINT message, long extra) const
+{
+	if (message == WM_KEYDOWN)
+		if ((extra&PREV_KEYSTATE) != 0)
+			return true;
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::Release
+//
+// global���Ÿ� Ȯ���� �������� �ϱ� ���ؼ� �߰�..  by sigi
+//-----------------------------------------------------------------------------
+void
+C_VS_UI::Release()
+{
+#ifndef _LIB
+//	DeleteNew(m_p_edit_dialog);
+#endif
+
+	DeleteNew(gpC_Imm);
+	gpC_Imm = NULL;
+	DeleteNew(m_pC_title);
+	DeleteNew(m_pC_game);  //���漼������
+	DeleteNew(m_pC_progress);
+	DeleteNew(m_pC_option);
+	m_pC_progress = NULL;
+	Phoenix_ReleaseProgressCache();
+
+	g_FreeMessage(); // Window Manager ������ ���ش�.
+
+	DeleteNew(gpC_vs_ui_window_manager);
+
+	DeleteNew(gpC_window_manager);
+	DeleteNew(gpC_process_runner);
+
+	DeleteNew(gpC_item);
+	DeleteNew(gpC_global_resource);
+	DeleteNew(gpC_mouse_pointer);
+
+	DeleteNew(gpC_base);
+	//DeleteNew(g_pSkinManager);
+
+#ifndef _LIB
+	//UnInitSound();
+
+	
+#endif
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::GetHotkey
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::SetHotkey(C_VS_UI_SKILL::HOTKEY hotkey, ACTIONINFO id)
+{
+	if (m_pC_game)
+		m_pC_game->SetHotkey(hotkey, id);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::GetHotkey
+//
+// 
+//-----------------------------------------------------------------------------
+int	C_VS_UI::GetHotkey(C_VS_UI_SKILL::HOTKEY hotkey, C_VS_UI_SKILL::HOTKEY_GRADE grade) const
+{
+	if (m_pC_game)
+		return m_pC_game->GetHotkey(hotkey, grade);
+
+	return NOT_SELECTED;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI_GAME::GetHotkeyType
+//
+// 
+//-----------------------------------------------------------------------------
+int	C_VS_UI::GetQuikSlot(C_VS_UI_OUSTERS_QUICKITEM::HOTKEY hotkey) const
+{
+	if (m_pC_game)
+		return m_pC_game->GetQuikSlot(hotkey);
+
+	return NOT_SELECTED;
+}
+
+int	C_VS_UI::GetQuikSlot(C_VS_UI_SLAYER_QUICKITEM::HOTKEY hotkey) const
+{
+	if (m_pC_game)
+		return m_pC_game->GetQuikSlot(hotkey);
+
+	return NOT_SELECTED;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI_GAME::GetHotkeyType
+//
+// 
+//-----------------------------------------------------------------------------
+int	C_VS_UI::GetHotkeyType(C_VS_UI_SKILL::HOTKEY hotkey) const
+{
+	if (m_pC_game)
+		return m_pC_game->GetHotkeyType(hotkey);
+
+	return NOT_SELECTED;
+}
+//-----------------------------------------------------------------------------
+// C_VS_UI::FinishLevelUp
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::FinishLevelUp()
+{
+	if (m_pC_game)
+		m_pC_game->FinishLevelUp();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::LevelUp
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::LevelUp()
+{
+	if (m_pC_game)
+		m_pC_game->LevelUp();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningLevelUp
+//
+// 
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningLevelUp()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningLevelUp();
+	return false;
+}
+
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningCharInfo
+//
+// 
+//-----------------------------------------------------------------------------
+bool C_VS_UI::IsRunningCharInfo()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningCharInfo();
+
+	return false;
+}
+
+bool	C_VS_UI::IsRunningGrade2Info()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningGrade2Info();
+
+	return false;
+}
+
+bool	C_VS_UI::IsRunningGrade3Info()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningGrade3Info();
+
+	return false;
+}
+
+
+bool	C_VS_UI::IsRunningGrade1Info()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningGrade1Info();
+
+	return false;
+}
+
+
+bool	C_VS_UI::IsRunningRareSkillInfo()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningRareSkillInfo();
+
+	return false;
+}
+
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningCharInfo
+//
+// 
+//-----------------------------------------------------------------------------
+bool C_VS_UI::IsRunningSkillInfo()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSkillInfo();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunCharacterInfo
+//
+// 
+//-----------------------------------------------------------------------------
+//void	C_VS_UI::RunInfo(bool skill_mode)
+//{
+//	if (m_pC_game)
+//		m_pC_game->RunInfo(skill_mode);
+//}
+
+void	C_VS_UI::RunInfo(C_VS_UI_INFO::INFO_MODE Mode)
+{
+	if (m_pC_game && !gC_ci->GetCompositionMode())
+		m_pC_game->RunInfo(Mode);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunOtherCharacterInfo
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RunOtherInfo(bool bIsMonster)
+{
+	if (m_pC_game)
+		m_pC_game->RunOtherInfo(bIsMonster);
+}
+
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::AcquireChatting
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::AcquireChatting()
+{
+	if (m_pC_game)
+		m_pC_game->AcquireChatting();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsEmptyChatting
+//
+// 
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsEmptyChatting()
+{
+	if (m_pC_game)
+		return m_pC_game->IsEmptyChatting();
+	return true;
+}
+
+/*
+//-----------------------------------------------------------------------------
+// C_VS_UI::DisconnectPCS
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::DisconnectPCS(int slot)
+{
+	if (m_pC_game)
+		m_pC_game->DisconnectPCS(slot);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::ConnectionFailed
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::ConnectionFailed()
+{
+	if (m_pC_game)
+		m_pC_game->ConnectionFailed();
+}
+*/
+//-----------------------------------------------------------------------------
+// C_VS_UI::CloseUserRegistrationWindow
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseUserRegistrationWindow()
+{
+	if (m_pC_title)
+	{
+		m_pC_title->CloseUserRegistrationWindow();
+		m_pC_title->Start();
+	}
+}
+/*
+//-----------------------------------------------------------------------------
+// C_VS_UI::GrantPCSWaitRoomToDuplex
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::GrantPCSWaitRoomToDuplex(int slot)
+{
+	if (m_pC_game)
+		m_pC_game->GrantPCSWaitRoomToDuplex(slot);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::GetSendPossibleSlot
+//
+// 
+//-----------------------------------------------------------------------------
+int C_VS_UI::GetSendPossibleSlot() const
+{
+	if (m_pC_game)
+		return m_pC_game->GetSendPossibleSlot();
+
+	return NOT_SELECTED;
+}
+*/
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunNewUserRegistration
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunNewUserRegistration()
+{
+	if (m_pC_title)
+		m_pC_title->RunNewUserRegistration();
+}
+
+void C_VS_UI::ShowUserRegistrationSucceeded()
+{
+	if (m_pC_title)
+		m_pC_title->ShowUserRegistrationSucceeded();
+}
+
+void C_VS_UI::ShowUserRegistrationFailed()
+{
+	if (m_pC_title)
+		m_pC_title->ShowUserRegistrationFailed();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::CloseInfo
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseInfo()
+{
+	if (m_pC_game)
+		m_pC_game->CloseInfo();
+}
+
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::CloseGameMenu
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseGameMenu()
+{
+	if (m_pC_game)
+		m_pC_game->CloseGameMenu();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::GetInventoryPosition
+//
+// Client���� Inventory�� ��ġ�� ����.
+//-----------------------------------------------------------------------------
+Point C_VS_UI::GetInventoryPosition() const
+{
+	if (m_pC_game)
+		return m_pC_game->GetInventoryPosition();
+
+	Point point(0, 0);
+	return point;
+}
+
+Point	C_VS_UI::GetInventoryGetWidthAndHeight()
+{
+	if (m_pC_game)
+		return m_pC_game->GetInventoryPosition();
+
+	Point point(0, 0);
+	return point;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::GetInventoryGridPosition
+//
+// Client���� Inventory�� (x, y) grid�� ��ġ�� ����.
+//-----------------------------------------------------------------------------
+Point	C_VS_UI::GetInventoryGridPosition(int grid_x, int grid_y) const
+{
+	if (m_pC_game)
+		return m_pC_game->GetInventoryGridPosition(grid_x, grid_y);
+
+	Point point(0, 0);
+	return point;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::ReplaceItemInGear
+//
+// 
+//-----------------------------------------------------------------------------
+bool C_VS_UI::ReplaceItemInGear(MItem* pItem, int slot, MItem*& pOldItem)
+{
+	if (m_pC_game)
+		return m_pC_game->ReplaceItemInGear(pItem, slot, pOldItem);
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RemoveItemInGear
+//
+// 
+//-----------------------------------------------------------------------------
+MItem * C_VS_UI::RemoveItemInGear(int slot)
+{
+	if (m_pC_game)
+		return m_pC_game->RemoveItemInGear(slot);
+
+	return NULL;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::CanReplaceItemInGear
+//
+// slayer/vampire gearâ���� item�� replace�� �� �ִ°�?
+//-----------------------------------------------------------------------------
+bool C_VS_UI::CanReplaceItemInGear(MItem* pItem, int slot, MItem*& pOldItem)
+{
+	if (m_pC_game)
+		return m_pC_game->CanReplaceItemInGear(pItem, slot, pOldItem);
+
+	return false;
+}
+
+bool C_VS_UI::CanReplaceItemInMilitarySlot(MItem* pItem, int slot, MItem*& pOldItem)
+{
+	if ( m_pC_game )
+		return m_pC_game->CanReplaceItemInMilitarySlot(pItem, slot, pOldItem);
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::GetGearItem
+//
+// slayer���� vampire���� �� �� ����Ѵ�.
+//-----------------------------------------------------------------------------
+const MItem * C_VS_UI::GetGearItem(int slot) const
+{
+	if (m_pC_game)
+		return m_pC_game->GetGearItem(slot);
+
+	return NULL;
+}
+
+const MItem * C_VS_UI::GetGearOtherItem(int slot) const
+{
+	if (m_pC_game)
+		return m_pC_game->GetGearOtherItem(slot);
+
+	return NULL;
+}
+
+const MItem * C_VS_UI::GetMilitarySlot(int slot) const
+{
+	if ( m_pC_game )
+		return m_pC_game->GetMilitarySlot(slot);
+
+	return NULL;
+}
+
+#if __CONTENTS(__GEAR_SWAP_CHANGE)		//C_VS_UI::GetGearID()
+	DWORD	C_VS_UI::GetGearID()
+	{
+		if (m_pC_game)
+			return m_pC_game->GetGearID();
+		return 0;
+	}
+#endif	// __GEAR_SWAP_CHANGE
+	
+#if __CONTENTS(__QUEST_RENEWAL)
+	void	C_VS_UI::GpsToBringQuestInfo()
+	{
+		if(m_pC_game)
+			m_pC_game->GpsToBringQuestInfo();
+	}
+#endif
+
+const MItem * C_VS_UI::GetGearItem_PickUp(int &slot) const
+{
+	if (m_pC_game)
+		return m_pC_game->GetGearItem_PickUp(slot);
+
+	return NULL;
+}
+const MItem * C_VS_UI::GetGearCoreZapItem(int slot) const // Ư�� ���Կ� �پ� �ִ� �ھ����� ����, slot : �ھ��� ���� ����
+{
+	if (m_pC_game)
+		return m_pC_game->GetGearCoreZapItem(slot);
+
+	return NULL;
+}
+
+const MItem * C_VS_UI::GetGearOtherCoreZapItem(int slot) const // Ư�� ���Կ� �پ� �ִ� �ھ����� ����, slot : �ھ��� ���� ����
+{
+	if (m_pC_game)
+		return m_pC_game->GetGearOtherCoreZapItem(slot);
+
+	return NULL;
+}
+
+const MItem * C_VS_UI::GetGearCoreZapedItem(int slot) const // �ھ��� �ؿ� �� �������� ����, slot : �ھ��� ����
+{
+	if (m_pC_game)
+		return m_pC_game->GetGearCoreZapedItem(slot);
+
+	return NULL;
+}
+const bool C_VS_UI::IsHasAllCoreZap(int CoreZapType) const
+{
+	if (m_pC_game)
+		return m_pC_game->IsHasAllCoreZap(CoreZapType);
+
+	return false;
+}
+
+const bool C_VS_UI::IsHasAllCue(OUT bool CueOption[]) const
+{
+	if (m_pC_game)
+		return m_pC_game->IsHasAllCue(CueOption);
+
+	return false;
+}
+
+const bool C_VS_UI::IsCloseBloodBibleSlot(int slot) const
+{
+	if (m_pC_game)
+		return m_pC_game->IsCloseBloodBibleSlot(slot);
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::GetGearSize
+//
+// slayer���� vampire���� �� �� ����Ѵ�.
+//-----------------------------------------------------------------------------
+const int C_VS_UI::GetGearSize() const
+{
+	if (m_pC_game)
+		return m_pC_game->GetGearSize();
+
+	return NULL;
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::CloseAllDialog
+//
+// ��𿡵� ���ӵ����ʴ� dialog�� server disconnect message�� ���� ���� ���� ����
+// ���� �ݾ���� �Ѵ�.
+//-----------------------------------------------------------------------------
+void	C_VS_UI::CloseAllDialog()
+{
+	if (m_pC_game)
+	{
+		while(m_pC_game->ClosePopupWindow());
+		
+		if(m_pC_game->IsRunningBloodBibleStatus())		//-_-;;
+			m_pC_game->CloseBloodBibleStatus();
+		
+		if(m_pC_game->IsRunningCTFStatusWindow() )
+			m_pC_game->CloseCTFStatusWindow();
+	}
+
+	if(gbl_ask_go_biling_page_running)
+	{
+		gpC_base->SendMessage(UI_GO_BILING_PAGE, FALSE);
+		gbl_ask_go_biling_page_running = false;		
+	}
+
+
+	g_FreeMessage();
+	g_InitMessage();
+}
+/*
+//-----------------------------------------------------------------------------
+// AcquireQuitPCSOnlineModeMessage
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::AcquireQuitPCSOnlineModeMessage()
+{
+	if (m_pC_game)
+		m_pC_game->AcquireQuitPCSOnlineModeMessage();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::PleaseConnectPCS
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::PleaseConnectPCS(char * sz_name, long pcs_number, int slot)
+{
+	if (m_pC_game)
+		m_pC_game->PleaseConnectPCS(sz_name, pcs_number, slot);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::OnLinePCS
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::OnLinePCS(char * sz_name, long pcs_number)
+{
+	if (m_pC_game)
+		m_pC_game->OnLinePCS(sz_name, pcs_number);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::AcquirePDSClosedMessage
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::AcquirePDSClosedMessage()
+{
+	if (m_pC_game)
+		m_pC_game->AcquirePDSClosedMessage();
+}
+*/
+/*
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunEnchantSkillTree
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RunSwordSkillTree()
+{
+	if (m_pC_game)
+		m_pC_game->RunSwordSkillTree();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunEnchantSkillTree
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RunEnchantSkillTree()
+{
+	if (m_pC_game)
+		m_pC_game->RunEnchantSkillTree();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunGunSkillTree
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RunGunSkillTree()
+{
+	if (m_pC_game)
+		m_pC_game->RunGunSkillTree();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunHealSkillTree
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RunHealSkillTree()
+{
+	if (m_pC_game)
+		m_pC_game->RunHealSkillTree();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunBladeSkillTree
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RunBladeSkillTree()
+{
+	if (m_pC_game)
+		m_pC_game->RunBladeSkillTree();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RunVampireSkillTree
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RunVampireSkillTree()
+{
+	if (m_pC_game)
+		m_pC_game->RunVampireSkillTree();
+}
+*/
+//-----------------------------------------------------------------------------
+// RunDescDialog
+//
+// ����â�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunDescDialog(int type, void *ptr, void* ptr2)
+{
+	if (m_pC_game)
+		m_pC_game->RunDescDialog(type, ptr, ptr2);
+}
+
+//-----------------------------------------------------------------------------
+// CloseDescDialog
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseDescDialog()
+{
+	if (m_pC_game)
+		m_pC_game->CloseDescDialog();
+}
+
+//-----------------------------------------------------------------------------
+// RunFileDialog
+//
+// ����â�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunFileDialog(C_VS_UI_FILE_DIALOG::MODE Mode, char *type)
+{
+	if (m_pC_game)
+		m_pC_game->RunFileDialog(Mode, type);
+}
+
+//-----------------------------------------------------------------------------
+// CloseFileDialog
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseFileDialog()
+{
+	if (m_pC_game)
+		m_pC_game->CloseFileDialog();
+}
+
+//-----------------------------------------------------------------------------
+// RunElevator
+//
+// ���������� �������̽��� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunElevator()
+{
+	if (m_pC_game)
+		m_pC_game->RunElevator();
+}
+
+//-----------------------------------------------------------------------------
+// CloseElevator
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseElevator()
+{
+	if (m_pC_game)
+		m_pC_game->CloseElevator();
+}
+#if __CONTENTS(__REPAIRSYSTEM_RENEWAL)
+void C_VS_UI::RunRepairItemAll(DWORD objectID, DWORD price)
+{
+	if (m_pC_game)
+		m_pC_game->RunRepairItemAll(objectID, price);
+}
+#endif //__REPAIRSYSTEM_RENEWAL
+
+//-----------------------------------------------------------------------------
+// RunBookcase
+//
+// å���� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunBookcase()
+{
+	if (m_pC_game)
+		m_pC_game->RunBookcase();
+}
+
+//-----------------------------------------------------------------------------
+// CloseBookcase
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseBookcase()
+{
+	if (m_pC_game)
+		m_pC_game->CloseBookcase();
+}
+
+/*
+//-----------------------------------------------------------------------------
+// RunBriefing
+//
+// �긮���� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunBriefing()
+{
+	if (m_pC_game)
+		m_pC_game->RunBriefing();
+}
+
+//-----------------------------------------------------------------------------
+// CloseBriefing
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseBriefing()
+{
+	if (m_pC_game)
+		m_pC_game->CloseBriefing();
+}
+*/
+//-----------------------------------------------------------------------------
+// RunComputer
+//
+// ��ǻ�͸� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunComputer()
+{
+	if (m_pC_game)
+		m_pC_game->RunComputer();
+}
+
+//-----------------------------------------------------------------------------
+// CloseComputer
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseComputer()
+{
+	if (m_pC_game)
+		m_pC_game->CloseComputer();
+}
+/*
+//-----------------------------------------------------------------------------
+// RunTutorialExit
+//
+// Ʃ�丮�� ������â�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunTutorialExit()
+{
+	if (m_pC_game)
+		m_pC_game->RunTutorialExit();
+}
+
+//-----------------------------------------------------------------------------
+// CloseTutorialExit
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseTutorialExit()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTutorialExit();
+}
+
+//-----------------------------------------------------------------------------
+// RunTutorialExitAccept
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunTutorialExitAccept()
+{
+	if(m_pC_game)
+		m_pC_game->RunTutorialExitAccept();
+}
+*/
+//-----------------------------------------------------------------------------
+// RunSlayerPortal
+//
+// �����̾���Ż �������̽��� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunSlayerPortal( int nExtendLevel )
+{
+	if (m_pC_game)
+		m_pC_game->RunSlayerPortal( nExtendLevel );
+}
+
+//-----------------------------------------------------------------------------
+// CloseSlayerPortal
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseSlayerPortal()
+{
+	if (m_pC_game)
+		m_pC_game->CloseSlayerPortal();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningSlayerPortal
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningSlayerPortal() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSlayerPortal();
+
+	return false;
+}
+
+
+//-----------------------------------------------------------------------------
+// RunTeamList
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunTeamList(bool ready, bool IsUnion)
+{
+	if (m_pC_game)
+		m_pC_game->RunTeamList(ready, IsUnion);
+}
+
+//-----------------------------------------------------------------------------
+// CloseTeamList
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseTeamList()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTeamList();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningTeamList
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningTeamList(bool IsUnion) const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningTeamList(IsUnion);
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// RunTeamList
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunTeamMemberList()
+{
+	if (m_pC_game)
+		m_pC_game->RunTeamMemberList();
+}
+
+//-----------------------------------------------------------------------------
+// CloseTeamList
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseTeamMemberList()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTeamMemberList();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningTeamList
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningTeamMemberList() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningTeamMemberList();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// RunTeamInfo
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunTeamInfo(bool ready, void *info, bool IsUnion)
+{
+	if (m_pC_game)
+		m_pC_game->RunTeamInfo(ready, info, IsUnion);
+}
+
+//-----------------------------------------------------------------------------
+// CloseTeamInfo
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseTeamInfo()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTeamInfo();
+}
+
+void C_VS_UI::CloseTeamInfoDialogBox()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTeamInfoDialogBox();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningTeamInfo
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningTeamInfo() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningTeamInfo();
+
+	return false;
+}
+
+
+//-----------------------------------------------------------------------------
+// RunTeamMemberInfo
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunTeamMemberInfo(C_VS_UI_TEAM_MEMBER_INFO::MEMBER_INFO *info)
+{
+	if (m_pC_game)
+		m_pC_game->RunTeamMemberInfo(info);
+}
+
+//-----------------------------------------------------------------------------
+// CloseTeamMemberInfo
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseTeamMemberInfo()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTeamMemberInfo();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningTeamMemberInfo
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningTeamMemberInfo() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSlayerPortal();
+
+	return false;
+}
+
+
+//-----------------------------------------------------------------------------
+// RunTeamRegist
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunTeamRegist(bool member, int reg_fee, int rank, char *date, char *team_name, int guild_id)
+{
+	if (m_pC_game)
+		m_pC_game->RunTeamRegist(member, reg_fee, rank, date, team_name, guild_id);
+}
+
+//-----------------------------------------------------------------------------
+// CloseTeamRegist
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseTeamRegist()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTeamRegist();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningTeamRegist
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningTeamRegist() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningTeamRegist();
+
+	return false;
+}
+
+
+
+
+
+
+void C_VS_UI::RunQuickItemSlot()
+{
+	if(m_pC_game)
+		m_pC_game->RunQuickItemSlot();
+}
+
+void C_VS_UI::CloseQuickItemSlot()
+{
+	if(m_pC_game)
+		m_pC_game->CloseQuickItemSlot();
+}
+
+bool C_VS_UI::IsRunningQuickItemSlot()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningQuickItemSlot();
+	return false;
+}
+
+void C_VS_UI::RunMinimap()
+{
+	if(m_pC_game)
+		m_pC_game->RunMinimap();
+}
+
+void C_VS_UI::CloseMinimap()
+{
+	if(m_pC_game)
+		m_pC_game->CloseMinimap();
+}
+
+bool C_VS_UI::IsRunningMinimap()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningMinimap();
+	return false;
+}
+
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::CloseSkillTree
+//
+// 
+//-----------------------------------------------------------------------------
+//void	C_VS_UI::CloseSkillTree()
+//{
+//	if (m_pC_game)
+//		m_pC_game->CloseSkillTree();
+//}
+
+//-----------------------------------------------------------------------------
+// FinishItemSelling
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::FinishItemSelling()
+{
+	if (m_pC_game)
+		m_pC_game->FinishItemSelling();
+}
+
+//-----------------------------------------------------------------------------
+// FinishItemRepairing
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::FinishItemRepairing()
+{
+	if (m_pC_game)
+		m_pC_game->FinishItemRepairing();
+}
+
+//-----------------------------------------------------------------------------
+// FinishItemSilvering
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::FinishItemSilvering()
+{
+	if (m_pC_game)
+		m_pC_game->FinishItemSilvering();
+}
+
+
+//void	C_VS_UI::OpenGameHook()
+//{
+//	if ( m_pC_game )
+//		m_pC_game->OpenGameHook();
+//}
+//
+//void	C_VS_UI::CloseGameHook()
+//{
+//	if ( m_pC_game )
+//		m_pC_game->CloseGameHook();
+//}
+
+void    C_VS_UI::ToggleMilitary()
+{
+	if ( m_pC_game )
+		m_pC_game->ToggleMilitary();
+}
+
+void	C_VS_UI::OpenMilitary()
+{
+	if ( m_pC_game )
+		m_pC_game->OpenMilitary();
+}
+
+void	C_VS_UI::CloseMilitary()
+{
+	if ( m_pC_game )
+		m_pC_game->CloseMilitary();
+}
+
+void	C_VS_UI::InvalidateMilitarySkillLists()
+{
+	if ( m_pC_game )
+		m_pC_game->InvalidateMilitarySkillLists();
+}
+
+bool	C_VS_UI::IsRunningMilitary()
+{
+	if ( m_pC_game == NULL )
+		return false;
+	return m_pC_game->IsRunningMilitary();
+}
+
+void    C_VS_UI::UpdateMilitarySlotData(int nSlotID, int nType, int nGrade)
+{
+	if ( m_pC_game )
+		m_pC_game->UpdateMilitarySlotData(nSlotID, nType, nGrade);
+}
+
+void    C_VS_UI::ToggleTMall()
+{
+	if ( m_pC_game )
+		m_pC_game->ToggleTMall();
+}
+
+void	C_VS_UI::OpenTMall()
+{
+	if ( m_pC_game )
+		m_pC_game->OpenTMall();
+}
+
+void	C_VS_UI::CloseTMall()
+{
+	if ( m_pC_game )
+		m_pC_game->CloseTMall();
+}
+
+bool	C_VS_UI::AddItemToTMall(C_VS_UI_TMALL::ItemList pItem)
+{
+	if(m_pC_game)
+		return m_pC_game->AddItemToTMall( pItem );
+
+	return false;
+}
+
+bool C_VS_UI::IsRunningPayEvent()
+{
+	return m_pC_game->IsRunningPayEvent();
+}
+
+void C_VS_UI::OpenPayEvent()
+{
+	if(m_pC_game)
+		m_pC_game->OpenPayEvent();
+}
+void	C_VS_UI::ClosePayEvent()
+{
+	if ( m_pC_game )
+		m_pC_game->ClosePayEvent();
+}
+
+bool	C_VS_UI::AddItemToPayEvent(C_VS_UI_PAYEVENT::ItemData pItem)
+{
+	if(m_pC_game)
+		return m_pC_game->AddItemToPayEvent( pItem );
+
+	return false;
+}
+
+void	C_VS_UI::SetPayEventCount(int nLevel, int nCount)
+{
+	if(m_pC_game)
+		m_pC_game->SetPayEventCount(nLevel, nCount);
+}
+
+void	C_VS_UI::SetPayEventStautus(int nLevel, int nStautus)
+{
+	if(m_pC_game)
+		m_pC_game->SetPayEventStautus(nLevel, nStautus);
+}
+
+void	C_VS_UI::OpenHollyWar()
+{
+	if ( m_pC_game )
+		m_pC_game->OpenHollyWar();
+}
+
+void	C_VS_UI::CloseHollyWar()
+{
+	if ( m_pC_game )
+		m_pC_game->CloseHollyWar();
+}
+
+void   C_VS_UI::AddHollyScore(C_VS_UI_HOLYWAR::PlayerScore score, int nRace)
+{
+	if ( m_pC_game )
+		m_pC_game->AddHollyScore( score, nRace );
+}
+
+void   C_VS_UI::AddHollyRace(C_VS_UI_HOLYWAR::RaceData * data)
+{
+	if ( m_pC_game )
+		m_pC_game->AddHollyRace(data);
+}
+
+void   C_VS_UI::AddPlayerData(C_VS_UI_HOLYWAR::PlayerData data)
+{
+	if ( m_pC_game )
+		m_pC_game->AddPlayerData(data);
+}
+//-----------------------------------------------------------------------------
+// OpenInventoryToSell
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::OpenInventoryToSell()
+{
+	if (m_pC_game)
+		m_pC_game->OpenInventoryToSell();
+}
+
+//-----------------------------------------------------------------------------
+// OpenInventoryToRepair
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::OpenInventoryToRepair()
+{
+	if (m_pC_game)
+		m_pC_game->OpenInventoryToRepair();
+}
+
+//-----------------------------------------------------------------------------
+// OpenInventoryToSilvering
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::OpenInventoryToSilvering()
+{
+	if (m_pC_game)
+		m_pC_game->OpenInventoryToSilvering();
+}
+
+//-----------------------------------------------------------------------------
+// SetShop
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetShop(MShop* pShop)
+{
+	if (m_pC_game)
+		m_pC_game->SetShop(pShop);
+}
+
+//-----------------------------------------------------------------------------
+// SetStorage
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetStorage(MStorage* pStorage)
+{
+	if (m_pC_game)
+		m_pC_game->SetStorage(pStorage);
+}
+//-----------------------------------------------------------------------------
+// SetStorage
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetPetStorage(MStorage* pStorage)
+{
+	if (m_pC_game)
+		m_pC_game->SetPetStorage(pStorage);
+}
+//-----------------------------------------------------------------------------
+// CloseShop
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseShop()
+{
+	if (m_pC_game)
+		m_pC_game->CloseShop();
+}
+
+//-----------------------------------------------------------------------------
+// CloseStorage
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseStorage()
+{
+	if (m_pC_game)
+		m_pC_game->CloseStorage();
+}
+//-----------------------------------------------------------------------------
+// CloseStorage
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::ClosePetStorage()
+{
+	if (m_pC_game)
+		m_pC_game->ClosePetStorage();
+}
+//-----------------------------------------------------------------------------
+// CloseExchange
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseExchange()
+{
+	if (m_pC_game)
+		m_pC_game->CloseExchange();
+}
+
+//-----------------------------------------------------------------------------
+// CloseExchangeAsk
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseExchangeAsk()
+{
+	if (m_pC_game)
+		m_pC_game->CloseExchangeAsk();
+}
+
+//-----------------------------------------------------------------------------
+// CloseExchangeCancel
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseExchangeCancel()
+{
+	if (m_pC_game)
+		m_pC_game->CloseExchangeCancel();
+}
+
+//-----------------------------------------------------------------------------
+// CloseSkillView
+//
+// 
+//-----------------------------------------------------------------------------
+//void C_VS_UI::CloseSkillView()
+//{
+//	if (m_pC_game)
+//		m_pC_game->CloseSkillView();
+//}
+
+//-----------------------------------------------------------------------------
+// RunSkillView / CloseSkillView / GetSkillViewWindow
+//
+// 2026-05-12: SkillInfoWindow aktivasyonu (m_pC_skill_view chain).
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunSkillView()
+{
+	if (m_pC_game)
+		m_pC_game->RunSkillView();
+}
+
+void C_VS_UI::CloseSkillView()
+{
+	if (m_pC_game)
+		m_pC_game->CloseSkillView();
+}
+
+C_VS_UI_SKILL_VIEW * C_VS_UI::GetSkillViewWindow()
+{
+	if (m_pC_game)
+		return m_pC_game->GetSkillViewWindow();
+	return NULL;
+}
+
+
+//-----------------------------------------------------------------------------
+// RunShop
+//
+// Shop�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunShop()
+{
+	if (m_pC_game)
+		m_pC_game->RunShop();
+}
+
+//-----------------------------------------------------------------------------
+// RunStorage
+//
+// Storage�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunStorage()
+{
+	if (m_pC_game)
+		m_pC_game->RunStorage();
+}
+//-----------------------------------------------------------------------------
+// RunPetStorage
+//
+// Storage�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunPetStorage()
+{
+	if (m_pC_game)
+		m_pC_game->RunPetStorage();
+}
+
+//-----------------------------------------------------------------------------
+// RunStorageBuy
+//
+// Storage�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunStorageBuy(int price)
+{
+	if (m_pC_game)
+		m_pC_game->RunStorageBuy(price);
+}
+
+//-----------------------------------------------------------------------------
+// RunExchangeCancel
+//
+// ��ȯ����ҷ�?�ϰ� ���´�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunExchangeCancel(const char* pName)
+{
+	if (m_pC_game)
+		m_pC_game->RunExchangeCancel(pName);
+}
+
+//-----------------------------------------------------------------------------
+// RunExchangeAsk
+//
+// ��ȯ�ҷ�?�ϰ� ���´�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunExchangeAsk(const char* pName)
+{
+	if (m_pC_game)
+		m_pC_game->RunExchangeAsk(pName);
+}
+
+//-----------------------------------------------------------------------------
+// RunExchange
+//
+// ��ȯâ�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunExchange()
+{
+	if (m_pC_game)
+		m_pC_game->RunExchange();
+}
+/*
+//-----------------------------------------------------------------------------
+// RunOption
+//
+// �ɼ�â�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunOption()
+{
+	if (m_pC_game)
+		m_pC_game->RunOption();
+	else if(m_pC_title)
+		m_pC_title->RunOption();
+}
+
+//-----------------------------------------------------------------------------
+// CloseOption
+//
+// ��ȯâ�� ����.
+//-----------------------------------------------------------------------------
+void	C_VS_UI::CloseOption()
+{
+	if (m_pC_game)
+		m_pC_game->CloseOption();
+	else if(m_pC_title)
+		m_pC_title->CloseOption();
+}
+*/
+//-----------------------------------------------------------------------------
+// GetOpenState
+//
+// 
+//-----------------------------------------------------------------------------
+bool C_VS_UI::GetInventoryOpenState() const
+{
+	if (m_pC_game)
+		return m_pC_game->GetInventoryOpenState();
+
+	return false;
+}
+
+bool C_VS_UI::GetGearOpenState() const
+{
+	if (m_pC_game)
+		return m_pC_game->GetGearOpenState();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// NewCharacterCreateFailed
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::NewCharacterCreateFailed(int error)
+{
+	if (m_pC_title)
+		m_pC_title->NewCharacterCreateFailed(error);
+}
+
+//-----------------------------------------------------------------------------
+// SetCharacter
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetCharacter(int slot, S_SLOT &S_slot)
+{
+	if (m_pC_title)
+		m_pC_title->SetCharacter(slot, S_slot);
+
+}
+
+//-----------------------------------------------------------------------------
+// ServerDisconnectMessage
+//
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::ServerDisconnectMessage()
+{
+	gC_ci->Init();
+	CloseAllDialog();
+	if (gpC_base->EventOccured() == true)
+		gpC_base->FinishEvent();
+
+
+	// Ȯ���� ��� Window�� �ݱ����ؼ�..
+//	if (m_pC_title)
+//	{
+//		DeleteNew(m_pC_title);
+//	}
+//	m_pC_title = new C_VS_UI_TITLE;
+//	m_pC_title->Start();
+
+	StartTitle();
+
+	//g_msg_server_disconnect->Start();
+}
+
+//-----------------------------------------------------------------------------
+// InvalidIdPasswordMessage
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::InvalidIdPasswordMessage()
+{
+	g_msg_invalid_id_password->Start();
+}
+
+//-----------------------------------------------------------------------------
+// AleadyExistIdMessage
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::AleadyExistIdMessage()
+{
+	g_msg_id_aleady_exist->Start();
+}
+
+//-----------------------------------------------------------------------------
+// NoAleadyExistIdMessage
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::NoAleadyExistIdMessage()
+{
+	g_msg_id_no_aleady_exist->Start();
+}
+
+//-----------------------------------------------------------------------------
+// Invalid_SSN_Message
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::Invalid_SSN_Message()
+{
+	g_msg_invalid_ssn->Start();
+}
+
+//-----------------------------------------------------------------------------
+// StartProgress
+//
+// 
+//-----------------------------------------------------------------------------
+
+void C_VS_UI::StartProgress()
+{
+	C_VS_UI_PROGRESS::DebugLogLayout("LIB_SIDE_StartProg");
+	if (m_pC_progress == NULL)
+		m_pC_progress = Phoenix_AcquireProgressWindow();
+	else
+		m_pC_progress->ReshuffleEventImage();
+
+	m_pC_progress->Start();
+
+#if __CONTENTS(__DYNAMIC_UI)
+	m_bActProgress = true;
+#endif //__DYNAMIC_UI
+}
+
+#if __CONTENTS(__TIPOJYU_CASTLE)	//C_VS_UI_GAME
+void C_VS_UI::StartProgress(WORD wZoneID)
+{
+	if (m_pC_progress == NULL)
+		m_pC_progress = Phoenix_AcquireProgressWindow();
+	else
+		m_pC_progress->ReshuffleEventImage();
+
+	m_pC_progress->SetZoneID(wZoneID);
+	m_pC_progress->Start();
+
+#if __CONTENTS(__DYNAMIC_UI)
+	m_bActProgress = true;
+#endif //__DYNAMIC_UI
+}
+
+void C_VS_UI::SetProgressZoneID(WORD	wZoneID)
+{
+	if(m_pC_progress)
+		m_pC_progress->SetZoneID(wZoneID);
+}
+
+WORD C_VS_UI::GetProgressZoneID()
+{
+	if(m_pC_progress)
+		return m_pC_progress->GetZoneID();
+	
+	return -1;
+}
+#endif //__TIPOJYU_CASTLE
+//-----------------------------------------------------------------------------
+// EndProgress
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::EndProgress()
+{
+	// Finish + park: IsRunningProgress() false olur (m_pC_progress=NULL),
+	// ProgressEvent SPK cache'te kalir (hop basina ~165MB reload yok).
+	if (m_pC_progress != NULL)
+	{
+		m_pC_progress->Finish();
+		Phoenix_ParkProgressWindow(m_pC_progress);
+		m_pC_progress = NULL;
+#if __CONTENTS(__DYNAMIC_UI)
+		m_bActProgress = false;
+#endif //__DYNAMIC_UI
+	}
+}
+
+//-----------------------------------------------------------------------------
+// SetProgress
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::SetProgress(WORD cur_val, WORD max_val)
+{
+	if (m_pC_progress)
+		m_pC_progress->SetProgress(cur_val, max_val);
+}
+
+//-----------------------------------------------------------------------------
+// ToggleESC4UI
+//
+// Game �� GameMenu�� �θ��� ����...
+//-----------------------------------------------------------------------------
+void C_VS_UI::ToggleESC4UI()
+{
+	if (m_pC_game)
+		m_pC_game->ToggleESC4UI();
+}
+
+//-----------------------------------------------------------------------------
+// ResetSlayerQuickItemSize
+//
+// Gear���� belt�� ��ü�� ��쿡 ����ȴ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::ResetSlayerQuickItemSize()
+{
+	if (m_pC_game)
+		m_pC_game->ResetSlayerQuickItemSize();
+}
+
+#ifndef _LIB
+void VS_UI_DialogRun(C_VS_UI_DIALOG * p_this_dialog, id_t id)
+{
+
+}
+#endif
+
+//-----------------------------------------------------------------------------
+// Init
+//
+// �翬�� ���� ���� �����Ͽ��� �Ѵ�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::Init(CSpriteSurface *surface, void (*fp)(DWORD, int, int, void *))
+{
+	g_SetNewHandler();
+
+	if( g_pSkinManager == NULL )
+	{
+		g_pSkinManager = new SkinManager;
+		std::string filename;
+		
+		if( gC_ci->IsChinese() )
+//			filename = CHINESE_INTERFACE_INFO;
+			filename = KOREAN_INTERFACE_INFO; //by viva
+		else if (gC_ci->IsJapanese() )
+			filename = JAPANESE_INTERFACE_INFO;
+		else filename = KOREAN_INTERFACE_INFO;
+		
+		//assert( g_pSkinManager->LoadInformation( filename.c_str() ) );
+		if ( g_pSkinManager->LoadInformation( filename.c_str() ) == false )
+			assert( FALSE );			
+	}
+
+#ifndef _LIB
+	g_pMoneyManager->SetMoney(2000000000);
+#endif	
+
+	gpC_base = new Base;
+	gpC_base->Init(surface, fp);
+
+	//-----------------------------------------------
+	// global object allocation
+	//-----------------------------------------------
+
+	//
+	// Process runner
+	//
+	gpC_process_runner = new PI_ProcessRunner;
+
+	//
+	// Window manager
+	//
+	gpC_window_manager = new WindowManager;
+	gpC_window_manager->SetAcquireMouseFocusHandler(_AcquireMouseFocusHandler);
+	gpC_window_manager->SetAcquireDisappearHandler(_AcquireDisappearHandler);
+	gpC_window_manager->SetUnacquireMouseFocusHandler(_UnacquireMouseFocusHandler);
+
+	gpC_vs_ui_window_manager = new C_VS_UI_WINDOW_MANAGER;
+
+	gpC_global_resource = new C_GLOBAL_RESOURCE;
+
+	gpC_mouse_pointer = new C_VS_UI_MOUSE_POINTER;
+
+
+	gpC_item = new C_VS_UI_ITEM;
+	// Fix #12 (2026-05-14) diagnostic: gC_vs_ui.Init son adimlari hang yapiyor.
+	// Latest run newitem.ispk load (C_VS_UI_ITEM ctor) sonrasi 22 sn sessiz.
+	// Hangi adim blokluyor anlamak icin 5 CT_Done point.
+	CT_Done("DIAG-VS_UI: post-C_VS_UI_ITEM ctor");
+
+	g_interface_blink_tid = gC_timer2.Add(INTERFACE_BLINK_MILLISEC, _Timer_InterfaceBlink);
+	gC_timer2.Continue(g_interface_blink_tid);
+	CT_Done("DIAG-VS_UI: post-timer2 setup");
+
+	g_InitMessage();
+	CT_Done("DIAG-VS_UI: post-g_InitMessage (dialog ctors done)");
+
+	g_InstallDescriptor();
+	CT_Done("DIAG-VS_UI: post-g_InstallDescriptor (descriptor+equipset+gem)");
+
+#ifndef _LIB
+	g_pUserOption->UseForceFeel = true;
+#endif
+
+	if(gpC_Imm != NULL)
+	{
+		delete gpC_Imm;
+		gpC_Imm = NULL;
+	}
+	gpC_Imm = new CImm;
+	CT_Done("DIAG-VS_UI: post-CImm ctor");
+	if(gpC_Imm && g_pUserOption->UseForceFeel)gpC_Imm->Enable();
+	else if(gpC_Imm)gpC_Imm->Disable();
+	CT_Done("DIAG-VS_UI: post-CImm Enable/Disable (Init returning)");
+
+#ifndef _LIB
+//	InitSound();
+
+	//---------------------------------------------------------------------
+	//
+	// Skill Tree ��ü�� �ʱ�ȭ �ϴ� ���
+	//
+	//---------------------------------------------------------------------
+//	g_pSkillManager->Init();
+
+	//---------------------------------------------------------------------
+	// �⺻ ����κ��� skill tree�� �ʱ�ȭ�Ѵ�.
+	//---------------------------------------------------------------------
+//	(*g_pSkillManager)[SKILLDOMAIN_BLADE].SetRootSkill( SKILL_SINGLE_BLOW );
+//	(*g_pSkillManager)[SKILLDOMAIN_SWORD].SetRootSkill( SKILL_DOUBLE_IMPACT );
+//	(*g_pSkillManager)[SKILLDOMAIN_GUN].SetRootSkill( SKILL_SNIPPING );
+//	(*g_pSkillManager)[SKILLDOMAIN_GUN].SetRootSkill( SKILL_FAST_RELOAD );
+//	(*g_pSkillManager)[SKILLDOMAIN_ENCHANT].SetRootSkill( MAGIC_CREATE_HOLY_WATER );
+//	(*g_pSkillManager)[SKILLDOMAIN_HEAL].SetRootSkill( MAGIC_CURE_LIGHT_WOUNDS );
+//	(*g_pSkillManager)[SKILLDOMAIN_VAMPIRE].SetRootSkill( MAGIC_HIDE );	
+#endif
+
+#ifndef _LIB
+//	m_p_edit_dialog = NULL;//new C_VS_UI_MONEY_DIALOG(100, 100, 1, 0, VS_UI_DialogRun, DIALOG_OK|DIALOG_CANCEL, 10);
+
+	
+	//m_p_edit_dialog->Start();
+#endif
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RequestDie
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RequestDie(DWORD timer, bool enforce)
+{
+	if (m_pC_game)
+		m_pC_game->RequestDie(timer, enforce);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::FinishRequestDie
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::FinishRequestDie()
+{
+	if (m_pC_game)
+		m_pC_game->FinishRequestDie();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningRequestDie
+//
+// 
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningRequestDie() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningRequestDie();
+	return false;
+}
+
+#if __CONTENTS(__PREMIUM_GIVE_ITEM_UI)
+// PremiumGiveItem
+//-----------------------------------------------------------------------------
+// C_VS_UI::Request_PremiumGiveItem
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::Request_PremiumGiveItem()
+{
+	if (m_pC_game)
+		m_pC_game->Request_PremiumGiveItem();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::FinishRequest_PremiumGiveItem
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::FinishRequest_PremiumGiveItem()
+{
+	if (m_pC_game)
+		m_pC_game->FinishRequest_PremiumGiveItem();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningRequest_PremiumGiveItem
+//
+// 
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningRequest_PremiumGiveItem() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningRequest_PremiumGiveItem();
+	return false;
+}
+#endif //__PREMIUM_GIVE_ITEM_UI
+
+// party
+//-----------------------------------------------------------------------------
+// C_VS_UI::RequestParty
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RequestParty(const char *name, DWORD timer)
+{
+	if (m_pC_game)
+		m_pC_game->RequestParty(name, timer);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::FinishRequestParty
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::FinishRequestParty()
+{
+	if (m_pC_game)
+		m_pC_game->FinishRequestParty();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningRequestParty
+//
+// 
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningRequestParty() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningRequestParty();
+	return false;
+}
+
+bool	C_VS_UI::IsRunningAskParty()	const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningPartyAsk();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// RunPartyAsk
+//
+// ��Ƽ�������ҷ�?�ϰ� ���´�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunPartyAsk(const char* pName, C_VS_UI_REQUEST_PARTY::REQUEST_PARTY type)
+{
+	if (m_pC_game)
+		m_pC_game->RunPartyAsk(pName, type);
+}
+
+//-----------------------------------------------------------------------------
+// ClosePartyAsk
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::ClosePartyAsk()
+{
+	if (m_pC_game)
+		m_pC_game->ClosePartyAsk();
+}
+
+//-----------------------------------------------------------------------------
+// RunUsePetFood
+//
+// ��Ƽ�������ҷ�?�ϰ� ���´�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunUsePetFood(DWORD UsingObjectID, MItem* SubInventory)
+{
+	if (m_pC_game)
+		m_pC_game->RunUsePetFood(UsingObjectID, SubInventory);
+}
+
+//-----------------------------------------------------------------------------
+// CloseUsePetFood
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseUsePetFood()
+{
+	if (m_pC_game)
+		m_pC_game->CloseUsePetFood();
+}
+//-----------------------------------------------------------------------------
+// RunKeepPetItemDialog
+//
+// �� �±淡??�ϰ� ���´�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunKeepPetItemDialog()
+{
+	if (m_pC_game)
+		m_pC_game->RunKeepPetItemDialog();
+}
+
+//-----------------------------------------------------------------------------
+// CloseKeepPetItemDialog
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseKeepPetItemDialog()
+{
+	if (m_pC_game)
+		m_pC_game->CloseKeepPetItemDialog();
+}
+//-----------------------------------------------------------------------------
+// RunGetKeepPetItemDialog
+//
+// �� ã����??�ϰ� ���´�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunGetKeepPetItemDialog()
+{
+	if (m_pC_game)
+		m_pC_game->RunGetKeepPetItemDialog();
+}
+
+//-----------------------------------------------------------------------------
+// CloseGetKeepPetItemDialog
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseGetKeepPetItemDialog()
+{
+	if (m_pC_game)
+		m_pC_game->CloseGetKeepPetItemDialog();
+}
+//-----------------------------------------------------------------------------
+// RunEnchant
+//
+// Enchant�ҷ�?�ϰ� ���´�.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunEnchant(int value)
+{
+	if (m_pC_game)
+		m_pC_game->RunEnchant(value);
+}
+
+//-----------------------------------------------------------------------------
+// CloseEnchant
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseEnchant()
+{
+	if (m_pC_game)
+		m_pC_game->CloseEnchant();
+}
+
+#if __CONTENTS(__TUNING_ITEM)
+void C_VS_UI::RunTuningConfirm1(int value, char *name1, char *name2)	// Ʃ�� ����
+{
+	if (m_pC_game)
+		m_pC_game->RunTuningConfirm1(value,name1,name2);
+}
+
+void C_VS_UI::RunTuningConfirm2(int value, char *name1, char *name2)	// Ʃ�� �Ұ���
+{
+	if (m_pC_game)
+		m_pC_game->RunTuningConfirm2(value,name1,name2);
+}
+
+void C_VS_UI::RunConfirmError(char *message) // �Ұ���
+{
+	if (m_pC_game)
+		m_pC_game->RunConfirmError(message);
+}
+
+#endif //__TUNING_ITEM
+
+void C_VS_UI::RunThirdEnchant(int value)
+{
+	if (m_pC_game)
+		m_pC_game->RunThirdEnchant(value);
+}
+
+void C_VS_UI::CloseThirdEnchant()
+{
+	if (m_pC_game)
+		m_pC_game->CloseThirdEnchant();
+}
+
+
+//-----------------------------------------------------------------------------
+// RunNoSearchResult
+//
+// �˻���� ���� Ȯ��â
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunNoSearchResult()
+{
+	if (m_pC_game)
+		m_pC_game->RunNoSearchResult();
+}
+
+//-----------------------------------------------------------------------------
+// CloseNoSearchResult
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseNoSearchResult()
+{
+	if (m_pC_game)
+		m_pC_game->CloseNoSearchResult();
+}
+
+//-----------------------------------------------------------------------------
+// RunDepositLimit
+//
+// �˻���� ���� Ȯ��â
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunDepositLimit()
+{
+	if (m_pC_game)
+		m_pC_game->RunDepositLimit();
+}
+
+//-----------------------------------------------------------------------------
+// CloseDepositLimit
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseDepositLimit()
+{
+	if (m_pC_game)
+		m_pC_game->CloseDepositLimit();
+}
+
+//-----------------------------------------------------------------------------
+// RunWithdrawLimit
+//
+// �˻���� ���� Ȯ��â
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunWithdrawLimit()
+{
+	if (m_pC_game)
+		m_pC_game->RunWithdrawLimit();
+}
+
+//-----------------------------------------------------------------------------
+// CloseWithdrawLimit
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseWithdrawLimit()
+{
+	if (m_pC_game)
+		m_pC_game->CloseWithdrawLimit();
+}
+
+void	C_VS_UI::RunBringFeeLimit()
+{
+	if(m_pC_game)
+		m_pC_game->RunBringFeeLimit();
+}
+
+//-----------------------------------------------------------------------------
+// RunPartyCancel
+//
+// ��Ƽ��������û��... �ϰ� ���´�
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunPartyCancel(const char* pName)
+{
+	if (m_pC_game)
+		m_pC_game->RunPartyCancel(pName);
+}
+
+//-----------------------------------------------------------------------------
+// ClosePartyCancel
+//
+//-----------------------------------------------------------------------------
+void C_VS_UI::ClosePartyCancel()
+{
+	if (m_pC_game)
+		m_pC_game->ClosePartyCancel();
+}
+
+//-----------------------------------------------------------------------------
+// ClosePartyManager
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::ClosePartyManager()
+{
+	if (m_pC_game)
+		m_pC_game->ClosePartyManager();
+}
+
+//-----------------------------------------------------------------------------
+// RunPartyManager
+//
+// PartyManager�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunPartyManager()
+{
+	if (m_pC_game)
+		m_pC_game->RunPartyManager();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningPartyManager
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningPartyManager() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningPartyManager();
+
+	return false;
+}
+
+void C_VS_UI::CloseOption()
+{
+	CT_Done("VS_UI::CloseOption ENTER m_pC_option=%p", (void*)m_pC_option);
+	if (!m_pC_option)
+	{
+		CT_Done("VS_UI::CloseOption m_pC_option NULL -> early return");
+		return;
+	}
+
+	CT_Done("VS_UI::CloseOption DeleteNew PRE");
+	DeleteNew(m_pC_option);
+	CT_Done("VS_UI::CloseOption DeleteNew POST m_pC_option=%p", (void*)m_pC_option);
+//	m_pC_option = NULL;
+
+//	m_pC_option->Finish();
+
+	//assert(m_pC_tribe_interface != NULL);
+	//m_pC_tribe_interface->DoCommonActionAfterEventOccured();
+
+//	gbl_option_running = false;
+	gC_vs_ui.AcquireChatting();
+	CT_Done("VS_UI::CloseOption EXIT");
+}
+
+//-----------------------------------------------------------------------------
+// RunOption
+//
+// �ɼ�â ����
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunOption(bool IsTitle)
+{
+	CT_Done("VS_UI::RunOption ENTER IsTitle=%d m_pC_option=%p", IsTitle ? 1 : 0, (void*)m_pC_option);
+	//gC_vs_ui.CloseGameMenu();
+
+	if (m_pC_option == NULL)
+	{
+		// 2026-09-02: Reborn Option portu — yeni menu sinifi
+		CT_Done("VS_UI::RunOption new C_VS_UI_OPTION_RENEWAL PRE");
+		m_pC_option = new C_VS_UI_OPTION_RENEWAL(IsTitle);
+		CT_Done("VS_UI::RunOption new C_VS_UI_OPTION_RENEWAL POST ptr=%p", (void*)m_pC_option);
+	}
+
+	// center
+
+	assert(m_pC_option != NULL);
+
+//	gbl_option_running = true;
+
+	CT_Done("VS_UI::RunOption Start() PRE");
+	m_pC_option->Start();
+	CT_Done("VS_UI::RunOption Start() POST");
+}
+
+void C_VS_UI::Background_Music_ONOFF()
+{
+	assert(m_pC_option != NULL);
+	m_pC_option->Background_Music_ONOFF(C_VS_UI_OPTION::CHECK_MUSIC);	// yeni menu parametreyi yok sayar
+}
+
+void C_VS_UI::Effect_Music_ONOFF()
+{
+	assert(m_pC_option != NULL);
+	m_pC_option->Effect_Music_ONOFF(C_VS_UI_OPTION::CHECK_SOUND);	// yeni menu parametreyi yok sayar
+
+}
+
+
+void	C_VS_UI::CloseOtherInfo()
+{
+	if (m_pC_game)
+		m_pC_game->CloseOtherInfo();	
+}
+
+void	C_VS_UI::RunTraceWindow()
+{
+	if (m_pC_game)
+		m_pC_game->RunTraceWindow();
+}
+
+void	C_VS_UI::CloseTraceWindow()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTraceWindow();
+}
+
+bool	C_VS_UI::IsRunningTraceWindow() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningTraceWindow();
+
+	return false;
+}
+
+bool	C_VS_UI::IsStartTrace()
+{
+	if (m_pC_game)
+		return m_pC_game->IsStartTrace();
+
+	return false;
+}
+void	C_VS_UI::SetCannotTrace()
+{
+	if (m_pC_game)
+		m_pC_game->SetCannotTrace();
+}
+
+void	C_VS_UI::RunXmasCardWindow(const MItem *pItem)
+{
+	if (m_pC_game)
+		m_pC_game->RunXmasCardWindow(pItem);
+}
+
+void	C_VS_UI::CloseXmasCardWindow()
+{
+	if (m_pC_game)
+		m_pC_game->CloseXmasCardWindow();
+}
+
+bool	C_VS_UI::IsRunningXmasCardWindow() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningXmasCardWindow();
+
+	return false;
+}
+
+
+void	C_VS_UI::RunBringFeeWindow(UINT totalfee, UINT bringfee) 
+{ 
+	if(m_pC_game) 
+		m_pC_game->RunBringFeeWindow(totalfee,bringfee);
+}
+void	C_VS_UI::CloseBringFeeWindow() 
+{ 
+	if(m_pC_game) 
+		m_pC_game->CloseBringFeeWindow(); 
+}
+
+bool	C_VS_UI::IsRunningBringFeeWindow() 
+{ 
+	if(m_pC_game) 
+		return m_pC_game->IsRunningBringFeeWindow(); 
+	
+	return false; 
+}
+
+void	C_VS_UI::SetTotalFee(UINT fee) 
+{ 
+	if(m_pC_game) 
+		m_pC_game->SetTotalFee(fee); 
+}
+
+UINT	C_VS_UI::GetBringFee()
+{ 
+	if(m_pC_game) 
+		return m_pC_game->GetWillBringFee();
+
+	return 0;
+}
+
+void	C_VS_UI::SetBringFee(UINT fee)
+{
+	if(m_pC_game)
+		m_pC_game->SetBringFee(fee);
+}
+
+UINT	C_VS_UI::GetTotalFee()
+{
+	if(m_pC_game == NULL)
+		return 0;
+
+	return m_pC_game->GetTotalFee();
+}
+
+void	C_VS_UI::RunWarListWindow()
+{
+	if(m_pC_game)
+		m_pC_game->RunWarListWindow();
+}
+
+void	C_VS_UI::CloseWarListWindow()
+{
+	if(m_pC_game)
+		m_pC_game->CloseWarListWindow();
+}
+
+bool	C_VS_UI::IsRunningWarListWindow() const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningWarListWindow();
+
+	return false;
+}
+
+void	C_VS_UI::AddWarList(C_VS_UI_WAR_LIST::WarInfo &war_info)
+{
+	if(m_pC_game)
+		m_pC_game->AddWarList(war_info);
+}
+
+void	C_VS_UI::ClearWarList()
+{
+	if(m_pC_game)
+		m_pC_game->ClearWarList();
+}
+
+void	C_VS_UI::RunBloodBibleStatus()
+{
+	if(m_pC_game)
+		m_pC_game->RunBloodBibleStatusWindow();
+}
+
+void	C_VS_UI::CloseBloodBibleStatus()
+{
+	if(m_pC_game)
+		m_pC_game->CloseBloodBibleStatus();
+}
+
+bool	C_VS_UI::IsRunningBloodBibleStatus()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningBloodBibleStatus();
+
+	return false;
+}
+
+void	C_VS_UI::SetBloodBibleStatus(int& blood_bible_id, int& zone_id, int& x,int& y, C_VS_UI_BLOOD_BIBLE_STATUS::BLOOD_BIBLE_STATUS_INFO status, const char *name)
+{
+	if(m_pC_game)
+	{
+		C_VS_UI_BLOOD_BIBLE_STATUS::BLOOD_BIBLE_STATUS bbs;
+
+		bbs.zone_id = zone_id;
+		bbs.x = x;
+		bbs.y = y;
+		bbs.name = name;
+		bbs.status = status;
+		
+		m_pC_game->SetBloodBibleStatus(blood_bible_id, bbs);
+	}
+}
+
+void	C_VS_UI::SetBloodBibleStatus(int& blood_bible_id, C_VS_UI_BLOOD_BIBLE_STATUS::BLOOD_BIBLE_STATUS &blood_bible_status)
+{
+	if(m_pC_game)
+		m_pC_game->SetBloodBibleStatus(blood_bible_id, blood_bible_status);
+}
+
+void	C_VS_UI::UnSetBloodBibleStatus(int blood_bible_id)
+{
+	if(m_pC_game)
+		m_pC_game->UnSetBloodBibleStatus(blood_bible_id);
+}
+
+
+void	C_VS_UI::RunInputNameWindow(C_VS_UI_INPUT_NAME::INPUT_NAME_MODE_LIST mode )
+{
+	if(m_pC_game)
+		m_pC_game->RunInputNameWindow( mode );
+}
+
+void	C_VS_UI::CloseInputNameWindow()
+{
+	if(m_pC_game)
+		m_pC_game->CloseInputNameWindow();
+}
+
+bool	C_VS_UI::IsRunningInputNameWindow()
+{
+	if(m_pC_game == NULL)
+		return false;
+
+	return m_pC_game->IsRunningInputNameWindow();
+}
+
+const char*	C_VS_UI::GetCurrentInputName()
+{
+	if(m_pC_game == NULL)
+		return NULL;
+
+	return m_pC_game->GetCurrentInputName();
+}
+
+void	C_VS_UI::SetInputNameWindow(const char* name)
+{
+	if(m_pC_game == NULL)
+		return;
+	
+	m_pC_game->SetInputNameWindow(name);
+}
+
+void	C_VS_UI::SetEnableInputName()
+{
+	if(m_pC_game != NULL)
+		m_pC_game->SetEnableInputName();
+}
+
+void	C_VS_UI::SetDisableInputName()
+{
+	if(m_pC_game != NULL)
+		m_pC_game->SetDisableInputName();
+}
+
+void	C_VS_UI::RunCannotPlayMessage()
+{
+	if(m_pC_title == NULL)
+		return;
+	
+	m_pC_title->RunCannotPlayMessage();
+}
+
+void	C_VS_UI::RunCannotPlayByAttrMessage()
+{
+	if(m_pC_title == NULL)
+		return;
+	
+	m_pC_title->RunCannotPlayByAttrMessage();
+}
+
+void	C_VS_UI::RunPopupMessage(const char *str, C_VS_UI_POPUP_MESSAGE::POPUP_TYPE type)
+{
+	if(m_pC_game != NULL)
+		m_pC_game->RunPopupMessage( str, type );
+}
+
+void	C_VS_UI::RunPopupMessage( C_VS_UI_POPUP_MESSAGE::PopupWindowStyle& style )
+{
+	if(m_pC_game != NULL)
+		m_pC_game->RunPopupMessage( style );
+}
+
+void	C_VS_UI::ClosePopupMessage()
+{
+	if(m_pC_game != NULL)
+		m_pC_game->ClosePopupMessage();
+}
+
+bool	C_VS_UI::IsRunningPopupMessage()
+{
+	if(m_pC_game != NULL)
+		return m_pC_game->IsRunningPopupMessage();
+
+	return false;
+}
+
+// ����Ʈ ����â
+void	C_VS_UI::RunQuestStatusWindow()
+{
+	if(m_pC_game != NULL)
+		m_pC_game->RunQuestStatusWindow();
+}
+
+void	C_VS_UI::CloseQuestStatusWindow()
+{
+	if(m_pC_game != NULL)
+		m_pC_game->CloseQuestStatusWindow();
+}
+
+bool	C_VS_UI::IsRunningQuestStatusWindow()
+{
+	if(m_pC_game != NULL)
+		return m_pC_game->IsRunningQuestStatusWindow();
+
+	return false;
+}
+
+void	C_VS_UI::SetQuestStatus(C_VS_UI_QUEST_STATUS::QUEST_STATUS &status)
+{
+	if(m_pC_game)
+		m_pC_game->SetQuestStatus(status);
+}
+
+void	C_VS_UI::SetQuestStatusInit()
+{
+	if(m_pC_game)
+		m_pC_game->SetQuestStatusInit();
+}
+
+DWORD	C_VS_UI::GetQuestStatusID()
+{
+	if(m_pC_game)
+		return m_pC_game->GetQuestStatusID();
+	return 0xffffffff;
+}
+
+// ����â
+void	C_VS_UI::RunLotteryCard( int& step )
+{
+	if(m_pC_game != NULL)
+		m_pC_game->RunLotteryCard( step );
+}
+
+void	C_VS_UI::CloseLotteryCard()
+{
+	if(m_pC_game != NULL)
+		m_pC_game->CloseLotteryCard();
+}
+
+bool	C_VS_UI::IsRunningLotteryCard()
+{
+	if(m_pC_game != NULL)
+		return m_pC_game->IsRunningLotteryCard();
+
+	return false;
+}
+
+void	C_VS_UI::RunItemListWindow()
+{
+	if(m_pC_game)
+		m_pC_game->RunItemListWindow();
+}
+
+bool	C_VS_UI::IsRunningItemListWindow()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningItemListWindow();
+
+	return false;
+}
+
+void	C_VS_UI::CloseItemListWindow()
+{
+	if(m_pC_game)
+		m_pC_game->CloseItemListWindow();
+}
+
+bool	C_VS_UI::AddItemToItemList(C_VS_UI_ITEM_LIST::ItemList pItem)
+{
+	if(m_pC_game)
+		return m_pC_game->AddItemToItemList( pItem );
+
+	return false;
+}
+
+void	C_VS_UI::RunImageNotice()
+{
+	if(m_pC_game)
+		m_pC_game->RunImageNotice( );
+}
+
+void	C_VS_UI::CloseImageNotice()
+{
+	if(m_pC_game)
+		m_pC_game->CloseImageNotice();
+}
+
+bool	C_VS_UI::IsRunningImageNotice()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningImageNotice();
+	return false;
+}
+
+void	C_VS_UI::AddNotice(const char *name, DWORD& id)
+{
+	if(m_pC_game)
+		m_pC_game->AddNotice( name, id );
+}
+
+bool	C_VS_UI::RemoveItemInItemList( DWORD ID )
+{
+	if(m_pC_game)
+		return m_pC_game->RemoveItemInItemList( ID );
+
+	return false;
+}
+
+void	C_VS_UI::RunBulletinBoardWindow(const MItem *pItem)
+{
+	if (m_pC_game)
+		m_pC_game->RunBulletinBoardWindow(pItem);
+}
+
+void	C_VS_UI::CloseBulletinBoardWindow()
+{
+	if (m_pC_game)
+		m_pC_game->CloseBulletinBoardWindow();
+}
+
+bool	C_VS_UI::IsRunningBulletinBoardWindow() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningBulletinBoardWindow();
+
+	return false;
+}
+
+void	C_VS_UI::RunTransItem()
+{
+	if (m_pC_game)
+		m_pC_game->RunTransItem();
+}
+
+void	C_VS_UI::CloseTransItem()
+{
+	if ( m_pC_game) 
+		m_pC_game->CloseTransItem();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::RequestDie
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::RequestResurrect(bool f1, bool f2, bool eternity, bool IsSiegeAttacker, bool IsSkillFromOther)
+{
+	if (m_pC_game)
+		m_pC_game->RequestResurrect(f1,f2,eternity,IsSiegeAttacker,IsSkillFromOther);
+}
+
+void	C_VS_UI::RequestResurrectSetButton(int resurrectMode, bool enable)
+{
+	if (m_pC_game)
+		m_pC_game->RequestResurrectSetButton(resurrectMode, enable);
+}
+
+
+void	C_VS_UI::SetDelayRequestResurrect( C_VS_UI_REQUEST_RESURRECT::RESURRECT_MODE mode, int delay)
+{
+	if( m_pC_game )
+		m_pC_game->SetDelayRequestResurrect( mode, delay );
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::FinishRequestDie
+//
+// 
+//-----------------------------------------------------------------------------
+void	C_VS_UI::FinishRequestResurrect()
+{
+	if (m_pC_game)
+		m_pC_game->FinishRequestResurrect();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningRequestDie
+//
+// 
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningRequestResurrect() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningRequestResurrect();
+	return false;
+}
+
+/*-----------------------------------------------------------------------------
+- ChangeToOustersInterface
+- Ousters interface�� �ٲ۴�.
+-----------------------------------------------------------------------------*/
+void C_VS_UI::ChangeToOustersInterface()
+{
+	if (m_pC_game)
+	{
+		m_pC_game->ChangeToOustersInterface();	
+		CloseOption();
+		DeleteNew(m_pC_option);
+	}
+}
+
+//-----------------------------------------------------------------------------
+// RunMixingForge
+//
+// MixingForge�� ����.
+//-----------------------------------------------------------------------------
+void C_VS_UI::RunMixingForge(C_VS_UI_MIXING_FORGE::FORGE_CLASS forge_class, C_VS_UI_MIXING_FORGE::FORGE_TYPE forge_type)
+{
+	if (m_pC_game)
+		m_pC_game->RunMixingForge(forge_class, forge_type);
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningMixingForge
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningMixingForge() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningMixingForge();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// CloseMixingForge
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::CloseMixingForge()
+{
+	if (m_pC_game)
+		m_pC_game->CloseMixingForge();
+}
+
+void	C_VS_UI::RunRemoveOptionFromRareItem(const MItem* pItem, const MItem* pItem2)
+{
+	if( m_pC_game )
+		m_pC_game->RunRemoveOptionFromRareItem( pItem, pItem2);
+}
+
+bool	C_VS_UI::IsRunningRemoveOptionFromRareItem() const
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningRemoveOptionFromRareItem();
+
+	return false;
+}
+
+void	C_VS_UI::CloseRemoveOptionFromRareItem()
+{
+	if( m_pC_game)
+		m_pC_game->CloseRemoveOptionFromRareItem();
+}
+
+///////////////////////////////////////////////////////
+//
+// Ousters Skill Info
+//
+///////////////////////////////////////////////////////
+void	C_VS_UI::RunOustersSkillInfo(int skillID, int window_x, int window_y, bool flag)
+{
+	if( m_pC_game )
+		m_pC_game->RunOustersSkillInfo( skillID, window_x, window_y, flag );
+}
+
+bool	C_VS_UI::IsRunningOustersSkillInfo() const
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningOustersSkillInfo();
+	
+	return false;
+}
+
+void	C_VS_UI::CloseOustersSkillInfo()
+{
+	if( m_pC_game)
+		m_pC_game->CloseOustersSkillInfo();
+}
+
+void C_VS_UI::ResetOustersQuickItemSize()
+{
+	if (m_pC_game)
+		m_pC_game->ResetOustersQuickItemSize();
+}
+
+void	C_VS_UI::RunHorn(int currentZoneID)
+{
+	if( m_pC_game )
+		m_pC_game->RunHorn( currentZoneID );
+}
+
+bool	C_VS_UI::IsRunningHorn() const
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningHorn();
+	
+	return false;
+}
+
+void	C_VS_UI::CloseHorn()
+{
+	if( m_pC_game)
+		m_pC_game->CloseHorn();
+}
+
+void	C_VS_UI::RunMailBox()
+{
+	if( m_pC_game )
+		m_pC_game->RunMailBox();
+}
+
+bool	C_VS_UI::IsRunningMailBox() const
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningMailBox();
+	
+	return false;
+}
+
+void	C_VS_UI::CloseMailBox()
+{
+	if( m_pC_game)
+		m_pC_game->CloseMailBox();
+}
+
+void	C_VS_UI::CloseMailBoxDialogBox()
+{
+	if( m_pC_game)
+		m_pC_game->CloseMailBoxDialogBox();
+}
+
+void	C_VS_UI::AddMail(int tab_id, DWORD id, SIZE windowSize, const char * sender, const char * title, DWORD date, bool open, int guildid, int guildtype)
+{
+	if(m_pC_game)
+		m_pC_game->AddMail(tab_id, id, windowSize, sender, title, date, open,guildid, guildtype);
+}
+
+void	C_VS_UI::AddMailContents(int tab_id, DWORD id, const char * contents)
+{
+	if(m_pC_game)
+		m_pC_game->AddMailContents(tab_id, id, contents);
+}
+
+void	C_VS_UI::AddHelpMail(DWORD id, bool open)
+{
+	if(m_pC_game)
+		m_pC_game->AddHelpMail(id, open);
+}
+
+void	C_VS_UI::DeleteMail(int tab_id, DWORD id)
+{
+	if(m_pC_game)
+		m_pC_game->DeleteMail(tab_id, id);
+}
+
+void	C_VS_UI::RunFindingMine()
+{
+	if( m_pC_game )
+		m_pC_game->RunFindingMine();
+}
+
+bool	C_VS_UI::IsRunningFindingMine() const
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningFindingMine();
+	
+	return false;
+}
+
+void	C_VS_UI::CloseFindingMine()
+{
+	if( m_pC_game)
+		m_pC_game->CloseFindingMine();
+}
+
+void	C_VS_UI::SetOustersSkillDown()
+{
+	if( m_pC_game )
+		m_pC_game->SetOustersDownSkill();
+}
+
+
+void	C_VS_UI::RunArrowTile()
+{
+	if( m_pC_game )
+		m_pC_game->RunArrowTile();
+}
+
+bool	C_VS_UI::IsRunningArrowTile() const
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningArrowTile();
+	
+	return false;
+}
+
+void	C_VS_UI::CloseArrowTile()
+{
+	if( m_pC_game )
+		m_pC_game->CloseArrowTile();
+}
+
+void	C_VS_UI::RunCrazyMine()
+{
+	if( m_pC_game )
+		m_pC_game->RunCrazyMine();
+}
+
+bool	C_VS_UI::IsRunningCrazyMine() const
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningCrazyMine();
+	return false;
+}
+
+void	C_VS_UI::CloseCrazyMine()
+{
+	if( m_pC_game )
+		m_pC_game->CloseCrazyMine();
+}
+
+void	C_VS_UI::SetMiniGameScore(BYTE& Type,std::string& topname, WORD& topscore, WORD& myscore)
+{
+	if( m_pC_game )
+		m_pC_game->SetMiniGameScore(Type, topname, topscore, myscore);
+}
+
+void	C_VS_UI::RunQuestInventory(const MItem* pItem)
+{
+	if( pItem == NULL )
+		return;
+	
+	if( m_pC_game )
+		m_pC_game->RunQuestInventory( pItem );
+}
+
+bool	C_VS_UI::IsRunningQuestInventory() const
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningQuestInventory();
+
+	return false;
+}
+
+void	C_VS_UI::CloseQuestInventory()
+{
+	if( m_pC_game )
+		m_pC_game->CloseQuestInventory();
+}
+
+void	C_VS_UI::RunCTFStatusWindow()
+{
+	if( m_pC_game )
+		m_pC_game->RunCTFStatusWindow();
+}
+
+void	C_VS_UI::CloseCTFStatusWindow()
+{
+	if( m_pC_game )
+		m_pC_game->CloseCTFStatusWindow();
+}
+
+bool	C_VS_UI::IsRunningCTFStatusWindow()
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningCTFStatusWindow();
+
+	return false;
+}
+
+void	C_VS_UI::SetCTFStatus(DWORD &endtime, int &flag_s, int &flag_v, int &flag_o)
+{
+	if( m_pC_game )
+		m_pC_game->SetCTFStatus( endtime, flag_s, flag_v, flag_o );
+}
+
+void	C_VS_UI::RunPetInfo(PETINFO *pPetInfo)
+{
+	if( m_pC_game )
+	{
+		gpC_base->SendMessage(UI_PLAYER_PETINFO);
+		m_pC_game->RunPetInfo(pPetInfo);
+	}
+}
+
+void	C_VS_UI::ClosePetInfo()
+{
+	if( m_pC_game )
+		m_pC_game->ClosePetInfo();
+}
+
+bool	C_VS_UI::IsRunningPetInfo()
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningPetInfo();
+
+	return false;
+}
+
+void C_VS_UI::RunHelpDesc(const char *detail,const char *title,DWORD id)
+{
+	if(m_pC_game)
+		m_pC_game->RunHelpDesc(detail,title, id);
+}
+
+bool C_VS_UI::IsRunningHelpDesc()
+{
+	if(m_pC_game)
+	{
+		return m_pC_game->IsRunningHelpDesc();
+	}
+	return false;
+}
+
+
+void C_VS_UI::RunWorldMap()
+{
+	if(m_pC_game)
+		m_pC_game->RunWorldMap();
+}
+
+
+void C_VS_UI::CloseWorldMap()
+{
+	if(m_pC_game)
+		m_pC_game->CloseWorldMap();
+}
+
+
+void C_VS_UI::ToggleWorldMap()
+{
+	if(m_pC_game)
+		m_pC_game->ToggleWorldMap();
+}
+
+
+bool C_VS_UI::IsRunningWorldMap()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningWorldMap();
+	return false;
+}
+
+
+void C_VS_UI::CloseHelpDesc()
+{
+	if(m_pC_game)
+	   m_pC_game->CloseHelpDesc();
+}
+void	C_VS_UI::RequestShrineMinimap(DWORD timer)
+{
+	if( m_pC_game )
+		m_pC_game->RequestShrineMinimap(timer);
+}
+
+void	C_VS_UI::CloseRequestShrineMinimap()
+{
+	if( m_pC_game )
+		m_pC_game->FinishRequestShrineMinimap();
+}
+
+bool	C_VS_UI::IsRunningRequestShrineMinimap()
+{
+	if( m_pC_game )
+		return m_pC_game->IsRunningRequestShrineMinimap();
+
+	return false;
+}
+int 	C_VS_UI::GetPetStorageEmptySlot()
+{
+	if( m_pC_game )
+		return m_pC_game->GetPetStorageEmptySlot();
+
+	return -1;
+}
+int 	C_VS_UI::GetPetStorageFocusSlot()
+{
+	if( m_pC_game )
+		return m_pC_game->GetPetStorageFocusSlot();
+
+	return -1;
+}
+
+// 2004, 5, 27 sobeit add start - sms message
+void C_VS_UI::RunSMSMessage()
+{
+	if (m_pC_game)
+		m_pC_game->RunSMSMessage();
+}
+
+bool	C_VS_UI::IsRunningSMSMessage() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSMSMessage();
+
+	return false;
+}
+
+void	C_VS_UI::CloseSMSMessage() 
+{
+	if (m_pC_game)
+		m_pC_game->CloseSMSMessage();
+}
+
+void C_VS_UI::RunSMSList()
+{
+	if (m_pC_game)
+		m_pC_game->RunSMSList();
+}
+
+bool	C_VS_UI::IsRunningSMSList() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSMSList();
+
+	return false;
+}
+
+void	C_VS_UI::CloseSMSList() 
+{
+	if (m_pC_game)
+		m_pC_game->CloseSMSList();
+}
+
+void C_VS_UI::RunSMSRecord()
+{
+	if (m_pC_game)
+		m_pC_game->RunSMSRecord();
+}
+
+bool	C_VS_UI::IsRunningSMSRecord() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSMSRecord();
+
+	return false;
+}
+
+void	C_VS_UI::CloseSMSRecord() 
+{
+	if (m_pC_game)
+		m_pC_game->CloseSMSRecord();
+}
+
+void	C_VS_UI::SetSMSAddressList(void* pVoid) 
+{
+	if (m_pC_game)
+		m_pC_game->SetSMSAddressList(pVoid);
+}
+void	C_VS_UI::AddSMSAddressList(DWORD element, char* name, char* id, char* num) 
+{
+	if (m_pC_game)
+		m_pC_game->AddSMSAddressList(element, name, id, num);
+}
+void	C_VS_UI::DeleteSMSAddressList(int id) 
+{
+	if (m_pC_game)
+		m_pC_game->DeleteSMSAddressList(id);
+}
+void	C_VS_UI::AddSMSSendList(char* str) 
+{
+	if (m_pC_game)
+		m_pC_game->AddSMSSendList(str);
+}
+void	C_VS_UI::AcquireSMS()
+{
+	if (m_pC_game)
+		m_pC_game->AcquireSMS();
+}
+
+void	C_VS_UI::SetSMSCharage(int i)
+{
+	if (m_pC_game)
+		m_pC_game->SetSMSCharage(i);
+}
+// 2004, 5, 27 sobeit add end
+
+
+// 2004, 6, 14 sobeit add start- naming
+void C_VS_UI::RunNaming()
+{
+	if (m_pC_game)
+		m_pC_game->RunNaming();
+}
+
+bool	C_VS_UI::IsRunningNaming() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningNaming();
+
+	return false;
+}
+
+void	C_VS_UI::CloseNaming() 
+{
+	if (m_pC_game)
+		m_pC_game->CloseNaming();
+}
+
+bool	C_VS_UI::IsRunAskUseItemDialog()
+{
+	if (m_pC_game)
+		return	m_pC_game->IsRunAskUseItemDialog();
+	return false;
+}
+
+void	C_VS_UI::SetUseAskIitemRunning(bool bRunning)
+{
+	if (m_pC_game)
+		m_pC_game->SetUseAskIitemRunning(bRunning);
+}
+
+void C_VS_UI::RunAskUseItemDialog(int AskType, int value, void* pValue)
+{
+	if (m_pC_game)
+		m_pC_game->RunAskUseItemDialog(AskType, value, pValue);
+}
+
+void C_VS_UI::CloseAskUseItemDialog()
+{
+	if (m_pC_game)
+		m_pC_game->CloseAskUseItemDialog();
+}
+// 2004, 6, 14 sobeit end
+
+// 2004, 6, 15 sobeit add start
+bool	C_VS_UI::IsRunningGearWindow() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningGearWindow();
+	return false;
+}
+void C_VS_UI::Change_Custom_Naming(int nID, char* szName)
+{
+	if (m_pC_game)
+		m_pC_game->Change_Custom_Naming(nID, szName);
+}
+// 2004, 6, 15 sobeit end
+
+// 2004, 6, 16 sobeit add start
+void C_VS_UI::SetNickNameList(void* pData)
+{
+	if(m_pC_game)
+		m_pC_game->SetNickNameList(pData);
+}
+void C_VS_UI::AddNickNameList(void* pData)
+{
+	if(m_pC_game)
+		m_pC_game->AddNickNameList(pData);
+}
+// 2004, 6, 16 sobeit add end
+
+// 2004, 6, 18 sobeit add start
+//bool	C_VS_UI::GetChangeableNickName() 
+//{
+//	if(m_pC_game)
+//		return m_pC_game->GetChangeableNickName();
+//	return false;
+//}
+//bool	C_VS_UI::GetChangeablePetNickName() 
+//{ 
+//	if(m_pC_game)
+//		return m_pC_game->GetChangeablePetNickName();
+//	return false;
+//}
+//void	C_VS_UI::SetChangeableNickName(bool Is) 
+//{
+//	if(m_pC_game)
+//		m_pC_game->SetChangeableNickName(Is);
+//}
+//void	C_VS_UI::SetChangeablePetNickName(bool Is)
+//{
+//	if(m_pC_game)
+//		m_pC_game->SetChangeablePetNickName(Is);
+//}
+// 2004, 6, 18 sobeit add end
+
+// 2004, 6, 21 sobiet add start
+void	C_VS_UI::RunNamingChange(MItem* pItem, char* szCustom)
+{
+	if(m_pC_game)
+		m_pC_game->RunNamingChange(pItem, szCustom);
+}
+
+bool	C_VS_UI::IsRunningNamingChange() const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningNamingChange();
+	return false;
+}
+
+void	C_VS_UI::CloseNamingChange() 
+{
+	if(m_pC_game)
+		m_pC_game->CloseNamingChange();
+}
+// 2004, 6, 21 sobeit add end
+
+// 2004, 6, 30 sobiet add start
+void	C_VS_UI::RunQuestManager()
+{
+	if(m_pC_game)
+		m_pC_game->RunQuestManager();
+}
+
+bool	C_VS_UI::IsRunningQuestManager() const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningQuestManager();
+	return false;
+}
+
+void	C_VS_UI::CloseQuestManager() 
+{
+	if(m_pC_game)
+		m_pC_game->CloseQuestManager();
+}
+
+void	C_VS_UI::ReleaseQuestXML()
+{
+	if(m_pC_game)
+		m_pC_game->ReleaseQuestXML();
+}
+
+bool	C_VS_UI::SetQuestManagerInfo(void* pVoid)
+{
+	if(m_pC_game)
+		return m_pC_game->SetQuestManagerInfo(pVoid);
+	return false;
+}
+bool	C_VS_UI::ModifyQuestManagerInfo(void* pVoid, int nType)
+{
+	if(m_pC_game)
+		return m_pC_game->ModifyQuestManagerInfo(pVoid, nType);
+	return false;
+}
+void	C_VS_UI::SetQuestManagerSubWindow(DWORD dwID)
+{
+	if(m_pC_game)
+		m_pC_game->SetQuestManagerSubWindow(dwID);
+}
+void	C_VS_UI::SendQuestIntention(bool bIntention)
+{
+	if(m_pC_game)
+		m_pC_game->SendQuestIntention(bIntention);
+}
+// 2004, 6, 30 sobeit add end
+
+// 2004, 7, 5, sobeit add start
+
+void	C_VS_UI::RunQuestList()
+{
+	if(m_pC_game)
+		m_pC_game->RunQuestList();
+}
+
+bool	C_VS_UI::IsRunningQuestList() const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningQuestList();
+	return false;
+}
+
+void	C_VS_UI::CloseQuestList() 
+{
+	if(m_pC_game)
+		m_pC_game->CloseQuestList();
+}
+
+void	C_VS_UI::RunQuestDetail()
+{
+	if(m_pC_game)
+		m_pC_game->RunQuestDetail();
+}
+
+bool	C_VS_UI::IsRunningQuestDetail() const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningQuestDetail();
+	return false;
+}
+
+void	C_VS_UI::CloseQuestDetail() 
+{
+	if(m_pC_game)
+		m_pC_game->CloseQuestDetail();
+}
+
+void	C_VS_UI::RunQuestMission()
+{
+	if(m_pC_game)
+		m_pC_game->RunQuestMission();
+}
+
+bool	C_VS_UI::IsRunningQuestMission() const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningQuestMission();
+	return false;
+}
+
+void	C_VS_UI::CloseQuestMission() 
+{
+	if(m_pC_game)
+		m_pC_game->CloseQuestMission();
+}
+
+void	C_VS_UI::RunQuestItem()
+{
+	if(m_pC_game)
+		m_pC_game->RunQuestItem();
+}
+
+bool	C_VS_UI::IsRunningQuestItem() const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningQuestItem();
+	return false;
+}
+
+void	C_VS_UI::CloseQuestItem() 
+{
+	if(m_pC_game)
+		m_pC_game->CloseQuestItem();
+}
+
+void	C_VS_UI::CloseQuestIcon(int JustClose) 
+{
+	if(m_pC_game)
+		m_pC_game->CloseQuestIcon(JustClose);
+}
+void	C_VS_UI::UpdateQuestItemInfo(std::vector<MItem*>& vItem)
+{
+	if (m_pC_game)
+		m_pC_game->UpdateQuestItemInfo(vItem);
+
+}
+
+void	C_VS_UI::PushGQuestExcuteElement(DWORD qID, BYTE bCondition, WORD wIndex)
+{
+	if (m_pC_game)
+		m_pC_game->PushGQuestExcuteElement(qID,bCondition,wIndex);
+
+}
+void	C_VS_UI::RunNextGQuestExcuteElement()
+{
+	if (m_pC_game)
+		m_pC_game->RunNextGQuestExcuteElement();
+
+}
+// 2004, 7, 5, sobeit add end
+void	C_VS_UI::DeleteQuestItem(int nSlot)
+{
+	if (m_pC_game)
+		m_pC_game->DeleteQuestItem(nSlot);
+
+}
+
+// 2004, 10, 25, sobeit add start - ���� ����
+void	C_VS_UI::RunModifyTax()
+{
+	if (m_pC_game)
+		m_pC_game->RunModifyTax();
+
+}
+
+
+void	C_VS_UI::RunRangerChat()
+{
+	if (m_pC_game)
+		m_pC_game->RunRangerChat();
+}
+bool	C_VS_UI::IsRunngingRangerChat()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunngingRangerChat();
+	return false;
+}
+void	C_VS_UI::CloseRangerChat()
+{
+	if (m_pC_game)
+		m_pC_game->CloseRangerChat();
+}
+void	C_VS_UI::SetRangerChatString(char* str)
+{
+	if (m_pC_game)
+		m_pC_game->SetRangerChatString(str);
+}
+// 2004, 10, 25, sobeit add end
+
+
+bool	C_VS_UI::IsRunningPersnalShopMessage() const
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningPersnalShopMessage();
+	return false;
+
+}
+void    C_VS_UI::RunPersnalShopMessage()
+{
+	if(m_pC_game)
+		m_pC_game->RunPersnalShopMessage();
+
+}
+void	C_VS_UI::ClosePersnalShopMessage()
+{
+	if(m_pC_game)
+		m_pC_game->ClosePersnalShopMessage();
+	
+}
+
+#if __CONTENTS(__ITEM_SHOW)
+void	C_VS_UI::CloseInventory()
+{
+	if(m_pC_game)
+		m_pC_game->CloseInventory();
+}
+#endif //__ITEM_SHOW
+
+bool	C_VS_UI::IsRunningPersnalShop() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningPersnalShop();
+
+	return false;
+}
+
+void C_VS_UI::RunPersnalShop()
+{
+	if(m_pC_game)
+	{
+		m_pC_game->RunPersnalShop();
+	}
+}
+
+void C_VS_UI::ClosePersnalShop()
+{
+	if(m_pC_game)
+		m_pC_game->ClosePersnalShop();
+}
+
+
+void C_VS_UI::SetPersnalShop(MStorage *pStorage)
+{
+	if(m_pC_game)
+		m_pC_game->SetPersnalShop(pStorage);
+}
+
+
+// 2004, 11, 30, sobeit add start
+void	C_VS_UI::RunPowerjjang()
+{
+	if (m_pC_game)
+		m_pC_game->RunPowerjjang();
+}
+bool	C_VS_UI::IsRunningPowerjjang()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningPowerjjang();
+	return false;
+}
+void	C_VS_UI::ClosePowerjjang()
+{
+	if (m_pC_game)
+		m_pC_game->ClosePowerjjang();
+}
+
+void	C_VS_UI::PowerjjangGambleResult(BYTE bItemCode)
+{
+	if (m_pC_game)
+		m_pC_game->PowerjjangGambleResult(bItemCode);
+}
+// 2004, 11, 30, sobeit add end
+
+// 2005, 1, 3, sobeit add start
+void C_VS_UI::OpenInventoryToSwapAdvanceItem()
+{
+	if (m_pC_game)
+		m_pC_game->OpenInventoryToSwapAdvanceItem();
+}
+void C_VS_UI::FinishSwapAdvancementItem()
+{
+	if (m_pC_game)
+		m_pC_game->FinishSwapAdvancementItem();
+}
+bool C_VS_UI::IsRunningSwapAdvancementItem()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSwapAdvancementItem();
+
+	return false;
+}
+// 2005, 1, 3, sobeit add end
+
+// 2005, 1, 11, sobeit add start - �ҿ��̿����� â
+void	C_VS_UI::Run_Campaign_Help_Unfortunate_Neighbors(int value)
+{
+	if (m_pC_game)
+		m_pC_game->Run_Campaign_Help_Unfortunate_Neighbors(value);
+
+}
+// 2005, 1, 11, sobeit add end
+
+// 2005, 1, 17, sobeit add start - ����Ʈ ����
+void	C_VS_UI::SetQuestNpcDialog(void* pVoid)
+{
+	if(m_pC_game)
+		m_pC_game->SetQuestNpcDialog(pVoid);
+}
+// 2005, 1, 17, sobeit add end - ����Ʈ ����
+
+// 2005, 1, 24, sobeit add start - ������ �ޱ� �̺�Ʈ
+void	C_VS_UI::Run_Confirm_GetItemEvent(int value)
+{
+	if (m_pC_game)
+		m_pC_game->Run_Confirm_GetItemEvent(value);
+
+}
+// 2005, 1, 24, sobeit add end
+
+	
+	// 2005, 2, 1, sobeit add start
+
+void	C_VS_UI::RunWebBrowser(HWND hWnd, char* szURL, HINSTANCE hInst) //void* pWebOjbect)
+{
+	if (m_pC_game)
+		m_pC_game->RunWebBrowser(hWnd, szURL, hInst) ; //pWebOjbect);
+}
+
+bool	C_VS_UI::IsRunningWebBrowser()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningWebBrowser();
+	return false;
+}
+
+void	C_VS_UI::CloseWebBrowser()
+{
+	if (m_pC_game)
+		m_pC_game->CloseWebBrowser();
+}
+
+int	C_VS_UI::GetMouseCursorInfo()
+{
+	if (m_pC_game)
+		return m_pC_game->GetMouseCursorInfo();
+	return 0;
+}
+
+bool C_VS_UI::IsInRectPointWebBrowser(int X, int Y)
+{
+	if (m_pC_game)
+		return m_pC_game->IsInRectPointWebBrowser(X, Y);
+	return false;
+}
+// 2005, 2, 1, sobeit add end
+
+// 2005, 2, 24, sobeit add start
+void	C_VS_UI::RunSubInventory(MItem* pItem)
+{
+	if (m_pC_game)
+		m_pC_game->RunSubInventory(pItem);
+}
+
+int		C_VS_UI::CountRunningSubInventory()
+{
+	if (m_pC_game)
+		return m_pC_game->CountRunningSubInventory();
+	return 0;
+}
+
+bool	C_VS_UI::IsRunningSubInventory(TYPE_OBJECTID SubInventory)
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningSubInventory(SubInventory);
+	return false;
+}
+
+bool	C_VS_UI::ExistSubInventory(TYPE_OBJECTID SubInventory)
+{
+	if (m_pC_game)
+		return m_pC_game->ExistSubInventory(SubInventory);
+	return false;
+}
+
+bool	C_VS_UI::AddItemToSubInventory(TYPE_OBJECTID SubInventory, MItem* pItem, int X, int Y)
+{
+	if (m_pC_game)
+		return m_pC_game->AddItemToSubInventory(SubInventory, pItem, X, Y);
+	return false;
+}
+
+bool	C_VS_UI::ReplaceSubInventoryItem(TYPE_OBJECTID SubInventory, MItem* pItem, BYTE x, BYTE y, MItem*& pOldItem)
+{
+	if (m_pC_game)
+		return m_pC_game->ReplaceSubInventoryItem(SubInventory, pItem, x, y, pOldItem);
+	return false;
+}
+
+void	C_VS_UI::CloseSubInventory(TYPE_OBJECTID SubInventory)
+{
+	if (m_pC_game)
+		m_pC_game->CloseSubInventory(SubInventory);
+}
+
+void	C_VS_UI::CloseAllSubInventory()
+{
+	if (m_pC_game)
+		m_pC_game->CloseAllSubInventory();
+}
+
+void	C_VS_UI::ClearSubInventory()
+{
+	if (m_pC_game)
+		m_pC_game->ClearSubInventory();
+}
+// 2005, 2, 25, sobeit add end
+
+
+void C_VS_UI::AutoMoveInventoryItemToQuickSlot(BYTE inven_grid_x, BYTE inven_grid_y, BYTE quick_slot_num)	///< chyaya Add
+{
+	if(g_pInventory == NULL || g_eRaceInterface == RACE_VAMPIRE )
+		return;
+
+	// �κ��丮 ��ġ���� �������� ��´�.
+	MItem * p_item = g_pInventory->GetItem(inven_grid_x, inven_grid_y);
+	if(p_item == NULL) return;
+
+	g_pInventory->RemoveItem(inven_grid_x, inven_grid_y);
+
+	gpC_base->SendMessage(UI_ITEM_PICKUP_FROM_INVENTORY,
+		inven_grid_x, inven_grid_y,
+		(MItem *)p_item);
+
+	gpC_base->SendMessage(UI_ITEM_DROP_TO_QUICKSLOT, quick_slot_num);
+
+}
+
+// 2005, 4, 21, sjheon add start - ��ȥ���Ǳ�  â
+void	C_VS_UI::Run_Wedding_Contribution_Unfortunate_Neighbors(int value)
+{
+	if (m_pC_game)
+		m_pC_game->Run_Wedding_Contribution_Unfortunate_Neighbors(value);
+}
+//2005, 4, 21, sjheon add end - ��ȥ���Ǳ� â
+
+void	C_VS_UI::PopupNetmarbleAgreementMessage()
+{
+	if( m_pC_title )
+		m_pC_title->PopupNetmarbleAgreementMessage();
+}
+
+
+//2005, 7, 14, sjheon add  - ComboSkill Add
+void	C_VS_UI::SetComboCnt(int ComboCnt)
+{
+	if (m_pC_game)
+		m_pC_game->SetComboCnt(ComboCnt);
+}
+//2005, 7, 14, sjheon add  - ComboSkill End
+
+//2005, 7, 14, sjheon add  - SelectComboSkill  Add
+void	C_VS_UI::SetSelectedAttackComboSkill(bool	bAttackSkill)
+{
+	if (m_pC_game)
+		m_pC_game->SetSelectedAttackComboSkill(bAttackSkill);
+}
+//2005, 7, 14, sjheon add  - SelectComboSkill  End
+
+
+//2005, 7, 18, sjheon add  - PopupSummerComBack Add
+void	C_VS_UI::PopupSummerComBack(int value)
+{
+	if(value < 0 || value > 4) return ; 
+	if (m_pC_game)
+		m_pC_game->PopupSummerComBack(value);
+}
+//2005, 7, 18, sjheon add  - PopupSummerComBack End
+
+
+
+void	C_VS_UI::SetBloodBurstAttackGage()
+{
+	if (m_pC_game)
+		m_pC_game->SetBloodBurstAttackGage();
+}
+
+void	C_VS_UI::SetBloodBurstDefenseGage()
+{
+	if (m_pC_game)
+		m_pC_game->SetBloodBurstDefenseGage();
+}
+
+void	C_VS_UI::SetBloodBurstPartyGage()
+{
+	if (m_pC_game)
+		m_pC_game->SetBloodBurstPartyGage();
+}
+
+
+bool	C_VS_UI::GetBloodBurstAttackGageFull()
+{
+	if (m_pC_game)
+		return	m_pC_game->GetBloodBurstAttackGageFull();
+	return false ;
+}
+
+bool	C_VS_UI::GetBloodBurstDefenseGageFull()
+{
+	if (m_pC_game)
+		return	m_pC_game->GetBloodBurstDefenseGageFull();
+	return false ;
+}
+
+bool	C_VS_UI::GetBloodBurstPartyGageFull()
+{
+	if (m_pC_game)
+		return	m_pC_game->GetBloodBurstPartyGageFull();
+	return false ;
+}
+
+int	C_VS_UI::GetSelectedSkillID()
+{
+	if (m_pC_game)
+		return	m_pC_game->GetSelectedSkillID();
+	return false;
+}
+
+void C_VS_UI::RunAskCheckToEnterServerDialog(int AskType ,  int value)
+{
+	if( m_pC_title )
+		m_pC_title->RunAskCheckToEnterServerDialog(AskType , value);
+}
+
+void	C_VS_UI::RunTaxRate(int	TexRate) //void* pWebOjbect)
+{
+	if (m_pC_game)
+		m_pC_game->RunTaxRate(TexRate) ; //pWebOjbect);
+}
+
+bool	C_VS_UI::IsRunTaxRate()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunTaxRate();
+	
+	return false;
+}
+
+void	C_VS_UI::CloseTexRate()
+{
+	if (m_pC_game)
+		m_pC_game->CloseTexRate();
+}
+
+
+
+void	C_VS_UI::RunDelegation_Of_Power(const char* pName)
+{
+	if (m_pC_game)
+			m_pC_game->RunDelegation_Of_Power(pName) ;
+}
+
+bool	C_VS_UI::IsRunningDelegation_Of_Power()
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningDelegation_Of_Power();
+	
+	return false;
+}
+
+void	C_VS_UI::CloseDelegation_Of_Power()
+{
+	if (m_pC_game)
+		m_pC_game->CloseDelegation_Of_Power();
+}
+
+
+void C_VS_UI::RunOperator()
+{
+	if(m_pC_game)
+		m_pC_game->RunOperator();
+}
+
+
+void C_VS_UI::CloseOperator()
+{
+	if(m_pC_game)
+		m_pC_game->CloseOperator();
+}
+
+
+void C_VS_UI::ToggleOperator()
+{
+	if(m_pC_game)
+		m_pC_game->ToggleOperator();
+}
+
+
+bool C_VS_UI::IsRunningOperator()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRunningOperator();
+	return false;
+}
+
+void C_VS_UI::RunTimeCount(DWORD time, LPCTSTR desc)
+{
+	if(m_pC_game)
+		m_pC_game->RunTimeCount(time, desc);
+}
+
+bool C_VS_UI::IsRuningTimeCount()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRuningTimeCount();
+	return false;
+}
+
+void C_VS_UI::CloseTimeCount()
+{
+	if(m_pC_game)
+		m_pC_game->CloseTimeCount();
+}
+
+#if	__CONTENTS(__USER_GRADE)
+void C_VS_UI::ToggleUserGrade()
+{
+	if(m_pC_game)
+		m_pC_game->ToggleUserGrade();
+}
+
+bool C_VS_UI::IsRuningUserGrade()
+{
+	if(m_pC_game)
+		return m_pC_game->IsRuningUserGrade();
+	return false;
+}
+#endif	//__USER_GRADE
+
+
+void C_VS_UI::Inventory_Item_Position_Remove()
+{
+	if(m_pC_game != NULL)
+		m_pC_game->Inventory_Item_Position_Remove();
+}
+
+#if __CONTENTS(__TIPOJYU_CASTLE) //RunIndounNpcDlg()
+void C_VS_UI::RunIndounNpcDlg(S_INDOUN_DLG_INFO Indoun_Npc_Dlg_Info, ENUMTYPE_INDUONSELECT etIndounSelect)
+{
+	if(m_pC_game)
+		m_pC_game->RunIndounNpcDlg(Indoun_Npc_Dlg_Info, etIndounSelect);
+}
+
+void C_VS_UI::CloseIndounNpcDlg()
+{
+	if(m_pC_game)
+	{
+		m_pC_game->CloseIndounNpcDlg();
+	}
+}
+#endif // __TIPOJYU_CASTLE;
+
+#if __CONTENTS(__DYNAMIC_UI)
+void C_VS_UI::ClosePCTalkDlg()
+{
+	g_pUIDialog->ClosePCTalkDlg();
+}
+
+bool C_VS_UI::Is_ActiveMessageDlg()
+{
+	if(g_pUIDialog==NULL)
+		return false;
+	else
+		return g_pUIDialog->Is_ActiveMessageDlg();
+}
+#endif //__DYNAMIC_UI
+
+#if __CONTENTS(__PET_MIXINGFORGE)
+void C_VS_UI::RunPetMixingForge()
+{
+	if (m_pC_game)
+		m_pC_game->RunPetMixingForge();
+}
+
+//-----------------------------------------------------------------------------
+// C_VS_UI::IsRunningMixingForge
+//
+//
+//-----------------------------------------------------------------------------
+bool	C_VS_UI::IsRunningPetMixingForge() const
+{
+	if (m_pC_game)
+		return m_pC_game->IsRunningPetMixingForge();
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// CloseMixingForge
+//
+// 
+//-----------------------------------------------------------------------------
+void C_VS_UI::ClosePetMixingForge()
+{
+	if (m_pC_game)
+		m_pC_game->ClosePetMixingForge();
+}
+#endif //__PET_MIXINGFORGE

@@ -1,0 +1,78 @@
+//////////////////////////////////////////////////////////////////////
+// 
+// Filename    : EffectInfo.h 
+// Written By  : elca@ewestsoft.com
+// Description : 기술이 성공했을때 보내는 패킷을 위한 클래스 정의
+// 
+//////////////////////////////////////////////////////////////////////
+
+#ifndef __EFFECT_INFO_H__
+#define __EFFECT_INFO_H__
+
+// include files
+#include "Types.h"
+#include "Exception.h"
+#include "Packet.h"
+
+//////////////////////////////////////////////////////////////////////
+//
+// class EffectInfo;
+//
+// 게임서버에서 클라이언트로 이펙트 정보를 알려주기 위한 객채
+// GCUpdateInfo, AddSlayer, AddVampire, AddMonster등에 실려서 날아간다.
+//
+//////////////////////////////////////////////////////////////////////
+
+class EffectInfo {
+
+public :
+	
+	// constructor
+	EffectInfo () ;
+	
+	// destructor
+	~EffectInfo() ;
+	
+public :
+	
+	
+    // 입력스트림(버퍼)으로부터 데이타를 읽어서 패킷을 초기화한다.
+    void read ( SocketInputStream & iStream ) ;
+		    
+    // 출력스트림(버퍼)으로 패킷의 바이너리 이미지를 보낸다.
+    void write ( SocketOutputStream & oStream ) const ;
+
+	// get packet's body size
+	// 최적화시, 미리 계산된 정수를 사용한다.
+	PacketSize_t getSize () const  { return szBYTE + (szWORD+szDWORD) * m_ListNum; }
+	static PacketSize_t getMaxSize()  { return szBYTE + (szWORD+szDWORD) * 255; }
+
+	// get packet's debug std::string
+	std::string toString () const ;
+
+	// get / set ListNumber
+	BYTE getListNum() const  { return m_ListNum; }
+	void setListNum( BYTE ListNum )  { m_ListNum = ListNum; }
+
+	// add / delete / clear S List
+	void addListElement( EffectID_t EffectID , DWORD Value ) ; 
+
+	// ClearList
+	void clearList()  { m_EList.clear(); m_ListNum = 0; }
+
+	// pop front Element in Status List
+	//DWORD popFrontListElement()  { DWORD EffectList = m_EList.front(); m_EList.pop_front(); return EffectList; }
+	const std::pair<WORD,DWORD> popFrontListElement()  { std::pair<WORD,DWORD> ret = m_EList.front(); m_EList.pop_front(); return ret; }
+
+	std::list<std::pair<WORD,DWORD> >& GetList() { return m_EList; }
+protected :
+	
+	// StatusList Element Number
+	BYTE m_ListNum;
+
+	// Status List
+	std::list<std::pair<WORD,DWORD> > m_EList;
+
+};
+
+#endif

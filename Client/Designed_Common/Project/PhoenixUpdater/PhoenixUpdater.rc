@@ -1,0 +1,7 @@
+#define IDI_PHOENIX_UPDATER 1
+#define IDR_PHOENIX_UPDATER_BG 101
+#define IDR_PHOENIX_UPDATER_CLOSE 102
+
+IDI_PHOENIX_UPDATER ICON "assets\\phoenix_updater_icon.ico"
+IDR_PHOENIX_UPDATER_BG RCDATA "assets\\phoenix_updater_bg.png"
+IDR_PHOENIX_UPDATER_CLOSE RCDATA "assets\\phoenix_updater_close.png"

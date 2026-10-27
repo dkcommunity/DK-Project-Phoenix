@@ -1,0 +1,29 @@
+//////////////////////////////////////////////////////////////////////////////
+// Filename    : CGDeleteSMSAddressHandler.cc
+// Written By  : elca@ewestsoft.com
+// Description :
+//////////////////////////////////////////////////////////////////////////////
+
+#include "CGDeleteSMSAddress.h"
+
+#ifdef __GAME_SERVER__
+	#include "GamePlayer.h"
+	#include "DarkAssert.h"
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+void CGDeleteSMSAddressHandler::execute (CGDeleteSMSAddress* pPacket , Player* pPlayer)
+	
+{
+	__BEGIN_TRY __BEGIN_DEBUG_EX
+
+#ifdef __GAME_SERVER__
+
+	Assert(pPacket != NULL);
+	Assert(pPlayer != NULL);
+
+#endif	// __GAME_SERVER__
+
+    __END_DEBUG_EX __END_CATCH
+}

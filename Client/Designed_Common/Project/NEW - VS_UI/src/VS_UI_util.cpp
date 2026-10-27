@@ -1,0 +1,1361 @@
+// VS_UI_Util.cpp
+
+#include "client_PCH.h"
+#include "crash_trace_tool.h"
+#include <assert.h>
+#include <fstream>
+#include <stdlib.h>
+#include "VS_UI_base.h"
+#include "VS_UI_util.h"
+#include "UserInformation.h"
+// FULL DX11 gecis Faz G1 (2026-09-01) — BltLockedClip ham pixel yazar,
+// dx11gpu modunda dirty bolge bildirimi gerekir
+#include "../../Client/DXLib/D3D11SpriteCommands.h"
+
+//#define TEMP_FILE			"_000_TEMP"
+
+//----------------------------------------------------------------------------
+// Operations
+//----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Read_rbt (FrameArray)
+//
+// 
+//-----------------------------------------------------------------------------
+//void Read_rbt(const char * rbt_file, C_SPRITE_FRAME_ARRAY * p_sf_array, C_CONVERT_TABLE * p_ct)
+//{
+//	assert(rbt_file);
+//	assert(p_sf_array);
+//	assert(p_ct);
+//
+//	RBT rbt;
+//
+//	if (rbt.Open(rbt_file) != RBT_OK)
+//		return;
+//
+//	for (data_count_t i = 0; i < rbt.Size(); i++)
+//	{
+//		RBT::DATA_HEAD head;
+//		rbt.GetDataHead(i, head);
+//
+//		int size = head.size;
+//
+//		assert(size > 0);
+//
+//		char * buf = new char[size];
+//
+//		rbt_result_t ret = rbt.ReadSequence(i, buf, size);
+//		if (ret == RBT_DATA_ID_NOT_FOUNT)
+//		{
+//			DeleteNewArray(buf);
+//			continue;
+//		}
+//		else if (ret != RBT_OK)
+//		{
+//			DeleteNewArray(buf);
+//			_Error(FAILED_JOB);
+//		}
+//
+//		ofstream spr_file(TEMP_FILE, ios::binary);
+//		if (!spr_file)
+//		{
+//			DeleteNewArray(buf);
+//			return;
+//		}
+//		spr_file.write(buf, size);
+//		spr_file.close();
+//
+//		C_SPRITE_FRAME sprite_frame;
+//		sprite_frame.Open(TEMP_FILE);
+//
+//		p_sf_array->AddSpriteFrame(&sprite_frame);
+//
+//		// set table
+//		p_ct->Add(head.id, i);
+//
+//		remove(TEMP_FILE);
+//		DeleteNewArray(buf);
+//	}
+//}
+
+//-----------------------------------------------------------------------------
+// Read_rbt (SpritePackList)
+//
+// 
+//-----------------------------------------------------------------------------
+//void Read_rbt(const char * rbt_file, CSpritePackList * p_spk_list, C_CONVERT_TABLE * p_ct)
+//{
+//	assert(rbt_file);
+//	assert(p_spk_list);
+//	assert(p_ct);
+//
+//	RBT rbt;
+//
+//	if (rbt.Open(rbt_file) != RBT_OK)
+//		return;
+//
+//	for (data_count_t i = 0; i < rbt.Size(); i++)
+//	{
+//		RBT::DATA_HEAD head;
+//		rbt.GetDataHead(i, head);
+//
+//		int size = head.size;
+//
+//		assert(size > 0);
+//
+//		char * buf = new char[size];
+//
+//		rbt_result_t ret = rbt.ReadSequence(i, buf, size);
+//		if (ret == RBT_DATA_ID_NOT_FOUNT)
+//		{
+//			DeleteNewArray(buf);
+//			continue;
+//		}
+//		else if (ret != RBT_OK)
+//		{
+//			DeleteNewArray(buf);
+//			_Error(FAILED_JOB);
+//		}
+//
+//		ofstream spr_file(TEMP_FILE, ios::binary);
+//		if (!spr_file)
+//		{
+//			DeleteNewArray(buf);
+//			return;
+//		}
+//		spr_file.write(buf, size);
+//		spr_file.close();
+//
+//		ifstream spr_file2(TEMP_FILE, ios::binary);
+//		if (!spr_file2)
+//		{
+//			DeleteNewArray(buf);
+//			return;
+//		}
+//
+//		CSprite * p_sprite;
+//		if (CDirectDraw::Is565())
+//			p_sprite = new CSprite565;
+//		else
+//			p_sprite = new CSprite555;
+//
+//		if (p_sprite->LoadFromFile(spr_file2) == false)
+//			_Error(FAILED_JOB);
+//
+//		p_spk_list->AddSprite(p_sprite);
+//
+//		// set table
+//		p_ct->Add(head.id, i);
+//
+//		spr_file2.close();
+//		remove(TEMP_FILE);
+//		DeleteNewArray(buf);
+//	}
+//}
+
+//SPRITE_ID C_CONVERT_TABLE::Index(data_id_t id) const
+//{
+//	assert(m_p_unit_list);
+//
+//	for (int i = 0; i < m_size; i++)
+//	{
+//		if (m_p_unit_list[i].id == id)
+//			return m_p_unit_list[i].index;
+//	}
+//
+//	return NO_SPRITE_ID;
+//}
+//
+//C_CONVERT_TABLE::C_CONVERT_TABLE()
+//{
+//	m_p_unit_list = NULL;
+//	m_size = 0;
+//}
+//
+//C_CONVERT_TABLE::~C_CONVERT_TABLE()
+//{
+//	if (m_p_unit_list)
+//	{
+//		assert(m_size > 0);
+//
+//		free(m_p_unit_list);
+//		m_p_unit_list = NULL;
+//		m_size = 0;
+//	}
+//}
+//
+//void C_CONVERT_TABLE::Add(data_id_t id, SPRITE_ID index)
+//{
+//	m_p_unit_list = (UNIT *)realloc(m_p_unit_list, sizeof(UNIT)*(m_size+1));
+//
+//	m_p_unit_list[m_size].id = id;
+//	m_p_unit_list[m_size].index = index;
+//
+//	m_size++;
+//}
+
+
+//-----------------------------------------------------------------------------
+// GetHeight
+//
+// 
+//-----------------------------------------------------------------------------
+int C_ANI_OBJECT::GetHeight(SPRITE_ID sprite_id) const
+{
+	return m_pC_spk->GetHeight(sprite_id);
+}
+
+//-----------------------------------------------------------------------------
+// GetWidth
+//
+// 
+//-----------------------------------------------------------------------------
+int C_ANI_OBJECT::GetWidth(SPRITE_ID sprite_id) const
+{
+	return m_pC_spk->GetWidth(sprite_id);
+}
+
+/*-----------------------------------------------------------------------------
+- Blt
+-
+-----------------------------------------------------------------------------*/
+void C_ANI_OBJECT::Blt(POINT &point, SPRITE_ID sprite_id)
+{
+	m_pC_spk->Blt(point, sprite_id);
+}
+
+/*-----------------------------------------------------------------------------
+- BltColor
+-
+-----------------------------------------------------------------------------*/
+void C_ANI_OBJECT::BltColor(POINT &point, SPRITE_ID sprite_id, int rgb)
+{
+	m_pC_spk->BltColor(point, sprite_id, rgb);
+}
+
+/*-----------------------------------------------------------------------------
+- BltDarkness
+-
+-----------------------------------------------------------------------------*/
+void C_ANI_OBJECT::BltDarkness(POINT &point, SPRITE_ID sprite_id, int dark_bit)
+{
+	m_pC_spk->BltDarkness(point, sprite_id, dark_bit);
+}
+
+/*-----------------------------------------------------------------------------
+- FrrRX
+-
+-----------------------------------------------------------------------------*/
+int C_ANI_OBJECT::FrrRX(int index) const
+{
+	return m_pC_frr->GetRX(index);
+}
+
+/*-----------------------------------------------------------------------------
+- FrrRY
+-
+-----------------------------------------------------------------------------*/
+int C_ANI_OBJECT::FrrRY(int index) const
+{
+	return m_pC_frr->GetRY(index);
+}
+
+/*-----------------------------------------------------------------------------
+- FrrSize
+-
+-----------------------------------------------------------------------------*/
+int C_ANI_OBJECT::FrrSize() const
+{
+	return m_pC_frr->Size();
+}
+
+/*-----------------------------------------------------------------------------
+- C_ANI_OBJECT
+-
+-----------------------------------------------------------------------------*/
+C_ANI_OBJECT::C_ANI_OBJECT(const char *sz_spkfile, const char *sz_frrfile)
+{
+	if (!sz_spkfile || !sz_frrfile)
+		_Error(NULL_REF);
+
+	m_pC_spk = new C_SPRITE_PACK(sz_spkfile);
+
+	m_pC_frr = new C_FRR(sz_frrfile);
+}
+
+/*-----------------------------------------------------------------------------
+- ~C_ANI_OBJECT
+-
+-----------------------------------------------------------------------------*/
+C_ANI_OBJECT::~C_ANI_OBJECT()
+{
+	DeleteNew(m_pC_spk);
+	DeleteNew(m_pC_frr);
+}
+
+/*-----------------------------------------------------------------------------
+- Timer
+-
+-----------------------------------------------------------------------------*/
+void C_ANIMATION::Timer()
+{
+	if (m_play_order == STOP)
+		return;
+
+	if (m_dw_prev_tickcount+m_dw_millisec <= GetTickCount())
+	{
+		// next frame!
+
+		m_dw_prev_tickcount = GetTickCount();
+
+		switch (m_play_order)
+		{
+			case PLAY:
+				if (m_pC_ani_object->FrrSize() > m_current_frame+1)
+					m_current_frame++;
+				else
+				{
+					m_play_order = STOP;
+
+					// m_play_order�� next order�� �ٲ� ��, �ð������� �ֱ� ������(�ܺο��� �� ��
+					// �̰��� �߿��� ������) ��ٷ� next order�� �����Ѵ�.
+					RunNextPlayOrder();
+				}
+				break;
+
+			case PLAY_BACK:
+				if (0 < m_current_frame)
+					m_current_frame--;
+				else
+				{
+					m_play_order = STOP;
+					RunNextPlayOrder();
+				}
+				break;
+
+			case PLAY_LOOP:
+				if (m_pC_ani_object->FrrSize() > m_current_frame+1)
+					m_current_frame++;
+				else
+					m_current_frame = 0;
+				break;
+
+			case PLAY_LOOPBACK:
+				if (m_bl_reverse)
+					m_current_frame--;
+				else
+					m_current_frame++;
+
+				if (m_current_frame == 0)
+					m_bl_reverse = false;
+				if (m_current_frame == m_pC_ani_object->FrrSize()-1)
+					m_bl_reverse = true;
+				break;
+		}
+	}
+}
+
+/*-----------------------------------------------------------------------------
+- Doing
+- Animation ���̶�� true�� ��ȯ�Ѵ�.
+-----------------------------------------------------------------------------*/
+C_ANIMATION::PLAY_ORDER C_ANIMATION::GetAnimationState() const
+{
+	return m_play_order;
+}
+
+/*-----------------------------------------------------------------------------
+- C_ANIMATION
+-
+-----------------------------------------------------------------------------*/
+C_ANIMATION::C_ANIMATION(C_ANI_OBJECT *p_object)
+{
+	m_pC_ani_object = p_object;
+	if (!m_pC_ani_object)
+		_Error(NULL_REF);
+
+	m_play_order_next = STOP;
+	m_play_order = STOP;
+	m_current_frame = 0;
+	m_dw_millisec = 100;
+	m_x = 0;
+	m_y = 0;
+}
+
+/*-----------------------------------------------------------------------------
+- ~C_ANIMATION
+-
+-----------------------------------------------------------------------------*/
+C_ANIMATION::~C_ANIMATION()
+{
+
+}
+
+//-----------------------------------------------------------------------------
+// RunNextPlayOrder
+//
+// next order�� ������ m_play_order���� ��ü�ϰ�, next order�� �ٽ� ������(STOP)��
+// �ٲ۴�.
+//-----------------------------------------------------------------------------
+void C_ANIMATION::RunNextPlayOrder()
+{
+	switch (m_play_order_next)
+	{
+		case PLAY:
+			Play();
+			break;
+
+		case PLAY_BACK:
+			PlayBack();
+			break;
+
+		case PLAY_LOOP:
+			PlayLoop();
+			break;
+
+		case PLAY_LOOPBACK:
+			PlayLoopBack();
+			break;
+	}
+
+	m_play_order_next = STOP;
+}
+
+/*-----------------------------------------------------------------------------
+- SetSpeed
+- timer �ӵ��� �����Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_ANIMATION::SetSpeed(DWORD millisec)
+{
+	m_dw_millisec = millisec;
+}
+
+/*-----------------------------------------------------------------------------
+- SetPlayPosition
+- animation�� �ϴ� ������ġ�� �����Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_ANIMATION::SetPlayPosition(int x, int y)
+{
+	m_x = x;
+	m_y = y;
+}
+
+/*-----------------------------------------------------------------------------
+- PlayLoop
+-
+-----------------------------------------------------------------------------*/
+void C_ANIMATION::PlayLoop()
+{
+	// refresh timer
+	m_dw_prev_tickcount = GetTickCount();
+
+	m_play_order = PLAY_LOOP;
+	m_current_frame = 0;
+}
+
+//-----------------------------------------------------------------------------
+// PlayLoopBack
+//
+// play -> back -> play (�ݺ�)
+//-----------------------------------------------------------------------------
+void C_ANIMATION::PlayLoopBack()
+{
+	// refresh timer
+	m_dw_prev_tickcount = GetTickCount();
+
+	m_play_order = PLAY_LOOPBACK;
+	m_current_frame = 0;
+	m_bl_reverse = false;
+}
+
+/*-----------------------------------------------------------------------------
+- Play
+- �տ��� �ڷ� �� �� animation�Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_ANIMATION::Play()
+{
+	// refresh timer
+	m_dw_prev_tickcount = GetTickCount();
+	
+	m_current_frame = 0;
+	m_play_order = PLAY;
+}
+
+//-----------------------------------------------------------------------------
+// Stop
+//
+// ���� ��ġ���� �����.
+//-----------------------------------------------------------------------------
+void C_ANIMATION::Stop()
+{
+	// refresh timer
+	m_dw_prev_tickcount = GetTickCount();
+
+	m_play_order = STOP;
+}
+
+//-----------------------------------------------------------------------------
+// SetNextPlayOrder
+//
+//
+//-----------------------------------------------------------------------------
+void C_ANIMATION::SetNextPlayOrder(C_ANIMATION::PLAY_ORDER order)
+{
+	m_play_order_next = order;
+}
+
+//-----------------------------------------------------------------------------
+// GetNextPlayOrder
+//
+// 
+//-----------------------------------------------------------------------------
+C_ANIMATION::PLAY_ORDER C_ANIMATION::GetNextPlayOrder() const
+{
+	return m_play_order_next;
+}
+
+//-----------------------------------------------------------------------------
+// Refresh
+//
+// 
+//-----------------------------------------------------------------------------
+void C_ANIMATION::Refresh()
+{
+	m_play_order = STOP;
+	m_play_order_next = STOP;
+	m_current_frame = 0;
+}
+
+/*-----------------------------------------------------------------------------
+- PlayBack
+- �ڿ��� ������ �� �� animation�Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_ANIMATION::PlayBack()
+{
+	// refresh timer
+	m_dw_prev_tickcount = GetTickCount();
+
+	m_play_order = PLAY_BACK;
+	m_current_frame = m_pC_ani_object->FrrSize()-1;
+}
+
+/*-----------------------------------------------------------------------------
+- Show
+- animation�� ������ ������ frame�� ���δ�.
+-----------------------------------------------------------------------------*/
+void C_ANIMATION::Show(bool enable)
+{
+	POINT point = {m_x+m_pC_ani_object->FrrRX(m_current_frame), m_y+m_pC_ani_object->FrrRY(m_current_frame)};
+
+	if(enable)
+		m_pC_ani_object->Blt(point, m_current_frame);
+	else
+//		gpC_base->m_p_DDSurface_back->BltIndexSpriteDarkness(&point, &m_pC_slayer_woman_ispk[m_pC_slayer_woman_cfpk[p_slot->woman_info.right][0][0][index].GetSpriteID()], DARK_BIT);
+		m_pC_ani_object->BltDarkness(point, m_current_frame, 2);
+
+	// �ӵ��� ���� Show()�� ����...
+	Timer();
+}
+
+/*-----------------------------------------------------------------------------
+- Size
+- frame�� �� ���� ��ȯ�Ѵ�.
+-----------------------------------------------------------------------------*/
+int C_FRR::Size() const
+{
+	return m_C_frame_array.GetSize();
+}
+
+/*-----------------------------------------------------------------------------
+- GetRX
+-
+-----------------------------------------------------------------------------*/
+int C_FRR::GetRX(int frame) const
+{
+	assert(frame > -1 && frame < m_C_frame_array.GetSize());
+
+	return m_C_frame_array[frame].GetCX();
+}
+
+/*-----------------------------------------------------------------------------
+- GetRY
+-
+-----------------------------------------------------------------------------*/
+int C_FRR::GetRY(int frame) const
+{
+	assert(frame > -1 && frame < m_C_frame_array.GetSize());
+
+	return m_C_frame_array[frame].GetCY();
+}
+
+/*-----------------------------------------------------------------------------
+- C_FRR
+-
+-----------------------------------------------------------------------------*/
+C_FRR::C_FRR(const char *sz_filename)
+{
+	if (sz_filename)
+	{
+		if (!Open(sz_filename))
+			_Error(FAILED_JOB);
+	}
+}
+
+/*-----------------------------------------------------------------------------
+- ~C_FRR
+-
+-----------------------------------------------------------------------------*/
+C_FRR::~C_FRR()
+{
+	m_C_frame_array.Release();
+}
+
+/*-----------------------------------------------------------------------------
+- Open
+-
+  `�̹� load�Ǿ� �ִٸ�, release�ϰ� sz_filename�� open�Ѵ�.
+-----------------------------------------------------------------------------*/
+bool C_FRR::Open(const char *sz_filename)
+{
+	if (!sz_filename)
+		return false;
+
+	// ������ load�ߴٸ� release�Ѵ�.
+	if (m_C_frame_array.GetSize() > 0)
+		m_C_frame_array.Release();
+
+	//if (access(sz_filename, 0)) _Error(FILE_OPEN);
+	ivfstream file(sz_filename, std::ios::binary);
+	if(!file.is_open()) _Error(FILE_OPEN);
+	m_C_frame_array.LoadFromFile(file);
+	file.close();
+
+	return true;
+}
+
+/*-----------------------------------------------------------------------------
+- Open
+- Sprite Pack file�� open�Ѵ�.
+
+  `Sprite pack file�� �ƴҰ���� ����ó���� ����.
+  `�̹� load�Ǿ� �ִٸ�, release�ϰ� sz_filename�� open�Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::Open(const char *sz_filename)
+{
+	//assert(m_pC_spk_list);	// by sigi
+
+//	if (!sz_filename)// || !m_pC_spk_list)		// by sigi
+//		_ErrorStr((char *)sz_filename);//(FAILED_JOB);
+
+	// by sigi
+	// ������ load�ߴٸ� release�Ѵ�.
+	//if (m_pC_spk_list->GetSize() > 0)
+	//	m_pC_spk_list->Release();
+
+//	ifstream file(sz_filename, ios::binary | ios::nocreate);
+//	if (!file)
+//	{
+//		_ErrorStr((char *)sz_filename);
+//		//_Error(FILE_OPEN);
+//	}
+
+	//m_pC_spk_list->LoadFromFile(file);
+	if (!m_SPK.LoadFromFile(sz_filename))
+	{
+		CT_Done("C_SPRITE_PACK::Open FAIL path=%s size=%d", sz_filename, (int)m_SPK.GetSize());
+	}
+}
+
+/*-----------------------------------------------------------------------------
+- C_SPRITE_PACK
+-
+-----------------------------------------------------------------------------*/
+C_SPRITE_PACK::C_SPRITE_PACK(const char *sz_filename)
+{
+	// Sprite�� ������ �� 565���� 555���� �˾ƾߵǴϱ�...
+	// �׷��� �� �˻縦 �ܺο��� �ϰ� �ߴٴ±�...
+	
+	// by sigi
+	//if (CDirectDraw::Is565())
+	//	m_pC_spk_list = new CSpritePackList565;
+	//else
+	//	m_pC_spk_list = new CSpritePackList555;
+
+	if (sz_filename) // file���� �����Ͽ��ٸ�...
+		Open(sz_filename);
+}
+
+/*-----------------------------------------------------------------------------
+- ~C_SPRITE_PACK
+-
+-----------------------------------------------------------------------------*/
+C_SPRITE_PACK::~C_SPRITE_PACK()
+{
+	// by sigi
+	//DeleteNew(m_pC_spk_list);
+}
+
+//-----------------------------------------------------------------------------
+// BltColor
+//
+// rgb �� �ϳ������� blt�Ѵ�.
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltColor(int x, int y, SPRITE_ID sprite_id, int rgb)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltColor OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+
+	POINT point;
+	point.x = x;
+	point.y = y;
+
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_p_DDSurface_back->Lock())
+	{
+		gpC_base->m_p_DDSurface_back->BltSpriteColor(&point, &m_SPK[sprite_id], rgb);
+
+		gpC_base->m_p_DDSurface_back->Unlock();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// BltColor
+//
+// rgb �� �ϳ������� blt�Ѵ�.
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltColor(POINT &point, SPRITE_ID sprite_id, int rgb)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltColor(point) OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_p_DDSurface_back->Lock())
+	{
+		gpC_base->m_p_DDSurface_back->BltSpriteColor(&point, &m_SPK[sprite_id], rgb);
+
+		gpC_base->m_p_DDSurface_back->Unlock();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// BltDarkness
+//
+// dark bit shift blt
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltDarkness(int x, int y, SPRITE_ID sprite_id, int dark)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltDarkness OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+
+	POINT point;
+	point.x = x;
+	point.y = y;
+
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_p_DDSurface_back->Lock())
+	{
+		gpC_base->m_p_DDSurface_back->BltSpriteDarkness(&point, &m_SPK[sprite_id], dark);
+
+		gpC_base->m_p_DDSurface_back->Unlock();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// BltDarkness
+//
+// dark bit shift blt
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltDarkness(POINT &point, SPRITE_ID sprite_id, int dark)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltDarkness(point) OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_p_DDSurface_back->Lock())
+	{
+		gpC_base->m_p_DDSurface_back->BltSpriteDarkness(&point, &m_SPK[sprite_id], dark);
+
+		gpC_base->m_p_DDSurface_back->Unlock();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// BltClip
+//
+// sprite�� clipping�Ѵ�.
+// sprite�� ���ϴ� �κи� ����� �� �����ϴ�.
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltClip(int x, int y, Rect &rect, SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltClip OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_p_DDSurface_back->Lock())
+	{
+		S_SURFACEINFO surface_info;
+		SetSurfaceInfo(&surface_info, gpC_base->m_p_DDSurface_back->GetDDSD());
+		
+		RECT rt;
+		rt.left = max(-x, rect.x);
+		rt.top = max(-y, rect.y);
+		rt.right = min(rect.x+rect.w, g_pUserInformation->iResolution_x-x);
+		rt.bottom = min(rect.y+rect.h, g_pUserInformation->iResolution_y-y);
+
+
+//#ifdef CONVERT_1024_768
+//		rt.right = min(rect.x+rect.w, RESOLUTION_X-x);
+//		rt.bottom = min(rect.y+rect.h, RESOLUTION_Y-y);
+//#else
+//		rt.right = min(rect.x+rect.w, 800-x);
+//		rt.bottom = min(rect.y+rect.h, 600-y);
+//#endif		
+		if(rt.left < rt.right && rt.top < rt.bottom)
+		{
+			
+			WORD * p_dest = (WORD *)surface_info.p_surface+x+rt.left;
+			p_dest = (WORD *)((BYTE *)p_dest+(y+rt.top)*surface_info.pitch);
+			
+			//void BltClip(WORD *pDest, WORD pitch, RECT* pRect); // in CSprite.h
+			m_SPK[sprite_id].BltClipWidth(p_dest, surface_info.pitch, &rt);
+		}
+
+		gpC_base->m_p_DDSurface_back->Unlock();
+	}
+}
+
+/*-----------------------------------------------------------------------------
+- BltAlpha
+-
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::BltAlpha(int x, int y, SPRITE_ID sprite_id, int alpha)
+{
+	POINT point = {x, y};
+	BltAlpha(point, sprite_id, alpha);
+}
+
+/*-----------------------------------------------------------------------------
+- BltAlpha
+-
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::BltAlpha(POINT &point, SPRITE_ID sprite_id, int alpha)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltAlpha OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_p_DDSurface_back->Lock())
+	{
+		gpC_base->m_p_DDSurface_back->BltSpriteAlpha(&point, &m_SPK[sprite_id], alpha);
+
+		gpC_base->m_p_DDSurface_back->Unlock();
+	}
+}
+
+/*-----------------------------------------------------------------------------
+- GetWidth
+-
+-----------------------------------------------------------------------------*/
+int C_SPRITE_PACK::GetWidth(SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::GetWidth OOB sprite_id=%d size=%d pthis=%p — return 0", (int)sprite_id, (int)m_SPK.GetSize(), (void*)this);
+		return 0;
+	}
+	return m_SPK[sprite_id].GetWidth();
+}
+
+/*-----------------------------------------------------------------------------
+- GetHeight
+-
+-----------------------------------------------------------------------------*/
+int C_SPRITE_PACK::GetHeight(SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::GetHeight OOB sprite_id=%d size=%d pthis=%p — return 0", (int)sprite_id, (int)m_SPK.GetSize(), (void*)this);
+		return 0;
+	}
+	return m_SPK[sprite_id].GetHeight();
+}
+
+//-----------------------------------------------------------------------------
+// IsPixel
+//
+// (x, y)�� �������̸� false�� ��ȯ�Ѵ�.
+//-----------------------------------------------------------------------------
+bool C_SPRITE_PACK::IsPixel(int x, int y, SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+		return false;
+	return m_SPK[sprite_id].IsColorPixel(x, y);
+}
+
+/*-----------------------------------------------------------------------------
+- Blt
+-
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::Blt(int x, int y, SPRITE_ID sprite_id)
+{
+	POINT point = {x, y};
+	Blt(point, sprite_id);
+}
+
+/*-----------------------------------------------------------------------------
+- Blt
+- Sprite Surface�� BackSurface�� blt�Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::Blt(POINT &point, SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::Blt OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_p_DDSurface_back->Lock())
+	{
+		gpC_base->m_p_DDSurface_back->BltSprite(&point, &m_SPK[sprite_id]);
+
+		gpC_base->m_p_DDSurface_back->Unlock();
+	}
+}
+
+/*-----------------------------------------------------------------------------
+- BltOffscreen
+- Sprite Surface�� BackSurface�� blt�Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::BltOffscreen(POINT &point, SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltOffscreen OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_DDSurface_offscreen.Lock())
+	{
+		gpC_base->m_DDSurface_offscreen.BltSprite(&point, &m_SPK[sprite_id]);
+
+		gpC_base->m_DDSurface_offscreen.Unlock();
+	}
+}
+
+void C_SPRITE_PACK::BltOffscreen(int x, int y, SPRITE_ID sprite_id)
+{
+	POINT point = {x, y};
+	BltOffscreen(point, sprite_id);
+}
+
+//-----------------------------------------------------------------------------
+// BltOutline
+//
+// Sprite�� �ܰ����� �׷��� �Բ� ����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltOutline(int x, int y, int color, SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltOutline OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+
+	CSpriteOutlineManager	outline_o;
+	outline_o.Add(x, y, &m_SPK[sprite_id]);
+	outline_o.Generate();
+
+	assert(!gpC_base->m_p_DDSurface_back->IsLock());
+	if (gpC_base->m_p_DDSurface_back->Lock())
+	{
+		gpC_base->m_p_DDSurface_back->BltSpriteOutline(&outline_o,  color);
+
+		gpC_base->m_p_DDSurface_back->Unlock();
+	}
+	
+	outline_o.Clear();
+}
+
+
+/*-----------------------------------------------------------------------------
+- BltLocked
+-
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::BltLocked(int x, int y, SPRITE_ID sprite_id)
+{
+	POINT point = {x, y};
+	BltLocked(point, sprite_id);
+}
+
+/*-----------------------------------------------------------------------------
+- BltLocked
+- Sprite Surface�� BackSurface�� blt�Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::BltLocked(POINT &point, SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= (int)m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltLocked OOB sprite_id=%d size=%d pthis=%p", (int)sprite_id, (int)m_SPK.GetSize(), (void*)this);
+		return;
+	}
+	int sw = (int)m_SPK[sprite_id].GetWidth();
+	int sh = (int)m_SPK[sprite_id].GetHeight();
+	if (sw <= 0 || sh <= 0)
+	{
+		CT_Done("SPK::BltLocked EMPTY sprite_id=%d size=%d w=%d h=%d pthis=%p", (int)sprite_id, (int)m_SPK.GetSize(), sw, sh, (void*)this);
+		return;
+	}
+	assert(gpC_base->m_p_DDSurface_back->IsLock());
+	gpC_base->m_p_DDSurface_back->BltSprite(&point, &m_SPK[sprite_id]);
+}
+
+/*-----------------------------------------------------------------------------
+- BltLockedOffscreen
+- Sprite Surface�� BackSurface�� blt�Ѵ�.
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::BltLockedOffscreen(POINT &point, SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltLockedOffscreen OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(gpC_base->m_p_DDSurface_back->IsLock());
+	gpC_base->m_DDSurface_offscreen.BltSprite(&point, &m_SPK[sprite_id]);
+}
+
+void C_SPRITE_PACK::BltLockedOffscreen(int x, int y, SPRITE_ID sprite_id)
+{
+	POINT point = {x, y};
+	BltLockedOffscreen(point, sprite_id);
+}
+
+//-----------------------------------------------------------------------------
+// BltOutline
+//
+// Sprite�� �ܰ����� �׷��� �Բ� ����Ѵ�.
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltLockedOutline(int x, int y, int color, SPRITE_ID sprite_id)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltLockedOutline OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+
+	// focus�� ���� �ܰ����� �׸���.
+	CSpriteOutlineManager	outline_o; // �ܰ������ ��ü.
+
+	// �ܰ������ ��ü �߰�.
+	outline_o.Add(x, y, &m_SPK[sprite_id]);
+	outline_o.Generate();
+
+	assert(gpC_base->m_p_DDSurface_back->IsLock());
+	gpC_base->m_p_DDSurface_back->BltSpriteOutline(&outline_o,  color);
+
+	outline_o.Clear();
+}
+
+//-----------------------------------------------------------------------------
+// BltLockedColor
+//
+// rgb �� �ϳ������� blt�Ѵ�.
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltLockedColor(int x, int y, SPRITE_ID sprite_id, int rgb)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltLockedColor OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+
+	POINT point;
+	point.x = x;
+	point.y = y;
+
+	assert(gpC_base->m_p_DDSurface_back->IsLock());
+	gpC_base->m_p_DDSurface_back->BltSpriteColor(&point, &m_SPK[sprite_id], rgb);
+}
+
+//-----------------------------------------------------------------------------
+// BltLockedDarkness
+//
+// dark bit shift blt
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltLockedDarkness(int x, int y, SPRITE_ID sprite_id, int dark)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltLockedDarkness OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+
+	POINT point;
+	point.x = x;
+	point.y = y;
+
+	assert(gpC_base->m_p_DDSurface_back->IsLock());
+	gpC_base->m_p_DDSurface_back->BltSpriteDarkness(&point, &m_SPK[sprite_id], dark);
+}
+
+//-----------------------------------------------------------------------------
+// BltLockedClip
+//
+// sprite�� clipping�Ѵ�.
+// sprite�� ���ϴ� �κи� ����� �� �����ϴ�.
+//-----------------------------------------------------------------------------
+void C_SPRITE_PACK::BltLockedClip(int x, int y, Rect &rect, SPRITE_ID sprite_id)
+{
+	CT_Done("BLC: ENTER pthis=%p sprite_id=%d xy=(%d,%d) rect=(%d,%d,%d,%d)", (void*)this, (int)sprite_id, x, y, rect.x, rect.y, rect.w, rect.h);
+	if (sprite_id < 0 || sprite_id >= (int)m_SPK.GetSize())
+	{
+		CT_Done("BLC: OOB sprite_id=%d size=%d — return", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	{
+		int sw = (int)m_SPK[sprite_id].GetWidth();
+		int sh = (int)m_SPK[sprite_id].GetHeight();
+		if (sw <= 0 || sh <= 0)
+		{
+			CT_Done("BLC: EMPTY sprite_id=%d size=%d w=%d h=%d — return", (int)sprite_id, (int)m_SPK.GetSize(), sw, sh);
+			return;
+		}
+	}
+	assert(gpC_base->m_p_DDSurface_back->IsLock());
+
+	S_SURFACEINFO surface_info;
+	CT_Done("BLC: pre SetSurfaceInfo back=%p", (void*)gpC_base->m_p_DDSurface_back);
+	SetSurfaceInfo(&surface_info, gpC_base->m_p_DDSurface_back->GetDDSD());
+	CT_Done("BLC: post SetSurfaceInfo p_surface=%p pitch=%d", surface_info.p_surface, (int)surface_info.pitch);
+//OutputDebugString("party 3.0002\n");	
+	RECT rt;
+	rt.left = max(-x, rect.x);
+	rt.top = max(-y, rect.y);
+	rt.right = min(rect.x+rect.w, g_pUserInformation->iResolution_x-x);
+	rt.bottom = min(rect.y+rect.h, g_pUserInformation->iResolution_y-y);
+
+//#ifdef CONVERT_1024_768
+//	rt.right = min(rect.x+rect.w, RESOLUTION_X-x);
+//	rt.bottom = min(rect.y+rect.h, RESOLUTION_Y-y);
+//#else
+//	rt.right = min(rect.x+rect.w, 800-x);
+//	rt.bottom = min(rect.y+rect.h, 600-y);
+//#endif	
+	CT_Done("BLC: rt=(%d,%d,%d,%d)", (int)rt.left, (int)rt.top, (int)rt.right, (int)rt.bottom);
+	if(rt.left >= rt.right || rt.top >= rt.bottom)return;
+
+	// Faz G1 (2026-09-01) — dx11gpu: ham BltClipWidth yazisi komut katmanina
+	// dirty olarak bildirilir (z-order icin checkpoint segmenti tetikler)
+	{
+		phoenix::render::D3D11SpriteCommands& cmds =
+			phoenix::render::D3D11SpriteCommands::Instance();
+		if (cmds.IsActive() && cmds.IsCompositionTarget(surface_info.p_surface))
+		{
+			RECT dirty;
+			dirty.left   = x + rt.left;
+			dirty.top    = y + rt.top;
+			dirty.right  = x + rt.right;
+			dirty.bottom = y + rt.bottom;
+			cmds.MarkDirty(&dirty);
+		}
+	}
+
+	WORD * p_dest = (WORD *)surface_info.p_surface+x+rt.left;
+	p_dest = (WORD *)((BYTE *)p_dest+(y+rt.top)*surface_info.pitch);
+//OutputDebugString("party 3.0003\n");
+	//void BltClip(WORD *pDest, WORD pitch, RECT* pRect); // in CSprite.h
+	CT_Done("BLC: pre BltClipWidth p_dest=%p", (void*)p_dest);
+	m_SPK[sprite_id].BltClipWidth(p_dest, surface_info.pitch, &rt);
+	CT_Done("BLC: post BltClipWidth — EXIT");
+//OutputDebugString("party 3.0004\n");
+}
+
+/*-----------------------------------------------------------------------------
+- BltLockedAlpha
+-
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::BltLockedAlpha(int x, int y, SPRITE_ID sprite_id, int alpha)
+{
+	POINT point = {x, y};
+	BltLockedAlpha(point, sprite_id, alpha);
+}
+
+/*-----------------------------------------------------------------------------
+- BltLockedAlpha
+-
+-----------------------------------------------------------------------------*/
+void C_SPRITE_PACK::BltLockedAlpha(POINT &point, SPRITE_ID sprite_id, int alpha)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltLockedAlpha OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(gpC_base->m_p_DDSurface_back->IsLock());
+	gpC_base->m_p_DDSurface_back->BltSpriteAlpha(&point, &m_SPK[sprite_id], alpha);
+
+}
+
+void C_SPRITE_PACK::BltLockedColorSet(POINT &point, SPRITE_ID sprite_id, WORD colorset)
+{
+	if (sprite_id < 0 || sprite_id >= m_SPK.GetSize())
+	{
+		CT_Done("SPK::BltLockedColorSet OOB sprite_id=%d size=%d", (int)sprite_id, (int)m_SPK.GetSize());
+		return;
+	}
+	assert(gpC_base->m_p_DDSurface_back->IsLock());
+	gpC_base->m_p_DDSurface_back->BltSpriteColorSet(&point, &m_SPK[sprite_id], colorset);
+}
+
+
+void C_SPRITE_PACK::BltLockedColorSet(int x, int y, SPRITE_ID sprite_id, WORD colorset)
+{
+	POINT point = {x, y};
+	BltLockedColorSet(point, sprite_id, colorset);
+}
+
+//-----------------------------------------------------------------------------
+// C_SPRITE_FRAME_ARRAY
+//
+// 
+//-----------------------------------------------------------------------------
+C_SPRITE_FRAME_ARRAY::C_SPRITE_FRAME_ARRAY()
+{
+	m_size = 0;
+	m_pC_sprite_frame_buf = NULL;
+}
+
+//-----------------------------------------------------------------------------
+// ~C_SPRITE_FRAME_ARRAY
+//
+// 
+//-----------------------------------------------------------------------------
+C_SPRITE_FRAME_ARRAY::~C_SPRITE_FRAME_ARRAY()
+{
+	if (m_pC_sprite_frame_buf)
+	{
+		free(m_pC_sprite_frame_buf);
+		m_pC_sprite_frame_buf = NULL;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// AddSpriteFrame
+//
+// 
+//-----------------------------------------------------------------------------
+void C_SPRITE_FRAME_ARRAY::AddSpriteFrame(C_SPRITE_FRAME * pC_sf)
+{
+	m_pC_sprite_frame_buf = (C_SPRITE_FRAME *)realloc(m_pC_sprite_frame_buf, sizeof(C_SPRITE_FRAME)*(m_size+1));
+
+	m_pC_sprite_frame_buf[m_size] = *pC_sf;
+	m_size++;
+}
+
+//-----------------------------------------------------------------------------
+// GetRX
+//
+// 
+//-----------------------------------------------------------------------------
+int C_SPRITE_FRAME_ARRAY::GetRX(int index)
+{
+	if (index == NO_SPRITE_ID)
+		return 0;
+
+	if (index < 0 || index >= m_size)
+		_Error(FAILED_JOB);
+
+	return m_pC_sprite_frame_buf[index].GetRX();
+}
+
+//-----------------------------------------------------------------------------
+// GetRY
+//
+// 
+//-----------------------------------------------------------------------------
+int C_SPRITE_FRAME_ARRAY::GetRY(int index)
+{
+	if (index == NO_SPRITE_ID)
+		return 0;
+
+	if (index < 0 || index >= m_size)
+		_Error(FAILED_JOB);
+
+	return m_pC_sprite_frame_buf[index].GetRY();
+}
+
+//-----------------------------------------------------------------------------
+// Constructor.
+//
+// 
+//-----------------------------------------------------------------------------
+C_SPRITE_FRAME::C_SPRITE_FRAME()
+{
+	m_rx = 0;
+	m_ry = 0;
+}
+
+//-----------------------------------------------------------------------------
+// Destructor.
+//
+// 
+//-----------------------------------------------------------------------------
+C_SPRITE_FRAME::~C_SPRITE_FRAME()
+{
+
+}
+
+//-----------------------------------------------------------------------------
+// Open
+//
+// 
+//-----------------------------------------------------------------------------
+bool C_SPRITE_FRAME::Open(const char * pathfile)
+{
+	//if (access(pathfile, 0)) return false;
+	
+	ivfstream file(pathfile, std::ios::binary);
+
+	if(!file.is_open()) return false;
+
+	file.read((char *)&m_rx, sizeof(m_rx));
+	file.read((char *)&m_ry, sizeof(m_ry));
+
+	file.close();
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+// Save
+//
+// 
+//-----------------------------------------------------------------------------
+bool C_SPRITE_FRAME::Save(const char * pathfile)
+{
+	std::ofstream file(pathfile, std::ios::binary);
+	if (!file)
+		return false;
+
+	file.write((char *)&m_rx, sizeof(m_rx));
+	file.write((char *)&m_ry, sizeof(m_ry));
+
+	file.close();
+
+	return true;
+}

@@ -1,0 +1,63 @@
+# CMake / Visual Studio build outputs
+/build/
+/cmake-build-*/
+/vcpkg_installed/
+/.vs/
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.obj
+*.o
+*.a
+*.lib
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.exp
+*.tlog/
+*.lastbuildstate
+*.recipe
+*.pch
+*.idb
+*.sbr
+*.bsc
+
+# Runtime data and generated binaries; keep the CMake output directory
+/GameData/*
+!/GameData/.gitkeep
+/thirdparty/unrar/*.tar.gz
+
+# Local editor and analysis state
+.cursor/
+.codex/
+.claude/
+.idea/
+.vscode/
+**/graphify-out/
+.graphify-index/
+.graphify-source-client/
+.graphify-source-server/
+.graphify-sources/
+__pycache__/
+*.py[cod]
+
+# Logs, backups, and OS files
+*.log
+*.bak
+*.backup_*
+*.dmp
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Local credentials and signing keys
+.env
+.env.*
+*.private.pem
+*_private_key.pem

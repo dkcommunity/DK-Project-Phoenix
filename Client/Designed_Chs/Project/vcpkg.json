@@ -1,0 +1,11 @@
+{
+    "name": "darkeden-legacy-modern",
+    "version-string": "1.0.0",
+    "dependencies": [
+        "xerces-c",
+        "zlib",
+        "lzo",
+        "directx-headers"
+    ],
+    "builtin-baseline": "36fb57eb3878cc3422351a91d3e87c328388dabd"
+}

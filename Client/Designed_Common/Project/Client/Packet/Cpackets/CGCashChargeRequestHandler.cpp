@@ -1,0 +1,24 @@
+//////////////////////////////////////////////////////////////////////////////
+// Filename    : CGCashChargeRequestHandler.cpp
+// Written By  : Phoenix (2026-08-20)
+// Description : CG paketleri client'ta alinmaz — handler govdesi konvansiyon
+//               geregi bos (sablon: CGRequestTmallListHandler.cpp)
+//////////////////////////////////////////////////////////////////////////////
+#include "Client_PCH.h"
+#include "CGCashChargeRequest.h"
+
+#include "ClientDef.h"
+
+#include "UIFunction.h"
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+void CGCashChargeRequestHandler::execute (CGCashChargeRequest* pPacket , Player* pPlayer)
+
+{
+	__BEGIN_TRY
+
+
+
+	__END_CATCH
+}

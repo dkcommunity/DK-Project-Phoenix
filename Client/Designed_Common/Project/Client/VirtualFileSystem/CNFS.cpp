@@ -1,0 +1,15 @@
+//////////////////////////////////////////////////////////////////////
+//
+// Filename    : VirtualFileIO.cpp
+// Written By  : chyaya@darkeden.com
+// Description : Source Of VirtualFileIO Class
+//
+//////////////////////////////////////////////////////////////////////
+
+#include "CNFS.h"
+
+#ifdef _DEBUG
+#define CNFS_INLINE
+#include "CNFS.inl"
+#endif
+

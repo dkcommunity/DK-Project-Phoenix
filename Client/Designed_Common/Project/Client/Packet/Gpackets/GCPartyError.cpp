@@ -1,0 +1,61 @@
+//////////////////////////////////////////////////////////////////////////////
+// Filename    : GCPartyError.cpp 
+// Written By  : 김성민
+// Description :
+//////////////////////////////////////////////////////////////////////////////
+
+#include "Client_PCH.h"
+#include "GCPartyError.h"
+
+//////////////////////////////////////////////////////////////////////////////
+// class GCPartyError member methods
+//////////////////////////////////////////////////////////////////////////////
+
+void GCPartyError::read (SocketInputStream & iStream) 
+	 
+{
+	__BEGIN_TRY
+
+	iStream.read(m_Code);
+	iStream.read(m_TargetObjectID);
+		
+	__END_CATCH
+}
+		    
+void GCPartyError::write (SocketOutputStream & oStream) const 
+     
+{
+	__BEGIN_TRY
+	
+	oStream.write(m_Code);
+	oStream.write(m_TargetObjectID);
+
+	__END_CATCH
+}
+
+void GCPartyError::execute (Player * pPlayer) 
+	 
+{
+	__BEGIN_TRY
+		
+	GCPartyErrorHandler::execute(this , pPlayer);
+
+	__END_CATCH
+}
+
+#ifdef __DEBUG_OUTPUT__
+std::string GCPartyError::toString () const
+       
+{
+	__BEGIN_TRY
+		
+	StringStream msg;
+	msg << "GCPartyError("
+		<< "CODE:" << (int)m_Code
+		<< "TOID:" << m_TargetObjectID
+		<< ")";
+	return msg.toString();
+		
+	__END_CATCH
+}
+#endif

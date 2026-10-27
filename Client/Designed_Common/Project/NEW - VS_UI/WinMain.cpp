@@ -1,0 +1,2256 @@
+#include <windows.h>
+/*-----------------------------------------------------------------------------
+      WinMain.cpp
+      MS Windows Application basic routines.
+      `VS UI Tester
+      2000.1.5. KJTINC
+-----------------------------------------------------------------------------*/
+#include "DXLib.h"
+#include "VS_UI.h" // include VS UI master header file.
+#include "client_PCH.h"
+#include "crash_trace_tool.h"
+#include <assert.h>
+#include <crtdbg.h>
+#include <math.h>
+#include <process.h>
+#include <windows.h>
+
+// include by sigi
+#include "../client/packet/Properties.h"
+#include "AcceleratorDef.h"
+#include "AcceleratorManager.h"
+#include "CSoundPartManager.h"
+#include "ClientConfig.h"
+#include "ExperienceTable.h"
+#include "FameInfo.h"
+#include "KeyAccelerator.h"
+#include "MCreatureTable.h"
+#include "MGameStringTable.H"
+#include "MGuildInfoMapper.h"
+#include "MGuildMarkManager.h"
+#include "MItemOptionTable.h"
+#include "MItemTable.h"
+#include "MMonsterKillQuestInfo.h"
+#include "MNPCTable.h"
+#include "MParty.h"
+#include "MPortal.h"
+#include "MPriceManager.h"
+#include "MQuestInfo.h"
+#include "MSortedItemManager.h"
+#include "MSoundTable.h"
+#include "MStringArray.h"
+#include "MTimeItemManager.h"
+#include "MTradeManager.h"
+#include "MZoneTable.h"
+#include "OperatorOption.h"
+#include "RankBonusDef.h"
+#include "RankBonusTable.h"
+#include "SXml.h"
+#include "ShrineInfoManager.h"
+#include <fcntl.h>
+#include <io.h>
+#include "SystemAvailabilities.h"
+#include "UserInformation.h"
+#include "UserOption.h"
+#include "UtilityFunction.h"
+#include "VS_UI_GameCommon2.h"
+#include "VS_UI_Mouse_pointer.h"
+#include "VS_UI_TIMECOUNT.h"
+#include "VS_UI_WorldMap.h"
+#include "VS_UI_filepath.h"
+
+bool g_bFamily = false;
+BOOL InitSound(); // defined in GameInit.cpp
+#define CLASSNAME "DX"
+#define TITLEBARNAME "VS UI tester~"
+#define _DEBUGGING 1
+// #define _FULLSCREEN
+/*-----------------------------------------------------------------------------
+  PROTOTYPE
+-----------------------------------------------------------------------------*/
+void MouseEventReceiver(CDirectInput::E_MOUSE_EVENT event, int x, int y, int z);
+void KeyboardEventReceiver(CDirectInput::E_KEYBOARD_EVENT event,
+                           DWORD scan_code);
+void UI_ResultReceiver(DWORD message, int dw_left, int dw_right,
+                       void *void_ptr);
+void InitGameStringTable();
+void ProgramLoop();
+void RunProgramLoopWithTry() {
+  __try { ProgramLoop(); }
+  __except(EXCEPTION_EXECUTE_HANDLER) {
+    static bool bOnce = false;
+    if (!bOnce) {
+      CT_Done("CRASH: Exception in ProgramLoop! (Render Error)");
+      bOnce = true;
+    }
+  }
+}
+/*-----------------------------------------------------------------------------
+  GLOBALS
+-----------------------------------------------------------------------------*/
+HWND g_hWnd;
+HINSTANCE g_hInst;
+int g_Dimension = 0;
+bool gbl_ui_input_state; // UI? ??? ?????
+int g_LeftPremiumDays = 10;
+extern EventButton *g_EventButton;
+bool gbl_active; // Is application active?
+CDirectDraw gC_DD;
+CSpriteSurface gC_DDSurface;
+extern CDirectInput *g_pDXInput; // = new CDirectInput;
+static DWORD g_double_click_time;
+int g_mouse_x, g_mouse_y;
+bool gbl_info_show = false; // true;
+bool gbl_game_back = false;
+bool gbl_show_item = true;
+C_VS_UI_NPC_DIALOG *m_pC_dialog = NULL;
+extern CSoundPartManager *g_pSoundManager;
+DWORD g_CurrentFrame = 0;
+void kk(C_VS_UI_DIALOG *b, unsigned long a) { int i = 0; }
+std::map<int, bool> g_mapPremiumZone;
+// IWebBrowser2*			g_pWebBrowser = NULL;
+/*-----------------------------------------------------------------------------
+- KeyboardEventReceiver
+-
+-----------------------------------------------------------------------------*/
+void KeyboardEventReceiver(CDirectInput::E_KEYBOARD_EVENT event,
+                           DWORD scan_code) {
+  static int hp = 0;
+  static WORD progress = 0;
+  static bool bl_ctrl = false;
+  static int time = 0;
+  static int x = 0, y = 0;
+  static int step = 2;
+  static int count = 2;
+  switch (event) {
+  case CDirectInput::KEYDOWN:
+    gC_vs_ui.DIKeyboardControl(event, scan_code);
+    switch (scan_code) {
+    case DIK_LCONTROL:
+    case DIK_RCONTROL:
+      bl_ctrl = true;
+      break;
+    case DIK_SPACE:
+
+      break;
+    case DIK_TAB:
+
+      break;
+    case DIK_ESCAPE:
+
+      break;
+    case DIK_LEFT:
+      if (g_EventButton) {
+        g_EventButton->x--;
+      } else if (bl_ctrl) {
+        time = (time - 1 + 24) % 24;
+        char temp[10];
+        wsprintf(temp, "%d:56:20", time);
+        gC_vs_ui.SetTime(temp);
+      } else {
+        progress -= 10;
+
+        g_char_slot_ingame.HP -= 10;
+        g_char_slot_ingame.MP -= 10;
+        gC_vs_ui.SetProgress(progress, 100);
+      }
+      break;
+    case DIK_RIGHT:
+      if (g_EventButton) {
+        g_EventButton->x++;
+      } else if (bl_ctrl) {
+        time = (time + 1) % 24;
+        char temp[10];
+        wsprintf(temp, "%d:56:20", time);
+        gC_vs_ui.SetTime(temp);
+      } else {
+        progress += 10;
+
+        g_char_slot_ingame.SILVER_HP += 10;
+        g_char_slot_ingame.HP += 10;
+        g_char_slot_ingame.MP += 10;
+        gC_vs_ui.SetProgress(progress, 100);
+      }
+      break;
+    case DIK_HOME:
+      gbl_game_back = !gbl_game_back;
+      break;
+      extern bool gbl_show_item;
+    case DIK_PGUP:
+      gbl_show_item = !gbl_show_item;
+      break;
+    case DIK_INSERT:
+      gbl_info_show = !gbl_info_show;
+      break;
+    case DIK_UP:
+      if (g_EventButton) {
+        g_EventButton->y--;
+      } else
+
+        hp++;
+
+      break;
+    case DIK_DOWN:
+      if (g_EventButton) {
+        g_EventButton->y++;
+      } else
+        hp--;
+
+      break;
+
+    // -----------------------------------------------------------------------
+    // F1-F12 = skill slot kisayollari (Phoenix versiyon konvansiyonu).
+    // 2026-05-12: Onceki mapping'ler — F1=BeginnerHint, F2=ChatDummy,
+    // F3/F4=Couple, F6-F8=ChangeRaceInterface, F9/F11=Exchange,
+    // F10=OtherInfo, F12=Screenshot — hepsi VS6 dev/debug stub'lariydi.
+    // F12 screenshot Bug 13 fix'i hayatta kalan tek dispatch'ti; o da bu
+    // versiyonda yanlis (PrtScn=HotKey_Sysrq screenshot icin ayri var).
+    // Dogru mapping: gC_vs_ui.HotKey_FN() race-spesifik tribe_interface
+    // (m_pC_hotkey)'a delegate eder ve player'in atanmis skill'ini calistirir.
+    // -----------------------------------------------------------------------
+    case DIK_F1:  gC_vs_ui.HotKey_F1();  break;
+    case DIK_F2:  gC_vs_ui.HotKey_F2();  break;
+    case DIK_F3:  gC_vs_ui.HotKey_F3();  break;
+    case DIK_F4:  gC_vs_ui.HotKey_F4();  break;
+    case DIK_F5:  gC_vs_ui.HotKey_F5();  break;
+    case DIK_F6:  gC_vs_ui.HotKey_F6();  break;
+    case DIK_F7:  gC_vs_ui.HotKey_F7();  break;
+    case DIK_F8:  gC_vs_ui.HotKey_F8();  break;
+    case DIK_F9:  gC_vs_ui.HotKey_F9();  break;
+    case DIK_F10: gC_vs_ui.HotKey_F10(); break;
+    case DIK_F11: gC_vs_ui.HotKey_F11(); break;
+    case DIK_F12: gC_vs_ui.HotKey_F12(); break;
+    case DIK_NUMPAD4:
+      if (bl_ctrl)
+        x -= 10;
+      else
+        x--;
+      gC_vs_ui.SetXY(x, y);
+      break;
+    case DIK_NUMPAD6:
+      if (bl_ctrl)
+        x += 10;
+      else
+        x++;
+      gC_vs_ui.SetXY(x, y);
+      break;
+    case DIK_NUMPAD8:
+      if (bl_ctrl)
+        y -= 10;
+      else
+        y--;
+      gC_vs_ui.SetXY(x, y);
+      break;
+    case DIK_NUMPAD2:
+      if (bl_ctrl)
+        y += 10;
+      else
+        y++;
+      gC_vs_ui.SetXY(x, y);
+      break;
+    case DIK_1:
+
+      if (bl_ctrl)
+        gpC_mouse_pointer->SetCursorDefault();
+      break;
+    case DIK_2:
+
+      if (bl_ctrl)
+        gpC_mouse_pointer->SetCursorAttack();
+      break;
+    case DIK_3:
+      if (bl_ctrl)
+        gpC_mouse_pointer->SetCursorPickUp("Bu Ne?", RGB_YELLOW);
+      break;
+    case DIK_5:
+      if (bl_ctrl)
+        gpC_mouse_pointer->SetCursorNotMove();
+      break;
+    case DIK_6:
+      if (bl_ctrl)
+        gpC_mouse_pointer->SetCursorPortal(11);
+      break;
+    case DIK_7:
+      if (bl_ctrl)
+        gpC_mouse_pointer->SetCursorPortal(11, 10, 10);
+      break;
+    case DIK_8:
+      if (bl_ctrl)
+        gpC_mouse_pointer->SetCursorPortal(11, 10, 10, "Bu Ne1??");
+      break;
+    }
+    break;
+  case CDirectInput::KEYUP:
+    switch (scan_code) {
+    case DIK_LCONTROL:
+    case DIK_RCONTROL:
+      bl_ctrl = false;
+      break;
+    }
+    break;
+  }
+}
+BOOL g_bLButtonDown = false;
+/*-----------------------------------------------------------------------------
+- MouseEventReceiver
+-
+-----------------------------------------------------------------------------*/
+void MouseEventReceiver(CDirectInput::E_MOUSE_EVENT event, int x, int y,
+                        int z) {
+  static DWORD last_click_time;
+  static int double_click_x, double_click_y;
+
+#ifndef _FULLSCREEN
+  POINT point;
+  GetCursorPos(&point);
+  ScreenToClient(g_hWnd, &point);
+  g_mouse_x = point.x;
+  g_mouse_y = point.y;
+  if (g_mouse_x < 0)
+    g_mouse_x = 0;
+  else if (g_mouse_x >= g_pUserInformation->iResolution_x)
+    g_mouse_x = g_pUserInformation->iResolution_x - 1;
+  if (g_mouse_y < 0)
+    g_mouse_y = 0;
+
+  else if (g_mouse_y >= g_pUserInformation->iResolution_y)
+    g_mouse_y = g_pUserInformation->iResolution_y - 1;
+  x = g_mouse_x;
+  y = g_mouse_y;
+#else
+  g_mouse_x = x;
+  g_mouse_y = y;
+#endif
+  switch (event) {
+  case CDirectInput::MOVE:
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_MOVING, x, y);
+
+    break;
+  case CDirectInput::LEFTDOWN:
+
+    if ((DWORD)abs((long)(GetTickCount() - last_click_time)) <=
+        g_double_click_time) {
+      if (x >= double_click_x - 1 && x <= double_click_x + 1 &&
+          y >= double_click_y - 1 && y <= double_click_y + 1) {
+        gbl_ui_input_state = gC_vs_ui.MouseControl(M_LB_DOUBLECLICK, x, y);
+        last_click_time = 0;
+        return;
+      }
+    }
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_LEFTBUTTON_DOWN, x, y);
+    last_click_time = GetTickCount();
+    double_click_x = x;
+    double_click_y = y;
+
+    g_bLButtonDown = TRUE;
+    break;
+  case CDirectInput::LEFTUP:
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_LEFTBUTTON_UP, x, y);
+    g_bLButtonDown = FALSE;
+    break;
+  case CDirectInput::RIGHTDOWN:
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_RIGHTBUTTON_DOWN, x, y);
+    break;
+  case CDirectInput::RIGHTUP:
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_RIGHTBUTTON_UP, x, y);
+    if (gbl_ui_input_state == false)
+      g_EventButton = NULL;
+    break;
+  case CDirectInput::CENTERDOWN:
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_CENTERBUTTON_DOWN, x, y);
+    break;
+  case CDirectInput::CENTERUP:
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_CENTERBUTTON_UP, x, y);
+    break;
+  case CDirectInput::WHEELDOWN:
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_WHEEL_DOWN, x, y);
+    break;
+  case CDirectInput::WHEELUP:
+    gbl_ui_input_state = gC_vs_ui.MouseControl(M_WHEEL_UP, x, y);
+    break;
+  }
+}
+//-----------------------------------------------------------------------------
+// Name: WindowProc()
+// Desc: The Main Window Procedure
+//-----------------------------------------------------------------------------
+long FAR PASCAL WindowProc(HWND hWnd, UINT message, WPARAM wParam,
+                           LPARAM lParam) {
+  static char scan_code;
+
+  switch (message) {
+  case WM_IME_NOTIFY: {
+    int ttt = 0;
+  }
+    return 0;
+
+  case WM_KEYUP:
+  case WM_KEYDOWN:
+  case WM_CHAR:
+  case WM_IME_COMPOSITION:
+  case WM_IME_STARTCOMPOSITION:
+  case WM_IME_ENDCOMPOSITION:
+    gC_vs_ui.KeyboardControl(message, wParam, lParam);
+    if (message == WM_IME_STARTCOMPOSITION)
+      return 0;
+    break;
+  case WM_MOVE:
+    if (gbl_active && !CDirectDraw::IsFullscreen())
+      CDirectDraw::OnMove();
+    return 0L;
+  case WM_ACTIVATE:
+  case WM_ACTIVATEAPP:
+    // Pause if minimized
+    gbl_active = !((BOOL)HIWORD(wParam));
+
+    g_pDXInput->SetAcquire(true);
+    g_double_click_time = GetDoubleClickTime();
+    break;
+    // return 0L;
+  case WM_MOUSEACTIVATE: {
+    int a = 0;
+  } break;
+  case WM_DESTROY:
+    // Clean up and close the app
+    gC_DD.ReleaseAll();
+    PostQuitMessage(0);
+    return 0L;
+
+  case WM_SETCURSOR:
+
+    SetCursor(NULL);
+    return 0L;
+  case WM_SIZE:
+    return 0;
+  }
+  return DefWindowProc(hWnd, message, wParam, lParam);
+}
+//.......................................................................................
+
+float dtan(float deg) {
+  if (deg > 360 || deg < 0)
+    return ((float)tan(-1));
+  return ((float)((3.141592 * deg) / 180));
+}
+
+void Lenz(int x, int y, int radius) {
+  static int sx, sy;
+  static int xsize, ysize;
+  static int a, b, c, d, e, f;
+  static int j, i, daddr;
+  static float g;
+  static WORD *data;
+  if (x < radius)
+    x = radius + 1;
+  if (y < radius)
+    y = radius + 1;
+  if (x + radius >= 640)
+    x = 639 - radius;
+  if (y + radius >= 480)
+    y = 479 - radius;
+
+  sx = x - radius;
+  sy = y - radius;
+  xsize = ysize = radius + radius;
+  data = new WORD[xsize * xsize];
+
+  gpC_base->m_p_DDSurface_back->Lock();
+  WORD *m_pdest = (WORD *)gpC_base->m_p_DDSurface_back->GetSurfacePointer();
+  const int pitch = gpC_base->m_p_DDSurface_back->GetSurfacePitch() / 2;
+  m_pdest += sy * pitch + sx;
+  daddr = 0;
+  for (j = 0; j < ysize; j++) {
+    memcpy(&data[daddr], m_pdest, (xsize << 1));
+    m_pdest += pitch;
+    daddr += xsize;
+  }
+  m_pdest = (WORD *)gpC_base->m_p_DDSurface_back->GetSurfacePointer();
+  for (j = 0; j < radius; j++) {
+    for (i = 0; i < radius; i++) {
+      g = 1;
+      double sum = sqrt(i * i + j * j);
+      if (sum < radius)
+        g = dtan((float)(sum / 2.5 + 20));
+      a = (radius + j) * xsize;
+      b = (radius - j) * xsize;
+      c = (int)(j * g);
+      d = (int)(i * g);
+      e = (int)(c + y) * pitch;
+      f = (int)(-c + y) * pitch;
+      data[a - i + radius] = m_pdest[e + (int)(-d + x)];
+      data[a + i + radius] = m_pdest[e + (int)(d + x)];
+      data[b - i + radius] = m_pdest[f + (int)(-d + x)];
+      data[b + i + radius] = m_pdest[f + (int)(d + x)];
+    }
+  }
+  m_pdest += sy * pitch + sx;
+  daddr = 0;
+  for (j = 0; j < ysize; j++) {
+    memcpy(m_pdest, &data[daddr], (xsize << 1));
+    m_pdest += pitch;
+    daddr += xsize;
+  }
+  gpC_base->m_p_DDSurface_back->Unlock();
+  delete data;
+}
+
+void Water(int xx, int yy, char Density, char Radius) {
+  gpC_base->m_p_DDSurface_back->Lock();
+  WORD *m_pBackSpace =
+      (WORD *)gpC_base->m_p_DDSurface_back->GetSurfacePointer();
+  static int Height[2][307200], hkind = 0;
+  static WORD WaveScr[307200];
+  static WORD Color2;
+  static int cx, cy, cnt;
+  static int addr1, addr2;
+  static int HiCurr, HiNext;
+  static int xhdif, yhdif, Chdif;
+  static int XPos, YPos, OPos;
+  static int WcntX1, WcntY1, WcntX2, WcntY2;
+  static bool bStarted = false;
+  if (bStarted) {
+
+    HiNext = Height[0][1];
+    for (cnt = 1; cnt < 306560; cnt++) {
+      HiCurr = HiNext;
+      xhdif = HiCurr - HiNext;
+      yhdif = HiCurr - Height[0][cnt + 640];
+      HiNext = Height[0][cnt + 1];
+      Chdif = 128 - yhdif;
+      xhdif >>= 3;
+      yhdif >>= 3;
+      WcntY1 = cnt >> 10;
+      WcntX1 = cnt - (WcntY1 << 10);
+      WcntX2 = yhdif + WcntX1;
+      WcntY2 = xhdif + WcntY1;
+      OPos = (WcntY2 << 10) + WcntX2;
+      OPos = OPos >= 0 ? OPos : 0;
+      OPos = OPos < 307200 ? OPos : 307199;
+      addr1 = OPos / 640;
+      addr2 = OPos - addr1 * 640;
+      WORD color = m_pBackSpace[addr1 * 800 + addr2];
+      WORD rr = (((color & 0xf800) >> 8) * Chdif) >> 7;
+      WORD gg = (((color & 0x7e0) >> 3) * Chdif) >> 7;
+      WORD bb = (((color & 0x1f) << 3) * Chdif) >> 7;
+      if (rr < 0 || bb < 0 || gg < 0)
+        rr = gg = bb = 0;
+      if (rr > 255 || bb > 255 || gg > 255)
+        rr = gg = bb = 255;
+      WaveScr[cnt] =
+          ((rr & 0xf8) << 8) | ((gg & 0xfc) << 3) | ((bb & 0xf8) >> 3);
+    }
+
+    switch (hkind) {
+    case 0:
+      for (cnt = 642; cnt < 306559; cnt++) {
+        Height[0][cnt] = ((Height[1][cnt - 1] + Height[1][cnt + 1] +
+                           Height[1][cnt - 640] + Height[1][cnt + 640] +
+                           Height[1][cnt - 641] + Height[1][cnt - 639] +
+                           Height[1][cnt + 639] + Height[1][cnt + 641]) >>
+                          2) -
+                         Height[0][cnt];
+        Height[0][cnt] -= Height[0][cnt] >> Density;
+      }
+      hkind = 1;
+      break;
+    case 1:
+      for (cnt = 642; cnt < 306559; cnt++) {
+        Height[1][cnt] = ((Height[0][cnt - 1] + Height[0][cnt + 1] +
+                           Height[0][cnt - 640] + Height[0][cnt + 640] +
+                           Height[0][cnt - 641] + Height[0][cnt - 639] +
+                           Height[0][cnt + 639] + Height[0][cnt + 641]) >>
+                          2) -
+                         Height[1][cnt];
+        Height[1][cnt] -= Height[1][cnt] >> Density;
+      }
+      hkind = 0;
+      break;
+    }
+
+    addr1 = 0;
+    addr2 = 0;
+    for (cy = 0; cy < 480; cy++) {
+      memcpy(&m_pBackSpace[addr1], &WaveScr[addr2], 1280);
+      addr1 += 800;
+      addr2 += 640;
+    }
+  } else {
+    int left, top, right, bottom;
+    int square, dist;
+    int radsquare;
+    double length;
+    radsquare = Radius * Radius;
+    length = (1024.0 / (double)Radius) * (1024.0 / (double)Radius);
+    top = -Radius;
+    left = -Radius;
+    bottom = Radius;
+    right = Radius;
+    // Perform edge clipping...
+    if (xx - Radius < 1)
+      left -= xx - Radius - 1;
+    if (yy - Radius < 1)
+      top -= yy - Radius - 1;
+    if (xx + Radius > 639)
+      right -= xx + Radius - 640 + 1;
+    if (yy + Radius > 479)
+      bottom -= yy + Radius - 480 + 1;
+    for (cy = top; cy < bottom; cy++) {
+      addr1 = (cy + yy) * 640;
+      for (cx = left; cx < right; cx++) {
+        square = cy * cy + cx * cx;
+        if (square < radsquare) {
+          dist = (int)sqrt(square * length);
+          Height[0][addr1 + xx + cx] += (int)((cos(dist) + 0xffff) * 480) >> 19;
+        }
+      }
+    }
+    bStarted = true;
+  }
+  gpC_base->m_p_DDSurface_back->Unlock();
+}
+void ProgramLoop() {
+
+  if (gbl_game_back) {
+    static C_SPRITE_PACK m_game_back(SPK_GAME_BACK);
+    m_game_back.Blt(0, 0);
+  } else
+    gC_DDSurface.FillSurface(15220);
+  // update mouse input state
+  g_pDXInput->UpdateInput();
+  gC_vs_ui.Process();
+  gC_vs_ui.Show();
+  gC_vs_ui.DrawMousePointer();
+
+  if (gbl_info_show == true) {
+    gC_DDSurface.ShowFPS(0, 0, RGB(255, 255, 255), RGB(128, 0, 128));
+    char buf[20];
+
+    sprintf(buf, "%dx%dx%d", g_pUserInformation->iResolution_x,
+            g_pUserInformation->iResolution_y, gC_DD.Get_BPP());
+    gC_DDSurface.GDI_Text(90, 0, buf, RGB(255, 255, 255), RGB(128, 0, 128),
+                          false);
+
+    sprintf(buf, "(%d, %d)", g_mouse_x, g_mouse_y);
+    gC_DDSurface.GDI_Text(500, 0, buf, RGB(255, 255, 255), RGB(128, 0, 128),
+                          false);
+    if (gbl_ui_input_state)
+      gC_DDSurface.GDI_Text(190, 0, "UI input mode", RGB(255, 255, 255),
+                            RGB(128, 0, 128), false);
+    else
+      gC_DDSurface.GDI_Text(190, 0, "Background mode", RGB(255, 255, 255),
+                            RGB(128, 0, 128), false);
+  }
+  assert(!gpC_base->m_p_DDSurface_back->IsLock());
+
+  gC_DD.Flip();
+}
+/*-----------------------------------------------------------------------------
+- UI_ResultReceiver
+-
+-----------------------------------------------------------------------------*/
+void UI_ResultReceiver(DWORD message, int dw_left, int dw_right,
+                       void *void_ptr) {
+  switch (message) {
+
+  case UI_CLOSE_POPUP_MESSAGE:
+    gC_vs_ui.ClosePopupMessage();
+    break;
+  case UI_CLOSE_MAILBOX:
+    gC_vs_ui.CloseMailBox();
+    break;
+  case UI_CLOSE_OUSTERS_SKILL_INFO:
+    gC_vs_ui.CloseOustersSkillInfo();
+    break;
+  case UI_CLOSE_IMAGE_NOTICE:
+    gC_vs_ui.CloseImageNotice();
+    break;
+  case UI_SEND_BRING_FEE:
+    gC_vs_ui.CloseBringFeeWindow();
+    break;
+  case UI_CLOSE_BRING_FEE_WINDOW:
+    gC_vs_ui.CloseBringFeeWindow();
+    break;
+  case UI_USE_XMAS_TREE: {
+    const char *sz_ptr = (const char *)void_ptr;
+  } break;
+  case UI_CLOSE_XMAS_CARD_WINDOW:
+    gC_vs_ui.CloseXmasCardWindow();
+    break;
+  case UI_RUN_CONNECT:
+    gC_vs_ui.RunConnect();
+    break;
+  case UI_CLOSE_FILE_DIALOG:
+    switch (dw_left) {
+    case C_VS_UI_FILE_DIALOG::MODE_PROFILE_SELECT:
+      if (void_ptr != NULL) {
+        char *p_str = (char *)void_ptr;
+        const int str_size = strlen(p_str);
+        if (str_size > 4) {
+          const POINT bigSize = {55, 70};
+          CDirectDrawSurface surface;
+          surface.InitOffsurface(bigSize.x, bigSize.y, DDSCAPS_SYSTEMMEMORY);
+          RECT destBigRect = {0, 0, bigSize.x, bigSize.y};
+          CDirectDrawSurface bmpSurface;
+          if (LoadImageToSurface(p_str, bmpSurface)) {
+
+            RECT bmpRect = {0, 0, bmpSurface.GetWidth(),
+                            bmpSurface.GetHeight()};
+            // BigSize
+            surface.FillSurface(0);
+            surface.Blt(&destBigRect, &bmpSurface, &bmpRect);
+            char saveBmpName[512];
+            strcpy(saveBmpName, DIR_PROFILE);
+            strcat(saveBmpName, "\\");
+            strcat(saveBmpName, g_char_slot_ingame.sz_name.c_str());
+            strcat(saveBmpName, ".bmp");
+            surface.SaveToBMP(saveBmpName);
+            g_pProfileManager->InitProfiles();
+            gC_vs_ui.RefreshInfoImage();
+          }
+        }
+      }
+      break;
+    }
+    gC_vs_ui.CloseFileDialog();
+    break;
+  case UI_CLOSE_TEAM_MEMBER_INFO:
+    gC_vs_ui.CloseTeamMemberInfo();
+    break;
+  case UI_LOTTERY_CARD_STATUS:
+    gC_vs_ui.SetResultLotteryCard(false);
+    break;
+  case UI_CLOSE_LOTTERY_CARD:
+    gC_vs_ui.CloseLotteryCard();
+    break;
+  case UI_JOIN_READY_TEAM:
+    gC_vs_ui.RunTeamRegist(true, 100000, 1, "2002-01-01",
+                           "Itâ€™s the Mugwort Team", 100);
+    break;
+  case UI_JOIN_REGIST_TEAM:
+    gC_vs_ui.RunTeamRegist(true, 100000, 2, "2002-01-01",
+                           "Itâ€™s the Mugwort Team", 100);
+    break;
+  case UI_MESSAGE_BOX:
+    switch (dw_left) {
+    case STRING_MESSAGE_CANNOT_REPAIR:
+      MessageBox(NULL,
+                 "Erm... this is actually a dialogue box that can only be "
+                 "displayed from the client, so..."
+                 "Back it up like this!\r\nI can't repair the item!",
+                 "-_-; The dialogue box appears correctly in the game", MB_OK);
+      break;
+    }
+    break;
+  case UI_REQUEST_GUILD_MEMBER_LIST: {
+    C_VS_UI_TEAM_MEMBER_LIST::TEAM_MEMBER_LIST member_info;
+    member_info.MEMBER_NAME = "A, B, C, D, E, F";
+    member_info.SERVER_NAME = "Avaros (No PK)";
+    member_info.member_grade = 1;
+    member_info.bLogOn = 1;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "2";
+    member_info.member_grade = 2;
+    member_info.bLogOn = 1;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "3";
+    member_info.SERVER_NAME = "3";
+    member_info.member_grade = 0;
+    member_info.bLogOn = 0;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "4";
+    member_info.SERVER_NAME = "3";
+    member_info.member_grade = 0;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "5";
+    member_info.SERVER_NAME = "3";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "6";
+    member_info.SERVER_NAME = "3";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "7";
+    member_info.SERVER_NAME = "3";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "8";
+    member_info.SERVER_NAME = "3";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "9";
+    member_info.SERVER_NAME = "3";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "10";
+    member_info.SERVER_NAME = "asgasfgas";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "11";
+    member_info.SERVER_NAME = "111111";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "12";
+    member_info.SERVER_NAME = "1";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+    member_info.MEMBER_NAME = "13";
+    member_info.SERVER_NAME = "0";
+    member_info.member_grade = 3;
+    gC_vs_ui.AddTeamMemberInfo(member_info);
+  } break;
+  case UI_REGIST_GUILD_MEMBER:
+  case UI_REGIST_GUILD_TEAM:
+    gC_vs_ui.CloseTeamRegist();
+    break;
+  case UI_SELECT_TEAM_MEMBER_LIST: {
+    C_VS_UI_TEAM_MEMBER_INFO::MEMBER_INFO info;
+    info.NAME = "asdasfasdfa";
+    info.GRADE = 0;
+    info.INTRODUCTION = "1"
+                        "12"
+                        "123"
+                        "1234"
+                        "12345";
+    info.guild_id = 102;
+    gC_vs_ui.RunTeamMemberInfo(&info);
+  } break;
+  case UI_MODIFY_GUILD_MEMBER_INTRO:
+    MessageBox(NULL, (char *)void_ptr, "sd", MB_OK);
+    break;
+  case UI_SELECT_READY_TEAM_LIST: {
+    C_VS_UI_TEAM_INFO::READY_TEAM_INFO info;
+    info.TEAM_NAME = "Itâ€™s the watercress";
+    info.LEADER_NAME = "J.Sins";
+    //			info.REGISTERD_DATE = "2001-12-31 06:30";
+    //			info.MEMBERS = 30;
+    info.REG_FEE = 100000;
+    info.EXPIRE_DATE = "2002-01-05 06:40";
+    info.MEMBERS_NAME.push_back("su teresi");
+    info.MEMBERS_NAME.push_back("su teresi1");
+    info.MEMBERS_NAME.push_back("su teresi2");
+    info.MEMBERS_NAME.push_back("su teresi3");
+    info.MEMBERS_NAME.push_back("su teresi4");
+    info.MEMBERS_MAX = 5;
+    info.INTRODUCTION = "123"
+                        "456"
+                        "789"
+                        "987"
+                        "654";
+    gC_vs_ui.RunTeamInfo(true, &info);
+  } break;
+  case UI_SELECT_REGIST_TEAM_LIST: {
+    C_VS_UI_TEAM_INFO::REGIST_TEAM_INFO info;
+    info.TEAM_NAME = "FT";
+    info.LEADER_NAME = "J.Sins B";
+    info.REGISTERED_DATE = "2001-12-31 06:30";
+    info.MEMBERS = 130;
+    info.REG_FEE = 100000;
+    info.RANKING = 1;
+    info.guild_id = 101;
+    info.INTRODUCTION = "Our team is sooo cool "
+                        "lol"
+                        "\nAnd come along soon~\nHello there~";
+    gC_vs_ui.RunTeamInfo(FALSE, &info);
+  } break;
+  case UI_MODIFY_TEAM_INFO:
+    MessageBox(NULL, (char *)void_ptr, "sad", MB_OK);
+    break;
+  case UI_CLOSE_TEAM_REGIST: {
+    gC_vs_ui.CloseTeamRegist();
+  } break;
+  case UI_CLOSE_TEAM_LIST: {
+    gC_vs_ui.CloseTeamList();
+  } break;
+  case UI_CLOSE_TEAM_MEMBER_LIST: {
+    gC_vs_ui.CloseTeamMemberList();
+  } break;
+  case UI_CLOSE_TEAM_INFO: {
+    gC_vs_ui.CloseTeamInfo();
+  } break;
+  case UI_AWAY_PARTY: {
+    int a = 0;
+  } break;
+  case UI_CLOSE_SLAYER_PORTAL: {
+    gC_vs_ui.CloseSlayerPortal();
+  } break;
+  case UI_CLOSE_PARTY_MANAGER: {
+    gC_vs_ui.ClosePartyManager();
+  } break;
+  case UI_SLAYER_PORTAL: {
+    int a = 0;
+  } break;
+  case UI_ITEM_DROP_TO_CLIENT: {
+    int a = 0;
+  } break;
+  case UI_CLOSE_DESC_DIALOG:
+    gC_vs_ui.CloseDescDialog();
+    break;
+  case UI_SELECT_ELEVATOR:
+  case UI_CLOSE_ELEVATOR:
+    gC_vs_ui.CloseElevator();
+    break;
+  case UI_CLOSE_BOOKCASE:
+    gC_vs_ui.CloseBookcase();
+    break;
+
+  case UI_CLOSE_COMPUTER: // by larosel
+    gC_vs_ui.CloseComputer();
+    break;
+
+  case UI_CLOSE_WAR_LIST_WINDOW:
+    gC_vs_ui.CloseWarListWindow();
+    break;
+  case UI_CHANGE_OPTION: {
+    int part = dw_left;
+    int value = dw_right;
+  } break;
+  case UI_CLOSE_OPTION:
+    CT_Done("[UI] UI_CLOSE_OPTION -> CloseOption()");
+    gC_vs_ui.CloseOption();
+    break;
+  case UI_EXCHANGE_REQUEST_CANCEL: {
+    int a = 0;
+  } break;
+  case UI_EXCHANGE_ACCEPT: {
+    BOOL accept = (BOOL)dw_left;
+  } break;
+  case UI_STORAGE_BUY: {
+    BOOL buy = (BOOL)dw_left;
+  } break;
+
+  case UI_EXCHANGE_MONEY: {
+    BOOL bGive = dw_left;
+    int money = dw_right;
+    if (bGive) {
+      g_pMoneyManager->UseMoney(money);
+      g_pTradeManager->GetMyMoneyManager()->AddMoney(money);
+    } else {
+      g_pMoneyManager->AddMoney(money);
+      g_pTradeManager->GetMyMoneyManager()->UseMoney(money);
+    }
+  } break;
+  case UI_ITEM_SELECT_EXCHANGE: {
+    MItem *p_item = (MItem *)void_ptr;
+    // trade mode toggle
+    if (p_item->IsTrade()) {
+      p_item->UnSetTrade();
+      // ?? ????... OK??
+      g_pTradeManager->RefuseMyTrade();
+    } else {
+      p_item->SetTrade();
+      // ?? ????... OK??
+      g_pTradeManager->RefuseMyTrade();
+    }
+  } break;
+  case UI_OK_EXCHANGE: {
+    g_pTradeManager->AcceptMyTrade();
+  } break;
+  case UI_CANCEL_EXCHANGE: {
+    g_pTradeManager->RefuseMyTrade();
+  } break;
+  case UI_CLOSE_EXCHANGE:
+    gC_vs_ui.CloseExchange();
+    break;
+
+  case UI_DEPOSIT_MONEY: {
+    int a = 0;
+  } break;
+
+  case UI_WITHDRAW_MONEY: {
+    int a = 0;
+  } break;
+
+  case UI_SELECT_STORAGE_SLOT: {
+    int z = 0;
+  } break;
+  case UI_CLOSE_STORAGE:
+    gC_vs_ui.CloseStorage();
+    break;
+  case UI_CLOSE_PETSTORAGE:
+    gC_vs_ui.ClosePetStorage();
+    break;
+
+  case UI_RUNNING_GAMEMENU:
+    break;
+  case UI_FINISH_LEVELUP_BUTTON:
+    gC_vs_ui.FinishLevelUp();
+    break;
+  case UI_FINISH_REQUEST_DIE_BUTTON:
+    gC_vs_ui.FinishRequestDie();
+    break;
+  case UI_FINISH_REQUEST_PARTY_BUTTON:
+    gC_vs_ui.FinishRequestParty();
+    break;
+  case UI_SELL_ITEM:
+
+    break;
+  case UI_SELL_ALL_ITEM: {
+    int z = 0;
+  } break;
+  case UI_ITEM_SELL_FINISHED:
+    gC_vs_ui.FinishItemSelling();
+    break;
+  case UI_REPAIR_ITEM:
+
+  {
+    int z = 0;
+  } break;
+  case UI_SILVERING_ITEM:
+
+  {
+    int z = 0;
+  } break;
+  case UI_ITEM_REPAIR_FINISHED:
+    gC_vs_ui.FinishItemRepairing();
+    break;
+  case UI_ITEM_SILVERING_FINISHED:
+    gC_vs_ui.FinishItemSilvering();
+    break;
+  case UI_CLOSE_OTHER_INFO:
+    gC_vs_ui.CloseOtherInfo();
+    break;
+  case UI_CLICK_BONUS_POINT:
+
+    if (g_char_slot_ingame.bonus_point > 0) {
+      g_char_slot_ingame.bonus_point--;
+      switch (dw_left) {
+      case 0:
+        g_char_slot_ingame.STR_PURE++;
+        g_char_slot_ingame.STR_CUR++;
+        g_char_slot_ingame.STR_MAX++;
+        break;
+      case 1:
+        g_char_slot_ingame.DEX_PURE++;
+        g_char_slot_ingame.DEX_CUR++;
+        g_char_slot_ingame.DEX_MAX++;
+        break;
+      case 2:
+        g_char_slot_ingame.INT_PURE++;
+        g_char_slot_ingame.INT_CUR++;
+        g_char_slot_ingame.INT_MAXX++;
+        break;
+      }
+    }
+    break;
+  case UI_INFO:
+
+    if (gC_vs_ui.IsRunningCharInfo()) {
+      gC_vs_ui.CloseInfo();
+    } else {
+
+      g_char_slot_ingame.sz_name = "su teresi yeter";
+      g_char_slot_ingame.sz_guild_name = "";
+      g_char_slot_ingame.Race = g_eRaceInterface;
+      g_char_slot_ingame.bl_drained = true;
+      g_char_slot_ingame.MP_MAX = 100;
+      g_char_slot_ingame.HP_MAX = 100;
+      g_char_slot_ingame.HP = 100;
+      g_char_slot_ingame.MP = 100;
+      g_char_slot_ingame.FAME = 1234567890;
+      g_char_slot_ingame.alignment = UI_GOOD_PLUS;
+      g_char_slot_ingame.alignment_num = -10000;
+      g_char_slot_ingame.TOHIT = 123;
+      g_char_slot_ingame.DAM = 223;
+      g_char_slot_ingame.DAM2 = 123;
+      g_char_slot_ingame.SILVER_DAM = 3;
+      g_char_slot_ingame.SILVER_DAM2 = 1;
+      g_char_slot_ingame.STR_CUR = 6;
+      g_char_slot_ingame.STR_PURE = 6;
+      g_char_slot_ingame.STR_MAX = 6;
+      g_char_slot_ingame.STR_EXP_REMAIN = 200500;
+      g_char_slot_ingame.DEX_CUR = 6;
+      g_char_slot_ingame.DEX_PURE = 6;
+      g_char_slot_ingame.DEX_MAX = 6;
+      g_char_slot_ingame.DEX_EXP_REMAIN = 300000;
+      g_char_slot_ingame.INT_CUR = 6;
+      g_char_slot_ingame.INT_PURE = 6;
+      g_char_slot_ingame.INT_MAXX = 6;
+      g_char_slot_ingame.INT_EXP_REMAIN = 350000;
+      g_char_slot_ingame.level = 1;
+      g_char_slot_ingame.EXP_REMAIN = 400000;
+      g_char_slot_ingame.SILVER_HP = 0;
+      g_char_slot_ingame.GUILD_ID = 102;
+      g_char_slot_ingame.STATUS.clear();
+      g_char_slot_ingame.m_SMS_Charge = 10;
+      S_SLOT::UI_EFFECTSTATUS_STRUCT efs;
+      efs.actionInfo = SKILL_CLIENT_MAGICAL_PET_CHANGER;
+      efs.delay100msec = 100000;
+      g_char_slot_ingame.STATUS.push_back(efs);
+      g_char_slot_ingame.GRADE = 40;
+      g_char_slot_ingame.bl_female = true;
+      g_char_slot_ingame.man_info.helmet = M_HELMET1;
+      g_char_slot_ingame.man_info.coat = M_COAT1;
+      g_char_slot_ingame.man_info.trouser = M_TROUSER1;
+      g_char_slot_ingame.man_info.hair = M_HAIR1;
+      g_char_slot_ingame.man_info.left = M_SHIELD1;
+      g_char_slot_ingame.man_info.right = M_CROSS;
+      g_char_slot_ingame.skin_color = 0;
+      g_char_slot_ingame.hair_color = 0;
+      g_char_slot_ingame.left_color = 405;
+      g_char_slot_ingame.right_color = 405;
+      g_char_slot_ingame.helmet_color = 0;
+      g_char_slot_ingame.trouser_color = 0;
+      g_char_slot_ingame.coat_color = 0;
+      g_char_slot_ingame.bonus_point = 5;
+      g_char_slot_ingame.skill_point = 50;
+      // 2005.08
+      g_char_slot_ingame.AttackBloodBurstPoint = 150;
+      g_char_slot_ingame.DefenseBloodBurstPoint = 250;
+      g_char_slot_ingame.PartyBloodBurstPoint = 350;
+      gC_vs_ui.RunInfo();
+    }
+    break;
+
+  case UI_DROP_MONEY:
+
+    break;
+  case UI_CHECK_EXIST_ID:
+
+    DeleteNewArray(void_ptr);
+
+    gC_vs_ui.NoAleadyExistIdMessage();
+    break;
+
+  case UI_CHAT_RETURN: {
+    gC_vs_ui.AddChatToHistory((char *)void_ptr, "Bu ne3",
+                              (CHAT_LINE_CONDITION)dw_left, dw_right);
+  }
+    DeleteNewArray(void_ptr);
+    break;
+  case UI_RUN_NEWUSER_REGISTRATION:
+    // FAZ 1.7 — in-client kayıt desteklenmiyor; Title katmanı bilgilendirme dialog'u gösteriyor.
+    CT_Done("[UI] UI_RUN_NEWUSER_REGISTRATION received (no-op, dialog shown by Title)");
+    break;
+  case UI_INFO_CLOSE:
+    gC_vs_ui.CloseInfo();
+    break;
+  case UI_GAMEMENU_CONTINUE:
+    gC_vs_ui.CloseGameMenu();
+    break;
+
+  case UI_REMOVE_BACKGROUND_MOUSE_FOCUS: {
+    int z = 0;
+  } break;
+  case UI_BACKGROUND_MOUSE_FOCUS:
+
+  {
+    int z = 0;
+  } break;
+  case UI_BUY_ITEM:
+
+  {
+    int z = 0;
+  } break;
+  case UI_CLOSE_SHOP:
+    gC_vs_ui.CloseShop();
+    break;
+  case UI_CHARACTER_MANAGER_FINISHED:
+    gC_vs_ui.StartServerSelect(false);
+    {
+      gC_vs_ui.StartServerSelect(false);
+      LPSTR server_name[20] = {"???", "???", "???", "??", "??", "??", "??",
+                               "??",  "??",  "??",  "??", "??", "??", "??",
+                               "??",  "??",  "??",  "??", "??", "??"};
+      int server_id[20] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+                           10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+      int server_status[20] = {0, 1, 2, 3, 4, 0, 0, 0, 0, 0,
+                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+      gC_vs_ui.SetServerList(server_name, server_id, server_status, 5, 0);
+    }
+    break;
+  case UI_ITEM_INSERT_FROM_INVENTORY:
+
+  {
+    int z = 0;
+  } break;
+  case UI_ITEM_INSERT_FROM_GEAR:
+
+  {
+    int z = 0;
+  } break;
+  case UI_CLOSE_BBS:
+
+    break;
+  case UI_CLOSE_INPUT_NAME:
+    gC_vs_ui.CloseInputNameWindow();
+    break;
+  case UI_GO_BILING_PAGE:
+    if (dw_left == TRUE) {
+      char str[256];
+      GetWindowsDirectory(str, // address of buffer for Windows directory
+                          255  // size of directory buffer
+      );
+      sprintf(str, "%s\\Explorer.exe", str);
+      CDirectDraw::GetDD()->RestoreDisplayMode();
+      _spawnl(_P_NOWAIT, str, "Explorer.exe", "http://www.darkeden.co.kr",
+              NULL);
+    }
+    break;
+  case UI_ITEM_DROP_TO_GEAR: {
+    MItem *pMouseItem = gpC_mouse_pointer->GetPickUpItem();
+
+    MItem *pOldItem = NULL;
+    MPlayerGear *pGear = NULL;
+
+    switch (g_eRaceInterface) {
+    case RACE_SLAYER:
+      if (g_pSlayerGear->ReplaceItem(pMouseItem, dw_left, pOldItem)) {
+        if (pOldItem != NULL) // replace ?????
+        {
+          gC_vs_ui.PickUpItem(pOldItem);
+        } else {
+          gC_vs_ui.DropItem();
+        }
+      }
+      break;
+    case RACE_VAMPIRE:
+      if (g_pVampireGear->ReplaceItem(pMouseItem, dw_left, pOldItem)) {
+        if (pOldItem != NULL) {
+          gC_vs_ui.PickUpItem(pOldItem);
+        } else {
+          gC_vs_ui.DropItem();
+        }
+      }
+      break;
+    case RACE_OUSTERS:
+      if (g_pOustersGear->ReplaceItem(pMouseItem, dw_left, pOldItem)) {
+        if (pOldItem != NULL) {
+          gC_vs_ui.PickUpItem(pOldItem);
+        } else {
+          gC_vs_ui.DropItem();
+        }
+      }
+      break;
+    }
+  } break;
+  case UI_ITEM_DROP_TO_QUICKSLOT: {
+    MItem *pMouseItem = gpC_mouse_pointer->GetPickUpItem();
+    MItem *pOldItem = NULL;
+    if (g_eRaceInterface == RACE_OUSTERS) {
+      MOustersArmsBand *pQuickSlot = NULL;
+      int slot = dw_left;
+      if (g_pArmsBand1 == NULL)
+        pQuickSlot = g_pArmsBand2;
+      else {
+        if (g_pArmsBand1->GetPocketNumber() > slot)
+          pQuickSlot = g_pArmsBand1;
+        else {
+          pQuickSlot = g_pArmsBand2;
+          slot -= g_pArmsBand1->GetPocketNumber();
+        }
+      }
+      if (pQuickSlot->ReplaceItem(pMouseItem, slot, pOldItem)) {
+        if (pOldItem != NULL) {
+          gC_vs_ui.PickUpItem(pOldItem);
+        } else {
+          gC_vs_ui.DropItem();
+        }
+      }
+    } else if (g_pQuickSlot->ReplaceItem(pMouseItem, dw_left, pOldItem)) {
+      if (pOldItem != NULL) {
+        gC_vs_ui.PickUpItem(pOldItem);
+      } else {
+        gC_vs_ui.DropItem();
+      }
+    }
+  } break;
+  case UI_ITEM_DROP_TO_INVENTORY: {
+    MItem *pMouseItem = gpC_mouse_pointer->GetPickUpItem();
+    if (gC_vs_ui.IsRunningExchange()) {
+      g_pTradeManager->RefuseMyTrade();
+    }
+    MItem *pOldItem = NULL;
+    if (g_pInventory->ReplaceItem(pMouseItem, dw_left, dw_right, pOldItem)) {
+      if (pOldItem != NULL) {
+        gC_vs_ui.PickUpItem(pOldItem);
+      } else {
+        gC_vs_ui.DropItem();
+      }
+    }
+  } break;
+  case UI_ITEM_TO_QUICKITEMSLOT: {
+    int a = 0;
+  } break;
+  case UI_ITEM_PICKUP_FROM_INVENTORY:
+    gC_vs_ui.PickUpItem((MItem *)void_ptr, HIWORD(dw_right), LOWORD(dw_right));
+    if (gC_vs_ui.IsRunningExchange()) {
+      g_pTradeManager->RefuseMyTrade();
+    }
+    break;
+  case UI_ITEM_PICKUP_FROM_QUICKSLOT:
+    gC_vs_ui.PickUpItem((MItem *)void_ptr, HIWORD(dw_right), LOWORD(dw_right));
+    break;
+  case UI_ITEM_PICKUP_FROM_GEAR:
+    gC_vs_ui.PickUpItem((MItem *)void_ptr, HIWORD(dw_right), LOWORD(dw_right));
+    switch (g_eRaceInterface) {
+    case RACE_SLAYER:
+      g_pSlayerGear->RemoveItem((MSlayerGear::GEAR_SLAYER)dw_left);
+      break;
+    case RACE_VAMPIRE:
+      g_pVampireGear->RemoveItem((MVampireGear::GEAR_VAMPIRE)dw_left);
+      break;
+    case RACE_OUSTERS:
+      g_pOustersGear->RemoveItem((MOustersGear::GEAR_OUSTERS)dw_left);
+      break;
+    }
+    break;
+  case UI_DELETE_CHARACTER:
+    DeleteNewArray(((DELETE_CHARACTER *)void_ptr)->sz_part1);
+    DeleteNewArray(((DELETE_CHARACTER *)void_ptr)->sz_part2);
+    gC_vs_ui.DeleteCharacter(((DELETE_CHARACTER *)void_ptr)->slot);
+    break;
+  case UI_NEW_CHARACTER: {
+    gC_vs_ui.NewCharacterCreateOk();
+  } break;
+  case UI_TERMINATION:
+    // FAZ 1.6 — Exit dialog "Evet" akışı.
+    // Zincir: UI_TERMINATION → PostMessage(WM_CLOSE) → DefWindowProc → DestroyWindow
+    //         → WM_DESTROY → gC_DD.ReleaseAll + PostQuitMessage(0).
+    // Ek güvenlik: zincir bir yerde kırılırsa bile çıkış garantili olsun diye
+    // doğrudan PostQuitMessage da ediyoruz (mesaj loop'tan sonra ikinci kez
+    // çağrılsa bile no-op gibi çalışır).
+    CT_Done("[UI] UI_TERMINATION received -> shutdown requested");
+    PostMessage(g_hWnd, WM_CLOSE, 0, 0);
+    PostQuitMessage(0);
+    break;
+  case UI_LOGIN: {
+    gC_vs_ui.BackupPrevId(((LOGIN *)void_ptr)->sz_id);
+    DeleteNewArray(((LOGIN *)void_ptr)->sz_id);
+    DeleteNewArray(((LOGIN *)void_ptr)->sz_password);
+    gC_vs_ui.StartServerSelect(true);
+    LPSTR group_name[5] = {"team1", "team2", "team3", "team4", "team5"};
+    int server_id[5] = {0, 1, 2, 3, 4};
+    int server_status[5] = {0, 1, 1, 1, 1};
+    gC_vs_ui.SetServerList(group_name, server_id, server_status, 5, 2);
+  } break;
+  case UI_CLOSE_SERVER_SELECT:
+    if (dw_left) {
+      gC_vs_ui.StartTitle();
+    } else // server
+    {
+      gC_vs_ui.StartServerSelect(true);
+      LPSTR group_name[5] = {"group1", "group2", "group3", "group4", "group5"};
+      int server_id[5] = {0, 1, 2, 3, 4};
+      int server_status[5] = {0, 1, 1, 1, 1};
+      gC_vs_ui.SetServerList(group_name, server_id, server_status, 5, 2);
+    }
+    break;
+  case UI_CONNECT_SERVER:
+    if (dw_left) // group
+    {
+      gC_vs_ui.StartServerSelect(false);
+      LPSTR server_name[20] = {"a", "b", "c", "d", "e", "f", "g",
+                               "h", "j", "k", "l", "m", "n", "o",
+                               "p", "q", "r", "s", "t", "u"};
+      int server_id[20] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+                           10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+      int server_status[20] = {0, 1, 2, 3, 4, 0, 0, 0, 0, 0,
+                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+      gC_vs_ui.SetServerList(server_name, server_id, server_status, 5, 0);
+    } else // server
+
+    {
+      gC_vs_ui.StartCharacterManager();
+      gC_vs_ui.ClearAllCharacter();
+      // set character
+      S_SLOT slot;
+      slot.sz_name = "FUCKER";
+      slot.sz_guild_name = "FUCK";
+      slot.GUILD_ID = 102;
+      slot.Race = RACE_SLAYER;
+      slot.m_AdvancementLevel = 1;
+      slot.MP_MAX = 300;
+      slot.HP_MAX = 300;
+      slot.HP = 200;
+      slot.MP = 100;
+      slot.FAME = 1234567890;
+      slot.alignment = UI_GOOD_PLUS;
+      slot.TOHIT = 22;
+      slot.DEFENSE = 33;
+      slot.PROTECTION = 44;
+      slot.DAM = 223;
+      slot.DAM2 = 123;
+      slot.STR_CUR = 80;
+      slot.STR_PURE = 85;
+      slot.STR_MAX = 100;
+      slot.STR_EXP_REMAIN = 13796;
+      slot.DEX_CUR = 50;
+      slot.DEX_PURE = 85;
+      slot.DEX_MAX = 100;
+      slot.DEX_EXP_REMAIN = 70;
+      slot.INT_CUR = 100;
+      slot.INT_PURE = 85;
+      slot.INT_MAXX = 70;
+      slot.INT_EXP_REMAIN = 35365;
+      slot.level = 123;
+      slot.EXP_REMAIN = 1234567890;
+      slot.bl_female = false; // false;
+      slot.man_info.helmet = M_HELMET2;
+      slot.man_info.coat = M_COAT2;
+      slot.man_info.trouser = M_TROUSER2;
+      slot.man_info.face = M_FACE2;
+      slot.man_info.hair = M_HAIR1;
+      slot.man_info.left = M_SHIELD2; // M_TR;//M_SWORD;
+      slot.man_info.right = M_MACE;   // W_SWORD;//W_DRAGON_SHIELD;
+      slot.skin_color = 0;
+      slot.hair_color = 0;
+      slot.left_color = 405;
+      slot.right_color = 405;
+      slot.helmet_color = 0xFFFF;
+      slot.trouser_color = 0xFFFF;
+      slot.coat_color = 0;
+      slot.bonus_point = 0;
+      slot.GRADE = 25;
+      gC_vs_ui.SetCharacter(0, slot);
+      slot.sz_name = "BuNe4";
+      slot.sz_guild_name = "BuNe5";
+      slot.GUILD_ID = 102;
+      slot.m_AdvancementLevel = 1;
+      slot.Race = RACE_VAMPIRE;
+      slot.MP_MAX = 300;
+      slot.HP_MAX = 300;
+      slot.HP = 200;
+      slot.MP = 100;
+      slot.FAME = 1234567890;
+      slot.alignment = UI_GOOD_PLUS;
+      slot.TOHIT = 22;
+      slot.DEFENSE = 33;
+      slot.PROTECTION = 44;
+      slot.DAM = 223;
+      slot.DAM2 = 123;
+      slot.STR_CUR = 80;
+      slot.STR_PURE = 85;
+      slot.STR_MAX = 100;
+      slot.STR_EXP_REMAIN = 13796;
+      slot.DEX_CUR = 50;
+      slot.DEX_PURE = 85;
+      slot.DEX_MAX = 100;
+      slot.DEX_EXP_REMAIN = 70;
+      slot.INT_CUR = 100;
+      slot.INT_PURE = 85;
+      slot.INT_MAXX = 70;
+      slot.INT_EXP_REMAIN = 35365;
+      slot.level = 123;
+      slot.EXP_REMAIN = 1234567890;
+      slot.bl_female = false;
+      slot.man_info.right = (CHAR_MAN)0;
+      slot.man_info.helmet = M_HELMET2;
+      slot.man_info.coat = M_COAT2;
+      slot.man_info.trouser = M_TROUSER2;
+      slot.man_info.face = M_FACE2;
+      slot.man_info.hair = M_HAIR1;
+      slot.man_info.left = M_SHIELD2; // M_TR;//M_SWORD;
+      slot.man_info.right = M_CROSS;  // W_SWORD;//W_DRAGON_SHIELD;
+      slot.skin_color = 0;
+      slot.hair_color = 0;
+      slot.left_color = 405;
+      slot.right_color = 405;
+      slot.helmet_color = 0xFFFF;
+      slot.trouser_color = 0;
+      slot.coat_color = 0;
+      slot.bonus_point = 0;
+      slot.GRADE = 40;
+      gC_vs_ui.SetCharacter(1, slot);
+    }
+    break;
+
+  case UI_CONNECT:
+    gC_vs_ui.StartGame();
+
+    break;
+  case UI_LOGOUT:
+    gC_vs_ui.StartTitle();
+    break;
+  case UI_SELECT_SKILL:
+
+    break;
+  case UI_CANCEL_SELECT_SKILL:
+
+    break;
+  case UI_CLOSE_PET_INFO:
+    gC_vs_ui.ClosePetInfo();
+    break;
+  case UI_CLOSE_SMS_MESSAGE:
+    if (gC_vs_ui.IsRunningSMSList())
+      gC_vs_ui.CloseSMSList();
+    if (gC_vs_ui.IsRunningSMSRecord())
+      gC_vs_ui.CloseSMSRecord();
+    gC_vs_ui.CloseSMSMessage();
+    break;
+  case UI_SMS_OPEN_LIST:
+    gC_vs_ui.RunSMSList();
+    break;
+  case UI_SMS_RECORD:
+    gC_vs_ui.AddSMSAddressList(rand() % 100, (char *)dw_left, (char *)dw_right,
+                               (char *)void_ptr);
+    gC_vs_ui.CloseSMSRecord();
+    break;
+  case UI_SMS_DELETE:
+    gC_vs_ui.DeleteSMSAddressList(dw_left);
+    break;
+  case UI_CLOSE_SMS_LIST:
+    gC_vs_ui.CloseSMSList();
+    break;
+  case UI_CLOSE_SMS_RECORD:
+    gC_vs_ui.CloseSMSRecord();
+    break;
+  case UI_SMS_ADD_SEND_LIST:
+    gC_vs_ui.AddSMSSendList((char *)dw_left);
+    break;
+  case UI_CLOSE_NAMING:
+    gC_vs_ui.CloseNaming();
+    break;
+  case UI_CHANGE_CUSTOM_NAMING:
+
+    break;
+  case UI_CLOSE_NAMING_CHANGE:
+    gC_vs_ui.CloseNamingChange();
+    break;
+  case UI_RUN_NAMING_CHANGE:
+    gC_vs_ui.RunNamingChange((MItem *)dw_left, "Hehehe^^");
+    break;
+  case UI_CLOSE_QUEST_MANAGER:
+    gC_vs_ui.CloseQuestManager();
+    break;
+  case UI_CLOSE_QUEST_LIST:
+    gC_vs_ui.CloseQuestList();
+    break;
+  case UI_CLOSE_QUEST_DETAIL:
+    gC_vs_ui.CloseQuestDetail();
+    break;
+  case UI_CLOSE_QUEST_MISSION:
+    gC_vs_ui.CloseQuestMission();
+    break;
+  case UI_CLOSE_QUEST_ITEM:
+    gC_vs_ui.CloseQuestItem();
+    break;
+  case UI_GQUEST_ACCEPT:
+    CT_Done("Accepted and sent");
+    break;
+  case UI_GQUEST_GIVEUP:
+    CT_Done("Send as a draft");
+    break;
+  case UI_CLOSE_QUEST_ICON:
+    gC_vs_ui.CloseQuestIcon(dw_left);
+    break;
+  case UI_REQUEST_UNION:
+    CT_Done("Send a request message to the Alliance Guild ");
+    break;
+  case UI_REQUEST_UNION_ACCEPT:
+    break;
+  case UI_REQUEST_UNION_DENY:
+    break;
+  case UI_REQUEST_UNION_REQUEST_DENY:
+    break;
+  case UI_REQUEST_UNION_REQUEST_INFO:
+    break;
+  case UI_REQUEST_UNION_EXPERGUILD:
+    CT_Done("Send a ban request ");
+    break;
+  case UI_REQUEST_UNION_QUIT:
+    CT_Done("Cancel subscription immediately  ");
+    break;
+  case UI_REQUEST_UNION_QUIT_ACCEPT:
+    break;
+  case UI_REQUEST_UNION_QUIT_DENY:
+    break;
+  case UI_CLOSE_POWER_JJANG:
+    gC_vs_ui.ClosePowerjjang();
+    break;
+  case UI_CLOSE_INVENTORY_SUB:
+    gC_vs_ui.CloseSubInventory(dw_left);
+    break;
+  }
+}
+void ReleaseAllObject() {
+  gC_vs_ui.Release();
+  if (g_pQuestInfoManager != NULL) {
+    delete g_pQuestInfoManager;
+    g_pQuestInfoManager = NULL;
+  }
+  if (g_pFameInfoTable) {
+    delete g_pFameInfoTable;
+    g_pFameInfoTable = NULL;
+  }
+  if (g_pRankBonusTable) {
+    delete g_pRankBonusTable;
+    g_pRankBonusTable = NULL;
+  }
+  if (g_pZoneTable) {
+    delete g_pZoneTable;
+    g_pZoneTable = NULL;
+  }
+  if (m_pC_dialog) {
+    delete m_pC_dialog;
+    m_pC_dialog = NULL;
+  }
+  if (g_pUserInformation) {
+    delete g_pUserInformation;
+    g_pUserInformation = NULL;
+  }
+  if (g_pSoundManager) {
+    g_pSoundManager->Release();
+    delete g_pSoundManager;
+    g_pSoundManager = NULL;
+  }
+  if (g_pProfileManager) {
+    g_pProfileManager->DeleteProfiles();
+    delete g_pProfileManager;
+    g_pProfileManager = NULL;
+  }
+  if (g_pParty != NULL) {
+    delete g_pParty;
+    g_pParty = NULL;
+  }
+  if (g_pSoundTable != NULL) {
+    delete g_pSoundTable;
+    g_pSoundTable = NULL;
+  }
+  if (m_pC_dialog != NULL) {
+    delete m_pC_dialog;
+    m_pC_dialog = NULL;
+  }
+  if (g_pClientConfig != NULL) {
+    delete g_pClientConfig;
+    g_pClientConfig = NULL;
+  }
+  if (g_pUserOption != NULL) {
+    delete g_pUserOption;
+    g_pUserOption = NULL;
+  }
+  if (g_pNPCTable != NULL) {
+    delete g_pNPCTable;
+    g_pNPCTable = NULL;
+  }
+  if (g_pCreatureTable != NULL) {
+    delete g_pCreatureTable;
+    g_pCreatureTable = NULL;
+  }
+  if (g_pDXInput) {
+    delete g_pDXInput;
+    g_pDXInput = NULL;
+  }
+  if (g_pInventory != NULL) {
+    delete g_pInventory;
+    g_pInventory = NULL;
+  }
+  if (g_pSlayerGear != NULL) {
+    delete g_pSlayerGear;
+    g_pSlayerGear = NULL;
+  }
+  if (g_pVampireGear != NULL) {
+    delete g_pVampireGear;
+    g_pVampireGear = NULL;
+  }
+  if (g_pOustersGear != NULL) {
+    delete g_pOustersGear;
+    g_pOustersGear = NULL;
+  }
+  if (g_pGuildInfoMapper != NULL) {
+    g_pGuildInfoMapper->Release();
+    delete g_pGuildInfoMapper;
+    g_pGuildInfoMapper = NULL;
+  }
+  if (g_pGuildMarkManager != NULL) {
+    delete g_pGuildMarkManager;
+    g_pGuildMarkManager = NULL;
+  }
+  if (g_pAcceleratorManager != NULL) {
+    delete g_pAcceleratorManager;
+    g_pAcceleratorManager = NULL;
+  }
+  if (g_pKeyAccelerator != NULL) {
+    delete g_pKeyAccelerator;
+    g_pKeyAccelerator = NULL;
+  }
+  if (g_pItemTable != NULL) {
+    delete g_pItemTable;
+    g_pItemTable = NULL;
+  }
+  if (g_pItemOptionTable != NULL) {
+    delete g_pItemOptionTable;
+    g_pItemOptionTable = NULL;
+  }
+  if (g_pMoneyManager != NULL) {
+    delete g_pMoneyManager;
+    g_pMoneyManager = NULL;
+  }
+  if (g_pPriceManager != NULL) {
+    delete g_pPriceManager;
+    g_pPriceManager = NULL;
+  }
+  if (g_pSkillInfoTable != NULL) {
+    delete g_pSkillInfoTable;
+    g_pSkillInfoTable = NULL;
+  }
+  if (g_pSkillManager != NULL) {
+    delete g_pSkillManager;
+    g_pSkillManager = NULL;
+  }
+  if (g_pExperienceTable != NULL) {
+    delete g_pExperienceTable;
+    g_pExperienceTable = NULL;
+  }
+  if (g_pSkillAvailable != NULL) {
+    delete g_pSkillAvailable;
+    g_pSkillAvailable = NULL;
+  }
+  if (g_pTimeItemManager != NULL) {
+    delete g_pTimeItemManager;
+    g_pTimeItemManager = NULL;
+  }
+
+  if (g_pNickNameStringTable != NULL) {
+    g_pNickNameStringTable->Release();
+    DeleteNew(g_pNickNameStringTable);
+  }
+  DeleteNew(g_pTradeManager);
+  DeleteNew(g_pRegenTowerInfoManager);
+  DeleteNew(g_pFileDef);
+}
+// LoadWorldMapInfo: tanim GameMain.cpp:3268'e tasindi (referans: GameMain.cpp:3422).
+// FAZ 4 (2026-05-05): WinMain.cpp'deki duplicate kaldirildi, LNK2005 onlendi.
+//----------------------------------------------------------
+// Load/save resolution information.
+//----------------------------------------------------------
+void InitResolutionConfig() {
+  Properties ResolutionConfig;
+  ResolutionConfig.load(
+      g_pFileDef->getProperty("FILE_INFO_RESOLUTION").c_str());
+  int nResolutionX = ResolutionConfig.getPropertyInt("ResolutionX");
+  int nResolutionY = ResolutionConfig.getPropertyInt("ResolutionY");
+  // Configure information to be used globally in VS_UI and the client
+  g_pUserInformation->IsResolution1024 = (nResolutionX == 1024);
+  g_pUserInformation->iResolution_x = nResolutionX;
+  g_pUserInformation->iResolution_y = nResolutionY;
+}
+void SaveResolutionConfig() {
+  std::ofstream file(g_pFileDef->getProperty("FILE_INFO_RESOLUTION").c_str());
+  file << "ResolutionX: " << (g_pUserOption->Resolution1024 ? "1024" : "800")
+       << std::endl;
+  file << "ResolutionY: " << (g_pUserOption->Resolution1024 ? "768" : "600")
+       << std::endl;
+}
+/*-----------------------------------------------------------------------------
+- WinMainf
+- Windows program entry point
+-----------------------------------------------------------------------------*/
+int WINAPI VS_UI_Tester_WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszArgs,
+                   int nWinMode) {
+  CT_Done("WinMain Entry SUCCESS");
+
+  CT_Done("Enter WinMain!");
+
+  // 2026-05-09: Process-private custom font yukle. Kullaniciya font install ettirmeye
+  // gerek yok; AddFontResourceEx FR_PRIVATE ile sadece bu process icin kayitli olur.
+  // CreateFont'ta "Russo One" face name'i artik bulunabilir hale gelir.
+  // RussoOne-Regular.ttf modern bold sans-serif (Google Fonts, OFL lisansi).
+  // ExA explicit (Unicode build'de bile multi-byte path).
+  int rfont = AddFontResourceExA("data\\font\\RussoOne-Regular.ttf", FR_PRIVATE, NULL);
+  CT_Done("AddFontResourceEx RussoOne result=%d (>0 success, 0 fail)", rfont);
+  if (rfont == 0) {
+    CT_Done("WARNING: RussoOne font load FAIL — TTF dosyasi bulunamadi veya bozuk. Fallback system font kullanilacak.");
+  }
+
+  // for Memory Leak Detecting
+  iovfs_base::start_vfs("data/pphoenix", O_RDONLY);
+  CT_Done("start_vfs Finished!");
+  g_pFileDef = new Properties;
+  g_pFileDef->load(FILE_INFO_FILEDEF);
+  CT_Done("Properties load Finished!");
+  g_pUserInformation = new UserInformation;
+  InitResolutionConfig();
+  CT_Done("InitResolutionConfig Finished!");
+  g_pUserInformation->attrOperator.SetAttr(OPERATORTYPE_RELEASELOG);
+  int tmpDbgFlag;
+  tmpDbgFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+  tmpDbgFlag |= _CRTDBG_DELAY_FREE_MEM_DF;
+  tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF;
+  _CrtSetDbgFlag(tmpDbgFlag);
+  HWND hwnd;
+  MSG msg;
+  WNDCLASSEX wcl;
+  //-------------------------------------
+  // client? global ??? by sigi
+  //-------------------------------------
+  g_pClientConfig = new ClientConfig;
+  //		g_pClientConfig->Use3DHAL			= TRUE;
+  g_pUserOption = new UserOption;
+  g_pUserOption->Use3DHAL = TRUE;
+  g_pUserOption->UseSmoothCursor = FALSE; // TRUE;
+  g_pUserOption->DrawMinimap = FALSE;     // Shall I draw a minimap?
+  g_pUserOption->DrawZoneName = TRUE;     // Print zone name
+  g_pUserOption->DrawGameTime = TRUE;     // Print game time
+  g_pUserOption->DrawInterface = FALSE;   // interface
+  g_pUserOption->DrawFPS = FALSE;         // FPS
+  g_pUserOption->BlendingShadow =
+      FALSE;                            // TRUE;			// Blending shadow
+  g_pUserOption->FilteringCurse = TRUE; // Texture filtering
+  g_pUserOption->PlayMusic = TRUE;      // Play music
+  g_pUserOption->PlaySound = TRUE;      // Play sound
+  g_pUserOption->VolumeMusic = 100;     // Music volume
+  g_pUserOption->VolumeSound = 100;     // Sound volume
+  g_pUserOption->UseEnterChat = true;
+  g_pUserOption->Resolution1024 = g_pUserInformation->IsResolution1024;
+  g_pOperatorOption = new OperatorOption;
+  g_pOperatorOption->SetDefault();
+  g_pGameStringTable = new MStringArray;
+  InitGameStringTable();
+  CT_Done("InitGameStringTable Finished!");
+  g_pRegenTowerInfoManager = new RegenTowerInfoManager;
+  g_pRegenTowerInfoManager->LoadRegenTowerInfo();
+  CT_Done("RegenTowerInfo Finished!");
+  g_pInventory = new MInventory;
+  g_pSlayerGear = new MSlayerGear;
+  g_pVampireGear = new MVampireGear;
+  g_pOustersGear = new MOustersGear;
+  g_pTimeItemManager = new MTimeItemManager;
+  g_pTimeItemManager->AddTimeItem(0, 70 + (60 * 60));
+  CT_Done("Gear/TimeItem Finished!");
+  g_pGuildMarkManager = new MGuildMarkManager(
+      SPK_GUILD_MARK, FILE_INFO_GUILD_MAPPER, SPK_GRADE_SLAYER,
+      SPK_GRADE_VAMPIRE, SPK_GRADE_OUSTERS, SPK_LEVEL_MARK, "",
+      SPK_ORIGIN_MARK);
+  CT_Done("GuildMarkManager Finished!");
+  g_pGuildInfoMapper = new MGuildInfoMapper;
+  ivfstream guildFile(FILE_INFO_GUILD_MAPPER, std::ios::binary);
+  g_pGuildInfoMapper->LoadFromFile(guildFile);
+  guildFile.close();
+  CT_Done("GuildInfoMapper Finished!");
+  g_pAcceleratorManager = new AcceleratorManager;
+  g_pKeyAccelerator = new KeyAccelerator;
+  g_pKeyAccelerator->Init(MAX_ACCELERATOR);
+  SetDefaultAccelerator();
+  CT_Done("Accelerator Finished!");
+  g_pSystemAvailableManager = new SystemAvailabilitiesManager;
+  CT_Done("SystemAvailable OK!");
+  g_pItemTable = new ITEMCLASS_TABLE;
+  CT_Done("ItemTable new OK!");
+  ivfstream itemFile(FILE_INFO_ITEM_INFO, std::ios::binary);
+  CT_Done("ItemFile open OK!");
+  g_pItemTable->LoadFromFile(itemFile);
+  itemFile.close();
+  CT_Done("ItemTable Finished!");
+  g_pNPCTable = new MNPCTable;
+  ivfstream npcFile(FILE_INFO_NPC_INFO, std::ios::binary);
+  g_pNPCTable->LoadFromFile(npcFile);
+  npcFile.close();
+  CT_Done("NPCTable Finished!");
+  g_pCreatureTable = new CREATURE_TABLE;
+  ivfstream creatureFile(FILE_INFO_CREATURE_INFO, std::ios::binary);
+  if(!creatureFile.is_open()) CT_Done("WinMain: FAILED to open Creature file!");
+  if(!creatureFile.is_open()) CT_Done("WinMain: FAILED to open Creature file!");
+  g_pCreatureTable->LoadFromFile(creatureFile);
+  CT_Done("WinMain: CreatureTable Load Result size=%d", g_pCreatureTable->GetSize());
+  CT_Done("WinMain: CreatureTable Load Result size=%d", g_pCreatureTable->GetSize());
+  creatureFile.close();
+  CT_Done("CreatureTable Finished!");
+  g_pZoneTable = new CZoneTable;
+  ivfstream zoneFile(FILE_INFO_ZONE_TABLE, std::ios::binary);
+  g_pZoneTable->LoadFromFile(zoneFile);
+  zoneFile.close();
+  CT_Done("ZoneTable Finished!");
+  g_pRankBonusTable = new RankBonusTable;
+  ivfstream rankFile(FILE_INFO_RANK_BONUS_TABLE, std::ios::binary);
+  g_pRankBonusTable->LoadFromFile(rankFile);
+  rankFile.close();
+  CT_Done("RankBonusTable Finished!");
+  g_pItemOptionTable = new ITEMOPTION_TABLE;
+  g_pMoneyManager = new MMoneyManager;
+  g_pPriceManager = new MPriceManager;
+  //  See the file named MFileDef.h    // test
+  g_pDXInput = new CDirectInput;
+  g_pParty = new MParty;
+  g_pQuestInfoManager = new MQuestInfoManager;
+  DWORD ver;
+  ivfstream questinfo("data\\info\\questinfo.inf", std::ios::binary);
+  questinfo.read((char *)&ver, sizeof(DWORD));
+  g_pQuestInfoManager->LoadFromFile(questinfo);
+  questinfo.close();
+  CT_Done("QuestInfoManager Finished!");
+  //---------------------------------------------------------------------
+  // nick name string table Loading
+  //---------------------------------------------------------------------
+  g_pNickNameStringTable = new MStringArray;
+  ivfstream gameStringTableTable("data\\info\\Nickname.inf", std::ios::binary);
+  if (false == (*g_pNickNameStringTable)
+                   .LoadFromFile_NickNameString(gameStringTableTable))
+    CT_Done("File read Error - NickName.inf");
+  gameStringTableTable.close();
+  CT_Done("NickNameStringTable Finished!");
+  //---------------------------------------------------------------------
+  //
+  //    Configuring settings for the SkillInfoTable
+  //
+  //---------------------------------------------------------------------
+  g_pSkillInfoTable = new MSkillInfoTable;
+  g_pSkillInfoTable->Init();
+  //------------------------------------------------
+  // Loading server skill information.
+  //------------------------------------------------
+  ivfstream serverSkillInfoFile(FILE_INFO_SKILL_INFO, std::ios::binary);
+  g_pSkillInfoTable->LoadFromFileServerSkillInfo(serverSkillInfoFile);
+  serverSkillInfoFile.close();
+  CT_Done("SkillInfoTable Finished!");
+  //---------------------------------------------------------------------
+  //
+  //    Configuring settings for the SkillManager
+  //
+  //---------------------------------------------------------------------
+  g_pSkillManager = new MSkillManager;
+  g_pSkillManager->Init();
+  //------------------------------------------------
+  // Loading server skill domain information.
+  //------------------------------------------------
+  ivfstream serverDomainInfoFile(FILE_INFO_SKILL_DOMAIN_EXP, std::ios::binary);
+  g_pSkillManager->LoadFromFileServerDomainInfo(serverDomainInfoFile);
+  serverDomainInfoFile.close();
+  CT_Done("SkillManager Finished!");
+  //---------------------------------------------------
+  // Loading the FameInfo table.
+  //---------------------------------------------------
+  g_pFameInfoTable = new FameInfoTable;
+  ivfstream FameLimit("Data\\Info\\FameLimit.inf", std::ios::binary);
+  g_pFameInfoTable->LoadFromFile(FameLimit);
+  FameLimit.close();
+  CT_Done("FameInfoTable Finished!");
+  //---------------------------------------------------------------------
+  //
+  //    Configuring settings for the ExperienceTable
+  //
+  //---------------------------------------------------------------------
+  g_pExperienceTable = new ExperienceTable;
+  //------------------------------------------------
+  // Loading the experience table.
+  //------------------------------------------------
+  ivfstream strExpFile(FILE_INFO_STR_EXP, std::ios::binary);
+  ivfstream dexExpFile(FILE_INFO_DEX_EXP, std::ios::binary);
+  ivfstream intExpFile(FILE_INFO_INT_EXP, std::ios::binary);
+  ivfstream vampireExpFile(FILE_INFO_VAMPIRE_EXP, std::ios::binary);
+  ivfstream oustersExpFile(FILE_INFO_OUSTERS_EXP, std::ios::binary);
+  ivfstream slayerRankExp(FILE_INFO_SLAYER_RANK_EXP, std::ios::binary);
+  ivfstream vampireRankExp(FILE_INFO_VAMPIRE_RANK_EXP, std::ios::binary);
+  ivfstream oustersRankExp(FILE_INFO_OUSTERS_RANK_EXP, std::ios::binary);
+  ivfstream advancementExp(FILE_INFO_ADVANCEMENT_EXP, std::ios::binary);
+  ivfstream petExpInfo("DATA\\INFO\\PETEXP.INF", std::ios::binary);
+
+  g_pExperienceTable->LoadFromFileSTR(strExpFile);
+  g_pExperienceTable->LoadFromFileDEX(dexExpFile);
+  g_pExperienceTable->LoadFromFileINT(intExpFile);
+  g_pExperienceTable->LoadFromFileVampire(vampireExpFile);
+  g_pExperienceTable->LoadFromFileOusters(oustersExpFile);
+  g_pExperienceTable->LoadFromFileSlayerRank(slayerRankExp);
+  g_pExperienceTable->LoadFromFileVampireRank(vampireRankExp);
+  g_pExperienceTable->LoadFromFileOustersRank(oustersRankExp);
+  g_pExperienceTable->LoadFromFilePetExp(petExpInfo);
+  g_pExperienceTable->LoadFromFileAdvanceMent(advancementExp);
+
+  strExpFile.close();
+  dexExpFile.close();
+  intExpFile.close();
+  vampireExpFile.close();
+  oustersExpFile.close();
+  slayerRankExp.close();
+  vampireRankExp.close();
+  oustersRankExp.close();
+  petExpInfo.close();
+  advancementExp.close();
+
+  //	g_pSkillInfoTable = new MSkillInfoTable;
+  //	g_pSkillManager = new SKILLDOMAIN_TABLE;
+  //	g_pSkillManager = new MSkillManager;
+  g_pSkillAvailable = new MSkillSet;
+  g_pTradeManager = new MTradeManager;
+
+  g_pTradeManager->Init();
+  g_pTradeManager->SetOtherName("The Ultimate Swapper");
+  g_pTradeManager->GetOtherMoneyManager()->SetMoney(42566);
+  g_pTradeManager->GetMyMoneyManager()->SetMoney(13344);
+
+  g_hInst = hInst;
+  wcl.hInstance = hInst;
+  wcl.lpszClassName = CLASSNAME;
+  wcl.lpfnWndProc = WindowProc;
+
+  wcl.style = CS_HREDRAW; // | CS_VREDRAW;
+  wcl.cbSize = sizeof(WNDCLASSEX);
+  wcl.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+  wcl.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
+  wcl.hCursor = LoadCursor(NULL, IDC_ARROW);
+  wcl.lpszMenuName = NULL; // MAKEINTRESOURCE(KJTMENU);
+  wcl.cbClsExtra = 0;
+  wcl.cbWndExtra = 0;
+  wcl.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+
+  RegisterClassEx(&wcl);
+
+  WAR_INFO s;
+  s.left_time = 7200 + (timeGetTime() / 1000);
+  s.war_type = 0;
+  s.zone_id = 1204;
+  s.zone_name = "Quartus";
+  g_pUserInformation->WarInfo.push_back(s);
+  InitResolutionConfig();
+  CT_Done("InitResolutionConfig Finished!");
+
+#ifndef _FULLSCREEN
+
+  int cx = g_pUserInformation->iResolution_x +
+           GetSystemMetrics(SM_CXSIZEFRAME) * 2 + 2;
+  int cy = g_pUserInformation->iResolution_y +
+           GetSystemMetrics(SM_CYSIZEFRAME) * 2 + GetSystemMetrics(SM_CYMENU) +
+           2;
+  hwnd = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, CLASSNAME, TITLEBARNAME,
+                        WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, CW_USEDEFAULT, cx, cy, HWND_DESKTOP,
+                        NULL, hInst, NULL);
+
+#else
+
+  hwnd = CreateWindowEx(WS_EX_TOPMOST, CLASSNAME, TITLEBARNAME,
+                        WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0,
+                        GetSystemMetrics(SM_CXSCREEN),
+                        GetSystemMetrics(SM_CXSCREEN), HWND_DESKTOP, NULL,
+                        hInst, NULL);
+
+#endif
+  if (!hwnd) {
+    CT_Done("CreateWindowEx failed!");
+    return 0;
+  }
+  ShowWindow(hwnd, nWinMode);
+  UpdateWindow(hwnd);
+  SetFocus(hwnd);
+  g_hWnd = hwnd;
+  CT_Done("ShowWindow OK - before InitSound!");
+  InitSound();
+  CT_Done("InitSound Finished!");
+
+#ifndef _FULLSCREEN
+
+  if (!gC_DD.Init(hwnd, g_pUserInformation->iResolution_x,
+                  g_pUserInformation->iResolution_y, CDirectDraw::WINDOWMODE,
+                  false, true)) {
+    char errMsg[256];
+    sprintf(
+        errMsg,
+        "gC_DD.Init (WINDOWMODE) failed! resolution_x: %d, resolution_y: %d",
+        g_pUserInformation->iResolution_x, g_pUserInformation->iResolution_y);
+    MessageBox(NULL, errMsg, "ERROR", MB_OK);
+    return 0;
+  }
+  CT_Done("gC_DD.Init (WINDOWMODE) SUCCESS!");
+
+#else
+
+  if (!gC_DD.Init(hwnd, g_pUserInformation->iResolution_x,
+                  g_pUserInformation->iResolution_y, CDirectDraw::FULLSCREEN,
+                  false, true)) {
+    char errMsg[256];
+    sprintf(
+        errMsg,
+        "gC_DD.Init (FULLSCREEN) failed! resolution_x: %d, resolution_y: %d",
+        g_pUserInformation->iResolution_x, g_pUserInformation->iResolution_y);
+    MessageBox(NULL, errMsg, "ERROR", MB_OK);
+    return 0;
+  }
+#endif
+#if _DEBUGGING
+  g_pDXInput->Init(hwnd, hInst, CDirectInput::NONEXCLUSIVE);
+#else
+  g_pDXInput->Init(hwnd, hInst, CDirectInput::EXCLUSIVE);
+#endif
+  gC_ci = new CI_KOREAN;
+
+  g_pDXInput->SetMouseEventReceiver(MouseEventReceiver);
+
+  g_pDXInput->SetMouseMoveLimit(g_pUserInformation->iResolution_x - 1,
+                                g_pUserInformation->iResolution_y - 1);
+  g_pDXInput->SetKeyboardEventReceiver(KeyboardEventReceiver);
+  CT_Done("Before InitializeGL!");
+  InitializeGL(CDirectDraw::Get_BPP(), CDirectDraw::Get_Count_Rbit(),
+               CDirectDraw::Get_Count_Gbit(), CDirectDraw::Get_Count_Bbit());
+  CT_Done("InitializeGL OK - before InitBacksurface!");
+
+  gC_DDSurface.InitBacksurface();
+  CIndexSprite::SetColorSet();
+  CSpriteSurface::InitEffectTable();
+  CT_Done("Before gC_vs_ui.Init!");
+  gC_vs_ui.Init(&gC_DDSurface, UI_ResultReceiver);
+  CT_Done("gC_vs_ui.Init Finished!");
+  g_pProfileManager = new ProfileManager;
+  g_pProfileManager->InitProfiles();
+
+  WAR_INFO ss;
+  ss.left_time = 3600 + 212 + (timeGetTime() / 1000);
+  ss.war_type = 0;
+  ss.zone_id = 1201;
+  ss.zone_name = "Quartus A";
+  g_pUserInformation->WarInfo.push_back(ss);
+  g_char_slot_ingame.m_AdvancementLevel = 10;
+
+  // FAZ 0.3 — Netmarble login akışı devre dışı (Phoenix: klasik darkeden login).
+  // Orijinal hardcode true'ydu (test amaçlı); InitInfo::ReadNetmarbleConfig ile
+  // NetmarbleConfig.INF'e bağlı doğru set ediliyor. Burada garanti için false.
+  g_pUserInformation->IsNetmarble = false;
+  g_pUserInformation->IsNetmarbleLogin = false;
+
+  g_char_slot_ingame.sz_name = "su teresi";
+  g_char_slot_ingame.sz_guild_name = "He's the master.";
+  g_char_slot_ingame.GUILD_ID = 102;
+  g_char_slot_ingame.Race = RACE_SLAYER;
+  g_char_slot_ingame.bl_drained = true;
+  g_char_slot_ingame.MP_MAX = 100;
+  g_char_slot_ingame.HP_MAX = 100;
+  g_char_slot_ingame.HP = 100;
+  g_char_slot_ingame.MP = 230;
+  g_char_slot_ingame.FAME = 1234567890;
+  g_char_slot_ingame.alignment = UI_GOOD_PLUS;
+  g_char_slot_ingame.alignment_num = -10000;
+  g_char_slot_ingame.TOHIT = 123;
+  g_char_slot_ingame.DAM = 223;
+  g_char_slot_ingame.DAM2 = 123;
+  g_char_slot_ingame.SILVER_DAM = 3;
+  g_char_slot_ingame.SILVER_DAM2 = 1;
+  g_char_slot_ingame.STR_CUR = 120;
+  g_char_slot_ingame.STR_PURE = 100;
+  g_char_slot_ingame.STR_MAX = 130;
+  g_char_slot_ingame.STR_EXP_REMAIN = 500;
+  g_char_slot_ingame.DEX_CUR = 6;
+  g_char_slot_ingame.DEX_PURE = 6;
+  g_char_slot_ingame.DEX_MAX = 6;
+  g_char_slot_ingame.DEX_EXP_REMAIN = 300;
+  g_char_slot_ingame.INT_CUR = 6;
+  g_char_slot_ingame.INT_PURE = 6;
+  g_char_slot_ingame.INT_MAXX = 6;
+  g_char_slot_ingame.INT_EXP_REMAIN = 350;
+  g_char_slot_ingame.level = 1;
+  g_char_slot_ingame.EXP_REMAIN = 1000000;
+  g_char_slot_ingame.SILVER_HP = 0;
+  g_char_slot_ingame.GRADE = 36;
+  g_char_slot_ingame.WS = 0;
+  g_char_slot_ingame.WeaponSpeed = 30;
+  g_char_slot_ingame.STATUS.clear();
+  g_char_slot_ingame.m_SMS_Charge = 10;
+  S_SLOT::UI_EFFECTSTATUS_STRUCT efs;
+
+  efs.actionInfo = SKILL_CLIENT_HOODLUM_STIGMA;
+  efs.delay100msec = 10;
+  g_char_slot_ingame.STATUS.push_back(efs);
+
+  g_char_slot_ingame.bl_female = true; // false;
+  g_char_slot_ingame.man_info.helmet = M_HELMET1;
+  g_char_slot_ingame.man_info.coat = M_COAT1;
+  g_char_slot_ingame.man_info.trouser = M_TROUSER1;
+  g_char_slot_ingame.man_info.hair = M_HAIR1;
+  g_char_slot_ingame.man_info.face = M_FACE1;
+  g_char_slot_ingame.man_info.left = M_SHIELD1; // M_TR;//M_SWORD;
+  g_char_slot_ingame.man_info.right = M_CROSS;  // W_SWORD;//W_DRAGON_SHIELD;
+  g_char_slot_ingame.skin_color = 0;
+  g_char_slot_ingame.hair_color = 0;
+  g_char_slot_ingame.left_color = 405;
+  g_char_slot_ingame.right_color = 405;
+  g_char_slot_ingame.helmet_color = 0xFFFF;
+  g_char_slot_ingame.trouser_color = 0XFFFF;
+  g_char_slot_ingame.coat_color = 255;
+  g_char_slot_ingame.bonus_point = 5;
+  g_char_slot_ingame.skill_point = 50;
+  // 2005.08
+  g_char_slot_ingame.AttackBloodBurstPoint = 150;
+  g_char_slot_ingame.DefenseBloodBurstPoint = 250;
+  g_char_slot_ingame.PartyBloodBurstPoint = 350;
+
+  CT_Done("Before StartGame!");
+  gC_vs_ui.StartGame();
+  CT_Done("StartGame Finished!");
+  //	gC_vs_ui.ChangeToOustersInterface();
+  gC_vs_ui.ChangeToSlayerInterface();
+  std::vector<C_VS_UI_NicknameInfo *> TempNickNameList;
+  C_VS_UI_NicknameInfo nik;
+  nik.setNickname("BuNe40");
+  nik.setNicknameID(0);
+  nik.setNicknameIndex(0);
+  nik.setNicknameType(0);
+  TempNickNameList.push_back(&nik);
+  // gC_vs_ui.AddNickNameList((void*)&nik);
+  C_VS_UI_NicknameInfo nik1;
+  nik1.setNickname("BuNe41");
+  nik1.setNicknameID(1);
+  nik1.setNicknameIndex(1);
+  nik1.setNicknameType(1);
+  // gC_vs_ui.AddNickNameList((void*)&nik);
+  TempNickNameList.push_back(&nik1);
+  C_VS_UI_NicknameInfo nik2;
+  nik2.setNickname("BuNe42");
+  nik2.setNicknameID(2);
+  nik2.setNicknameIndex(2);
+  nik2.setNicknameType(2);
+  // gC_vs_ui.AddNickNameList((void*)&nik);
+  TempNickNameList.push_back(&nik2);
+  C_VS_UI_NicknameInfo nik3;
+  nik3.setNickname("BuNe43");
+  nik3.setNicknameID(3);
+  nik3.setNicknameIndex(3);
+  nik3.setNicknameType(3);
+  // gC_vs_ui.AddNickNameList((void*)&nik);
+  TempNickNameList.push_back(&nik3);
+  C_VS_UI_NicknameInfo nik4;
+  nik4.setNickname("BuNe44");
+  nik4.setNicknameID(4);
+  nik4.setNicknameIndex(4);
+  nik4.setNicknameType(4);
+  // gC_vs_ui.AddNickNameList((void*)&nik);
+  TempNickNameList.push_back(&nik4);
+  C_VS_UI_NicknameInfo nik5;
+  nik5.setNickname("BuNe45");
+  nik5.setNicknameID(5);
+  nik5.setNicknameIndex(5);
+  nik5.setNicknameType(5);
+  TempNickNameList.push_back(&nik5);
+  gC_vs_ui.SetNickNameList((void *)&TempNickNameList);
+  g_char_slot_ingame.m_Powerjjang_Point = 0;
+  // gC_vs_ui.AddNickNameList((void*)&nik);
+  //	gC_vs_ui.RunQuickItemSlot();
+  SIZE size = {256, 256};
+  gC_vs_ui.SetSize(size);
+  gC_vs_ui.SetZone(61);
+  RECT rect = {100, 100, 200, 200};
+  gC_vs_ui.SetSafetyZone(rect, 0);
+  SetRect(&rect, 50, 50, 50, 50);
+  gC_vs_ui.SetPortal(rect, 1001);
+  SetRect(&rect, 50, 52, 60, 52);
+  gC_vs_ui.SetPortal(rect, 2024);
+  gC_vs_ui.SetNPC(50, 100, 21, "BuNe46");
+  gC_vs_ui.SetNPC(100, 100, 670, "BuNe47");
+
+  SetCursorPos(0, 0);
+
+  CT_Done("Before LoadWorldMapInfo!");
+  LoadWorldMapInfo();
+  CT_Done("LoadWorldMapInfo Finished - entering game loop!");
+  while (1) {
+    if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
+      if (GetMessage(&msg, NULL, 0, 0)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+      } else
+        // for delete
+        break;
+      // return msg.wParam;
+    } else {
+      if (gbl_active) {
+        RunProgramLoopWithTry();
+        g_CurrentFrame++;
+      } else
+        WaitMessage();
+    }
+  }
+  delete g_pGameStringTable;
+  SaveResolutionConfig();
+  ReleaseAllObject();
+  gC_vs_ui.Release();
+
+  return 0;
+}
+

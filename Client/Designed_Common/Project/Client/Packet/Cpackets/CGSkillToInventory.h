@@ -1,0 +1,97 @@
+//////////////////////////////////////////////////////////////////////////////
+// Filename    : CGSkillToInventory.h 
+// Written By  : elca@ewestsoft.com
+// Description : 
+//////////////////////////////////////////////////////////////////////////////
+
+#ifndef __CG_SKILL_TO_INVENTORY_H__
+#define __CG_SKILL_TO_INVENTORY_H__
+
+#include "Packet.h"
+#include "PacketFactory.h"
+
+//////////////////////////////////////////////////////////////////////////////
+// class CGSkillToInventory;
+//////////////////////////////////////////////////////////////////////////////
+
+class CGSkillToInventory : public Packet 
+{
+public:
+
+	CGSkillToInventory () ;
+	~CGSkillToInventory() ;
+
+    void read(SocketInputStream & iStream) ;
+    void write(SocketOutputStream & oStream) const ;
+	void execute(Player* pPlayer) ;
+	PacketID_t getPacketID() const  { return PACKET_CG_SKILL_TO_INVENTORY; }
+	PacketSize_t getPacketSize() const  { return szSkillType + szObjectID + szObjectID  + szCoordInven*4; }
+
+#ifdef __DEBUG_OUTPUT__
+	std::string getPacketName() const  { return "CGSkillToInventory"; }
+	std::string toString() const ;
+#endif
+
+public:
+	SkillType_t getSkillType() const   { return m_SkillType; }
+	void setSkillType(SkillType_t SkillType)  { m_SkillType = SkillType; }
+
+	ObjectID_t getObjectID() const  { return m_ObjectID; }
+	void setObjectID(ObjectID_t ObjectID)  { m_ObjectID = ObjectID; }
+
+	ObjectID_t getInventoryItemObjectID()  { return m_InventoryItemObjectID; }
+	void setInventoryItemObjectID(ObjectID_t InventoryItemObjectID)  { m_InventoryItemObjectID = InventoryItemObjectID; }
+
+	CoordInven_t getX() const  { return m_X; }
+	void setX(Coord_t X)  { m_X = X; }
+
+	CoordInven_t getY() const  { return m_Y; }
+	void setY(Coord_t Y)  { m_Y = Y; }
+
+	CoordInven_t getTargetX() const  { return m_TargetX; }
+	void setTargetX(Coord_t TargetX)  { m_TargetX = TargetX; }
+
+	CoordInven_t getTargetY() const  { return m_TargetY; }
+	void setTargetY(Coord_t TargetY)  { m_TargetY = TargetY; }
+
+private :
+	SkillType_t  m_SkillType;	// SkillType
+	ObjectID_t   m_ObjectID;	// ObjectID
+	// 보조 인벤토리 아이템의 오브젝트 아이디. 0이면 메인 인벤토리에서 사용
+	ObjectID_t	 m_InventoryItemObjectID;
+	CoordInven_t m_X;			// Coord X
+	CoordInven_t m_Y;			// Coord Y
+	CoordInven_t m_TargetX;		// Target X
+	CoordInven_t m_TargetY;		// Target Y
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// class CGSkillToInventoryFactory;
+//////////////////////////////////////////////////////////////////////////////
+#ifdef __DEBUG_OUTPUT__
+class CGSkillToInventoryFactory : public PacketFactory 
+{
+public:
+	Packet* createPacket()  { return new CGSkillToInventory(); }
+
+	#ifdef __DEBUG_OUTPUT__
+		std::string getPacketName() const  { return "CGSkillToInventory"; }
+	#endif
+
+	PacketID_t getPacketID() const  { return Packet::PACKET_CG_SKILL_TO_INVENTORY; }
+	PacketSize_t getPacketMaxSize() const  { return szSkillType + szObjectID + szObjectID + szCoordInven*4; }
+};
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// class CGSkillToInventoryHandler;
+//////////////////////////////////////////////////////////////////////////////
+#ifndef __GAME_CLIENT__
+	class CGSkillToInventoryHandler 
+	{
+	public:
+		static void execute(CGSkillToInventory* pCGSkillToInventory, Player* pPlayer) ;
+	};
+#endif
+
+#endif

@@ -1,0 +1,54 @@
+//----------------------------------------------------------------------
+// MusicDef.h
+//----------------------------------------------------------------------
+
+#ifndef __MUSICDEF_H__
+#define __MUSICDEF_H__
+
+enum MUSIC_ID
+{
+	MUSIC_TREASURE,
+	MUSIC_WHISPER,
+	MUSIC_SAY_AGAIN,
+	MUSIC_WINDMILL,
+	MUSIC_HELL_KNIGHT,
+	MUSIC_HOLLOWEEN,
+	MUSIC_PAY_BACK,
+	MUSIC_HIDE_AWAY,
+	MUSIC_LIVE_OR_DEAD,
+	MUSIC_LUNATIC,
+	MUSIC_MARCHING,
+
+	// 2001.12.17 추가
+	MUSIC_XMAS_JINGLEBELL,
+	MUSIC_XMAS_SILENTNIGHT,
+	MUSIC_XMAS_SILVERBELL,
+
+	MUSIC_HOLYLAND,
+	MUSIC_HOLYLAND_WAR,
+	MUSIC_OCTAVUS,
+	MUSIC_SEPTIMUS,
+	MUSIC_TERTIUS,
+	MUSIC_QUARTUS,
+	
+	MUSIC_ILLUSIONS_WAY,
+	MUSIC_GDR_LAIR,
+
+	MUSIC_OVERTURE,		// 뱀파이어 테마
+	MUSIC_ADVANCE,		// 아우스터즈 배틀
+	
+	MUSIC_GEHENNA,		// 슬레이어 배틀
+	MUSIC_ANONCIAD,		// 슬레이어 테마
+	MUSIC_SCHWARZWALD,	// 뱀파이어 배틀
+	MUSIC_CONCORDIA,	// 아우스터즈 테마
+
+	//add by rallser
+	MUSIC_UNKNOW1,
+	MUSIC_UNKNOW2,
+	MUSIC_UNKNOW3,
+	MUSIC_UNKNOW4,
+
+	MAX_MUSIC
+};
+
+#endif
