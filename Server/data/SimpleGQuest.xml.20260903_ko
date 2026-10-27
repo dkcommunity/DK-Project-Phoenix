@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuestList>
+	<Quest id="101">
+		<Title>어둠에 눈을 뜨라.</Title>
+		<Script sender="브리콜라카스">자, 새롭게 얻은 힘을 느껴보고 싶은가? 후후… 하지만 아직 네 힘은 미약하기 짝이 없다. 그 상태로 성 밖을 나서봐야 버텨낼 수 없을 터. 하지만 지금 같은 전시에 네 녀석을 일일이 가르칠 여유는 없구나. 하지만 네 스스로 가능성을 보여준다면 가르침을 주겠다. 이곳 지하 1층 정도라면 지금의 너라도 감당이 가능하겠지. 그곳의 쓰레기들을 처리하도록 해라. 때가 되면 너를 부를 것이다.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level max="3" />
+		</Happen>
+		<CompleteMessage sender="브리콜라카스" target="92">음… 좋다. 너에게서 풍기는 피 냄새가 제법 쓸만하구나. 내가 너에게 능력을 전수해 주마.</CompleteMessage>
+		<Complete>
+			<Level min="6" index="1">레벨 6 이상 달성</Level>
+		</Complete>
+		<FailMessage sender="브리콜라카스" target="92">도대체 뭘 하고 있는 건가? 그런 식으로는 버러지 같은 인간 녀석들의 사냥감이 되기 딱이겠군…</FailMessage>
+		<Fail>
+			<Time limit="30" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveVampireExp amount="100" />
+			<GiveMoney amount="10000" />
+		</Reward>
+	</Quest>
+	<Quest id="102">
+		<Title>뱀파이어로의 자각</Title>
+		<Script sender="레베카">어린 뱀파이어여! 어째서 아직까지 피의 유혹을 거부하는 거죠? 
+머리 속에 틀어박힌 하찮은 인간들의 윤리란 것이 신경 쓰이는 것인가요? 스스로가 원해서 인간 이길 포기한 주제에 아직까지 그런 것에 신경을 쓰고 있다니 우스운 일이군요. 하찮은 인간세상의 기억은 쓸모없는 것이죠. 우리 일족의 강대한 힘은 그냥 생겨나는 것이 아닙니다. 생명의 근원인 피를 통해 우리의 힘은 더욱 강해지는 것입니다. 강해지기 위해서라면 피를 마셔야 합니다.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="3" max="5" />
+		</Happen>
+		<CompleteMessage sender="레베카" target="255">이제 제법 흡혈에 익숙해졌나요? 이후에도 전투 중엔 항상 흡혈을 염두에 두어야 할 것입니다. 이제 마을의 카콘에게 맡겨둔 물건을 받도록 하십시오.</CompleteMessage>
+		<Complete>
+			<BloodDrain num="20" index="1">%s흡혈 회수 : %d / 20회</BloodDrain>
+		</Complete>
+		<FailMessage sender="레베카" target="255">숙명을 거부하겠다는 건가요? 뭐, 좋겠죠… 잿더미로 변한 후에 후회해도 소용없을 겁니다. 흐흠~</FailMessage>
+		<Fail>
+			<Time limit="15" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="SERUM" type="0" num="9" />
+			<GiveVampireExp amount="100" />
+		</Reward>
+	</Quest>
+	<Quest id="103">
+		<Title>라르바를 설득하라.</Title>
+		<Script sender="브리콜라카스">점점 일족으로서 성장해 나가는 자네를 마스터께서는 아주 흡족하게 생각하고 계신다네. 물론 앞으로도 기대를 저버리는 모습을 보여주진 않을거라 믿고 계시지. 하지만 가끔 어리석은 녀석들이 발견되기도 하네. 일족의 우수한 힘을 얻고도 인간이었을 때를 잊지 못하는 녀석들이지. 라르바라는 녀석이 그런 녀석들을 도와주고 있기 때문에 이런 일이 생기는 게야. 마스터께서는 무슨 생각으로 그 녀석을 내치지 않으시는지 모르겠어. 물론 라르바의 마력은 무시할 수 없는 것이긴 해. 그 자가 힘을 보태준다면 일족의 힘도 더욱 커질 텐데 말이야. 어떤가? 자네가 라르바를 한번 설득해보지 않겠나? 내 편지를 줄 테니 그와 얘기를 한번 해보게.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="10" max="14" />
+		</Happen>
+		<Complete>
+			<SayNPC name="브리콜라카스" target="92" index="1">브리콜라카스에게서 편지를 받는다</SayNPC>
+			<GiveQuestItem id="0" />
+			<SayNPC name="라르바" target="368" index="2">라르바에게 편지를 전한다.</SayNPC>
+			<Message index="3">브리콜라카스의 편지를 전하고 설득을 해보았지만 어째서인지 라르바는 말없이 고개를 저을 뿐이다. 라르바는 품 속에서 자신의 편지를 꺼내주며 브리콜라카스에게 전해 주라고 할 뿐이다.</Message>
+			<LoseQuestItem id="0" />
+			<GiveQuestItem id="1" />
+			<GiveVampireExp amount="200" />
+
+			<SayNPC name="브리콜라카스" target="92" index="4">브리콜라카스에게 편지를 전한다.</SayNPC>
+			<Script sender="브리콜라카스" target="92" index="5">이거 참, 무슨 배짱으로 이런 결정을 내리는 지 알 수가 없군. 이런 식이라면 언젠가는 마스터님의 분노를 살 터인데… 음, 아무튼 수고했네. 앞으로도 계속 마스터에게 충실히 봉사할 수 있도록 하게.</Script>
+			<LoseQuestItem id="1" />
+			<GiveVampireExp amount="200" />
+		</Complete>
+		<FailMessage sender="브리콜라카스" target="92">너무 무리할 필요는 없네. 내가 자네를 너무 과대 평가한 모양이군.</FailMessage>
+		<Fail>
+			<Killed num="1" index="1">전달하는 과정에서 죽지 않아야 한다.</Killed>
+		</Fail>
+		<Reward>
+			<GiveItem class="VAMPIRE_WEAPON" type="1" option="STR+3" />
+			<GiveVampireExp amount="100" />
+		</Reward>
+	</Quest>
+	<Quest id="104">
+		<Title>순종적 동물</Title>
+		<Script sender="카콘" target="220">하등한 존재인 주제에 반항만 하는 인간들에 비해 다른 동물들은 순종적이지. 물론 그렇다고 해서 다들 쓸모가 있는 건 아니야. 이 곳 에슬라니아 지방에는 예전부터 들개들이 번식하고 있었는데 이것들을 잘만 길들이면 꽤나 편리하지. 인간들도 이 녀석들을 이용한다고 하더군. 처음엔 길들이기 번거롭지만 쓸 만 할거야. 이 녀석들은 고기덩어리를 좋아한다니까 준비하는 걸 잊지 말게나.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="20" max="20" />
+		</Happen>
+		<CompleteMessage sender="카콘" target="220">지금 당장은 썩 쓸모있어 보이진 않겠지만 꾸준히 키우면 꽤 볼품이 있지. 잘만하면 자네의 능력에도 영향을 주기도 하지만 어디까지나 운이 꽤 좋아야 하네. 하지만 혹시라도 고약한 병에 걸린 녀석일지도 모르지. 림보성의 카파티니에게 보여주면 잘 살펴봐줄거야.</CompleteMessage>
+		<Complete>
+			<TamePet num="1" index="1">주니어울프아크를 길들여 울프독을 구한다.</TamePet>
+		</Complete>
+		<FailMessage sender="카콘" target="220">크크크, 하찮은 동물 하나 길들이지 못하다니 정말 딱하군… 어디 그래가지고 여기서 살아남기나 하겠나?</FailMessage>
+		<Fail>
+			<Time limit="20" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="PET_FOOD" type="3" num="5" />
+			<GiveItem class="VAMPIRE_WEAPON" type="2" option="DAM+3" />
+		</Reward>
+	</Quest>
+	<Quest id="105" type="tutorial">
+		<Title>악마와의 계약</Title>
+		<HappenRegion zoneid="22" x="230" y="231"/>
+		<RewardMessage>Name: 릴리스 제라(Lilith Jera)
+Option: VIS+2
+Exp: 200
+Money: 10,000겔드</RewardMessage>
+		<Script sender="악마">자, 릴리스의 힘이 돌아오는 것인가? 후후… 내 목소리가 네 녀석에게는 무척 생소하게 들릴 것이다. 하지만 아직 네 녀석은 나를 볼 자격이 없다. 그렇다고 내 말을 거역한다면 단지 넌 그 상태로 비밀 요원들의 장난감이 될 것이다. 지금 같은 상황에서 네 녀석을 일일이 가르칠 여유는 없지만 네 스스로 전사로 향하는 가능성을 보여준다면 릴리스의 위대한 가르침은 너와 함께할 것이지만 단 조건이 있다. 넌 이제부터 나와 계약을 해야 한다. 자 그럼 나와 계약을 하기 전에 림보성의 브리콜라카스에게 가서 기본 장비와 필요한 자금을 받도록 하고 수행을 시작하도록 하라! 나와 계약하는 것은 결코 쉽지 않다는 것을 보여 주겠다. 때가 되면 너를 부르도록 하지. 으흐흐흐….</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="4"/>
+		</Happen>
+		<CompleteMessage sender="악마" target="1022">나와 계약을 맺겠다고? 후후. 좋아, 퀘스트에서 미천한 네놈을 도와줄 나의 선물이다. 빼앗기거나 잃어버린다면 바로 네 목숨은 내 것이다. 이것은 곧 내 지시와도 같고 나의 지시는 곧 너의 피와도 같다. 절대 내 말을 잊지 말도록! </CompleteMessage>
+		<Complete>
+			<SayNPC name="브리콜라카스" target="92" index="1">브리콜라카스에게 말을 건다.</SayNPC>
+		</Complete>
+		<FailMessage sender="악마" target="1022">이런 나약해 빠진 놈 같으니라고!! 너를 평생 쫓아 다니며 괴롭혀 주겠다! 으하하하 </FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveVampireExp amount="200" />
+			<GiveMoney amount="10000" />
+			<GiveItem class="VAMPIRE_AMULET" type="15" option="VIS+2" limitedtime="2592000"/>
+		</Reward>
+	</Quest>
+	<Quest id="106" type="adventure">
+		<Title>지하 점령</Title>
+		<HappenRegion zoneid="22" x="230" y="231"/>
+		<RewardMessage>( 도메인 별 랜덤 무기 지급 )
+Name: 릴리스 사브 너클(Lilith SAV Knuckle)
+Option: STR+3 / INT+3</RewardMessage>
+		<Script sender="악마">이젠 네놈과 나는 계약을 통해 언제 어디서든지 내가 임무를 지시 할 수 있지. 너는 이미 나와 계약을 했으니 도망갈 길은 없다는 것을 알아두는 것이 좋을 것이야. 누구에게도 발설하는 순간에는 죽음을 줄 테니 각오 하는 것이 좋아! 우선 릴리스가 예언한 전사가 맞는지 확인을 해보겠다. 이곳 던전에는 보다시피 쓰레기들이 아주 많지. 나의 지시에 따라 몬스터의 목을 따오도록 하라! 그럼 네가 가진 보석들이 핏빛으로 물들어 가는 것을 볼 수 있을 것이다. 아주 중요한 것 이니 확인 하지 않으면 내가 아주 실망할지도 몰라. 넌 이제 나의 소유라는 것을 잊지 말도록!</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="7" />
+			<EnterZone ZoneID="1003" />
+		</Happen>
+		<CompleteMessage sender="악마" target="1022">흠, 생각보다는 괜찮은 실력이군. 난 항상 너를 보고 있다는 것을 잊지 말도록. 이 보상은 내가 주는 채찍질이니 앞으로도 더욱 더 나를 기쁘게 하라!</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%s 치프 데드바디 머리 사냥 : %d / 5 
+		    	<Target type="564" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="악마" target="1022">네 놈에겐 더욱 큰 고통이 필요한 것이냐 죽음이 필요한 것이냐?</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<Random>
+	    		<GiveItem class="VAMPIRE_WEAPON" type="25" option="STR+3" limitedtime="2592000" />
+	    		<GiveItem class="VAMPIRE_WEAPON" type="25" option="INT+3" limitedtime="2592000" />
+			</Random>
+		</Reward>
+	</Quest>
+	<Quest id="107" type="charge">
+		<Title>라르바의 취향</Title>
+		<HappenRegion zoneid="23" x="130" y="86"/>
+		<RewardMessage>박쥐날개 20개(Bat Wing)
+No. 108 퀘스트 시작</RewardMessage>
+		<Script sender="악마">자 그럼 첫 번째 주문을 내려 보도록 하겠어. 우선 림보 남동의 라르바에게 이것을 가지고 가라. 그 녀석의 취향은 좀 독특하긴 하지만 그는 네가 순수한 뱀파이어 혈통으로써 모든 수행을 이겨나갈 도움을 줄 것 이다. 고통으로 가득 찬 너의 고생길은 이제 시작에 불과 하다. 그럼 잔말 말고 이걸 가지고 림보남동의 라르바에게 가서 내 임무를 기다리도록 해!</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="11" />
+		</Happen>
+		<CompleteMessage sender="라르바" target="368">흠 당신이 바로 릴리스의 후예? 그런데 그 역겨운 머리는 도대체 어떻게 가져왔나? 사실 그것은 제가 모으는 재료 중의 하나라는걸 아는 사람은 몇 안되지 후후.. 좋다 자네에게 당장은 필요 없겠지만 아마 나중에 긴히 쓸 일이 생길 것이니 잘 모아 두도록 하라구.</CompleteMessage>
+		<Complete>
+			<GiveQuestItem id="27" />
+			<SayNPC name="라르바" target="368" index="1">라르바에게 말을 건다.</SayNPC>
+			<LoseQuestItem id="27" />
+		</Complete>
+		<FailMessage sender="악마" target="1022">왜 다시 돌아왔나? 뭐! 박쥐 머리가 사라졌다고? 도대체 그걸 어디다 쓴거냐 이 멍청한 놈아!</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="VAMPIRE_ETC" type="1" num="20" limitedtime="2592000"/>
+			<StartOtherQuest id="108"/>
+       	</Reward>
+	</Quest>
+	<Quest id="108" type="charge">
+		<Title>혐오스러운 임무</Title>
+		<HappenRegion zoneid="23" x="130" y="86"/>
+		<RewardMessage>Name: 릴리스 슬리퍼리 로브(Lilith Slipery Robe)
+Option: ATTR+2
+릴리스 플룸 클록(Lilith Plume Cloak)
+Option: ATTR+2 (남/여 구분)</RewardMessage>
+		<Script sender="악마">자 그럼 임무를 주도록 하겠다. 최근 들어 나의 심기를 불편하게 만드는 녀석들이 나타났단 말이야. 사실 그 녀석들은 내가 쉽게 처리할 수 있는 아주 간단한 녀석들이지만 네놈 역시 하찮은 존재! 그 놈들의 상대도 안된다면 네놈은 나와 대화할 가치 조차도 없다! 최근 림보성 남동 지역에서 우리와 같은 눈을 하고 정탐하는 쓰레기 같은 녀석들이다. 아마도 어디서 하등한 훈련을 받고 눈속임을 사용하는 것 같다. 그 놈들이 나타나는 림보성 남동 지역으로 가서 더러운 자들을 쓸어내라! 림보성 남동 지점이다. 신속하게 처단해 내야 한다. 자 그럼 임무를 시작 하도록! </Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="11" />
+			<CompleteQuest id="107" />	
+		</Happen>
+		<CompleteMessage sender="악마" target="1022">앞으로 더욱 잔인한 임무를 내릴 것 이다. 부디 몸조심 하기를… 하하하</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%s 치프 키드 머리 사냥 : %d / 5
+		              <Target type="567" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="악마" target="1022">실망할 가치도 없는 하찮은 녀석 이었군! 내 눈 앞에서 꺼지지 않으면 죽여버리겠다!</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="VAMPIRE_COAT" type="26" option="ATTR+2" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="109" type="adventure">
+		<Title>핏빛 지도를 그려라</Title>
+		<HappenRegion zoneid="14" x="196" y="240"/>
+		<RewardMessage>Name: 릴리스 앤티 썬 링(Lilith Anti-Sun Ring) 2개
+Option: RES+1</RewardMessage>
+		<Script sender="악마">네 녀석이 지난번 임무는 잘 수행했었지. 라르바 녀석도 내 선물을 받고 좋아하더군. 지난번 임무는 칭찬할 만 했어. 하지만 일 하나 처리 했다고 해서 네 녀석이 부족함이 없다고 자만하지는 않는 것 이 좋아. 이제 너는 곧 죽을 것이니까. 흐흐흐 그럼 다음 임무를 주도록 하지. 이번 임무는 죽을 위험이 크지. 이미 너는 제한 시간 내에 지시에 따라 치프급 몬스터를 사냥 했었지만 모든 일에는 예외란 것이 있지. 릴리스의 전사라면 그 강인함으로 인해 목숨이 떨어져도 지옥에서라도 돌아오겠지만 그 외엔 지옥에서 내 손에서 살아나간 놈은 아무도 없지. 에슬라니안 SW 지역에 테메리에 성지란 곳이 있다. 이미 그곳에서 우리는 많은 피를 마시며 살아왔지 하지만 이제 그곳은 피 끓는 전장이다! 적들의 목이 있다면 피를 마시며 치프들을 사냥하여 영광스럽게 귀환하라!</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+		    <Level min="16" />
+	        <EnterZone ZoneID="14" />
+		</Happen>
+		<CompleteMessage sender="악마" target="1022">수고 했어. 보상을 하나 주도록 하지. 그러나 내가 칭찬을 잘 하지 않는다는 것을 명심해. 그럼 다음 임무가 주어질 때까지 조용히 나의 속삭임을 기다리도록 해. 언제 어디서든 내가 보고 있다는 것을 꼭 잊지 말고! 하하하!</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%s 치프 알칸 머리 사냥 : %d / 5 
+		              <Target type="469" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="악마" target="1022">아직도 내가 원하는 능력 밖이란 말인가? 지옥의 불 맛을 보고 싶은가?</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="VAMPIRE_RING" type="16" option="RES+1" limitedtime="2592000"/>
+			<GiveItem class="VAMPIRE_RING" type="16" option="RES+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="110" type="adventure">
+		<Title>악마의 부름</Title>
+		<HappenRegion zoneid="33" x="206" y="190"/>
+		<RewardMessage>케르베로스 인장(Cerberus’s seal) 5개
+카브라캄의 심장 B1(Heart of Cabracam B1) 4개
+No. 111 퀘스트 시작 </RewardMessage>
+		<Script sender="악마">용케도 살아 남았군! 지금까지 살아 남았다면 자네는 조금 더 릴리스의 영광을 구현 할 전사로한 걸음 나간 것이지. 그러나 아직 내 성에 찰 만큼 넌 충분 하지 않아! 그런 의미에서 이번 기회로 내가 너의 능력을 한번 더 시험해 보도록 하지. 나의 전지 전능한 능력으로 슬레이어놈들이 움직이는 것을 포착했다. 드로베타 공단의 폐수장 근처에 위치한 어느 민가에 어느 멍청한 뱀파이어 녀석이 중요한 물건을 숨겨 놓았는데 슬레이어 놈들이 그걸 발견해냈다. 위치는 네가 가진 지도에 내가 표시를 해놓았지. 시간이 없으니 지난번에 라르바 녀석에게 받은 박쥐날개를 이용해서 가도록 하고 그 놈들이 물건을 회수하기 전에 먼저 찾아 내도록 해! 그럼 내가 아주 솔깃한 제안을 하나 하지. 네놈에게 그곳은 아직 위험한 지역이니 그 지역을 배회하는 몬스터들은 피하도록 해. 시간이 없다 빨리 움직이지 못해?</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+		    <Level min="21" />
+	        <EnterZone ZoneID="22" />
+		</Happen>
+		<CompleteMessage sender="악마" target="1022">수고 했어. 그럼 다음 지시를 바로 받도록 해라. </CompleteMessage>
+		<Complete>
+			<TouchWayPoint zoneid="33" x="206" y="190" index="1">드로베타 남동 X=206, Y=190 지역을 수색</TouchWayPoint>
+		</Complete>
+		<FailMessage sender="악마" target="1022">실패 했다고 죽이지는 않겠지만 네 녀석은 정말 웃기지도 않는군. 멍청한 녀석 다시 내 눈 앞에 그런 모습으로 돌아오면 죽여 버리겠다!</FailMessage>
+		<Fail>
+			<Killed num="3" index="1">수행 중 3회이상 사망하지 않아야 한다.</Killed>
+			<IllegalWarp index="2">씰 사용 금지</IllegalWarp>
+			<Time limit="20" index="3">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="5"/>
+			<GiveItem class="COMMON_QUEST_ITEM" type="12" num="4"/>
+			<StartOtherQuest id="111"/>
+       	</Reward>
+	</Quest>
+	<Quest id="111" type="charge">
+		<Title>어둠의 전사</Title>
+		<HappenRegion zoneid="22" x="219" y="230"/>
+		<RewardMessage>케르베로스 인장(Cerberus’s seal) 20개
+Exp: 3000
+Money: 50,000겔드</RewardMessage>
+		<Script sender="악마">수고했어! 제때 물건을 잘 가로챘군. 그럼 바로 지시를 내리도록 하겠다. 지금 네 녀석은 바쁘고 위험한 와중이니 잘 듣도록 해! 가로챈 그 물건을 가지고 당장 메네그로스 지하 던전1층으로 가서 슬레이어 놈들이 노리는 카브라캄을 잡아라. 그 녀석은 매우 귀중한 물건을 가지고 있기 때문이지. 그곳에 들어가려면 림보성 북서쪽에 있는 벨레고스트에게 이 인장을 들고 가야 해. 그리고 그곳에 들어 가서 미약한 네 주위 놈들과 힘을 합쳐서 내가 주는 이 심장으로 보스 녀석을 놈들 보다 먼저 잡도록 해. 그 녀석을 잡게 된다면 위대한 오시리스의 증표를 받을 수 있는데 그 증표는 그야말로 너 같은 녀석에겐 어울리지 않는 귀한 것이지만 특별히 너에게 주도록 하지! 증표로 보상을 받는다면 내가 네놈에게 특별히 보상을 더 얹어 주겠다! 그럼 지옥으로 가라! 그리고 메네그로스 지하 1층에 머물 수 있는 시간은 1시간이라는 것을 잊지 말도록!</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+		    <Level min="21" />
+			<CompleteQuest id="110" />	
+		</Happen>
+		<CompleteMessage sender="악마" target="1022">수고 했어. 겨우 이런 일을 하나 했다고 건방진 표정을 짓는데? 하하하</CompleteMessage>
+		<Complete>
+			<KillMonster num="1" sort="2" index="1">%s카브라캄 사냥 : %d / 1회 
+		              <Target type="1021" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="악마" target="1022">어느 정도 예상은 했지만 역시 말로 안되는군. 어쨌든 고생 한 것은 인정 하겠어. 다친 곳이나 치료하거라. 아무짝에도 쓸모 없는 녀석 같으니라구.</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="20"/>
+			<GiveVampireExp amount="3000" />
+			<GiveMoney amount="50000" />
+       	</Reward>
+	</Quest>
+
+	<Quest id="201">
+		<Title>살아 남기 위한 훈련이다.</Title>
+		<Script sender="카이저">자네가 이번에 편입된 신병인가? 이런, 아무리 전황이 급하다 하더라도 훈련조차 시키지 않은 병사를 보내다니 본부도 급한 모양이군. 지금 그 상태로 사령부 밖으로 보내봐야 뱀파이어에게 식사 거리를 주는 것 밖에는 안될 테지. 좋다, 특별히 부대내의 특설 훈련장에서 하드 트레이닝을 시켜주지. 지금 바로 타냐에게 훈련장 안내를 받도록 하라. 주특기 교육은 그 이후에 진행될 것이다.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level max="3" />
+		</Happen>
+		<CompleteMessage sender="카이저" target="17">꽤나 열심히 하고 있군. 좋아, 현시간부로 귀관의 주특기 교육을 실시하겠다. 지금 바로 집합한다.</CompleteMessage>
+		<Complete>
+			<Level min="5" index="1">레벨 5 이상 달성</Level>
+		</Complete>
+		<FailMessage sender="테리" target="302">이거, 또 한 명의 고문관이 탄생하셨군. 그렇게 어리버리 하다가는 앞으로 자크 교관에게 꽤나 괴롭힘 당할게 뻔하다구요. 정 힘들면 나한테 보급품를 사는 것도 좋구요. 하하하.</FailMessage>
+		<Fail>
+			<Time limit="50" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="100" />
+			<GiveMoney amount="10000" />
+		</Reward>
+	</Quest>
+	<Quest id="202">
+		<Title>훈련에 끝은 존재하지 않는다.</Title>
+		<Script sender="자크">이봐 신병! 이제야 겨우 스킬을 하나 배울 수 있는 수준이 되었군. 스킬은 잘만 사용하면 전투를 쉽게 이끌 수 있지. 더구나 스킬을 자주 사용함으로서 빠르게 성장하는 것이 가능하네. 한번 자네의 실력을 보고 싶군. 무슨 스킬이든 좋으니 XX레벨까지 올려보도록 해.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="5" max="5" />
+		</Happen>
+		<CompleteMessage sender="자크" target="16">흠, 생각보다는 괜찮은 실력이군. 앞으로도 충분히 제 구실을 해낼 가능성이 있어 보이네. 지급받은 보급표를 가지고 낸시에게 가면 보급품을 받을 수 있을거야.</CompleteMessage>
+		<Complete>
+			<SkillLevel min="3" index="1">스킬레벨 3 이상 달성</SkillLevel>
+		</Complete>
+		<FailMessage sender="자크" target="16">이봐 자네… 도대체 뭘 하고 있는 건가, 우리가 상대하는 것이 가만히 서있는 허수아비인 줄 아나? 여기는 놀이공원이 아니란 말이야. 정신 똑바로 차리는 게 좋아!</FailMessage>
+		<Fail>
+			<Time limit="20" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveQuestItem id="2" />
+			<SayNPC name="낸시" target="303" index="1">보급표를 가지고 낸시에게 가서 보급품을 받는다</SayNPC>
+			<Message index="2">보급품을 받았습니다.</Message>
+			<GiveDomainExp amount="100" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+		</Reward>
+	</Quest>
+	<Quest id="203">
+		<Title>첩보 자료의 회수</Title>
+		<Script sender="카이저">아군의 수색부대는 지속적으로 뱀파이어의 본거지에 대한 첩보를 진행해 왔다. 그런데 최근 페로나 국도 북서에 위치한 뱀파이어들의 거점을 조사하던 대원으로부터 통신이 두절되는 사건이 발생했다. 아마도 사살된 것이 확실하지만 그가 수집한 자료는 회수되어야 한다. 적의 거점과 가깝기 때문에 각별한 주위가 필요할 것이다. 확인된 그의 마지막 발신지는 에슬라니아 북서 좌표 67, 58 지점이다. 아! 오토바이의 소음은 뱀파이어들의 주의를 끌 수 있으니 이번 임무에서 오토바이의 사용은 금하도록 하겠다.</Script>
+		<Happen>
+			<Race race="SLAYER" />
+			<Level min="15" max="19" />
+		</Happen>
+		<Complete>
+			<TouchWayPoint zoneid="12" x="58" y="48" type="636" dir="1" index="1">데이터 디스크 회수</TouchWayPoint>
+			<Message sender="카이저" target="17" index="2">역시 사살된 것인가? 그나마 뱀파이어가 되지 않은 것이 다행이로군… 데이터를 얻었다면 바로 철수해 타냐에게 전달하도록 한다.</Message>
+			<GiveQuestItem id="3" />
+			<GiveDomainExp amount="200" />
+			<SayNPC name="타냐" target="26" index="3">타냐에게 디스크 전달</SayNPC>
+			<Message sender="카이저" target="17" index="2">좋아, 무사히 귀환했군. 수고했네. 그럼 다음 임무까지 개인정비를 실시하게. </Message>
+			<LoseQuestItem id="3" />
+			<GiveDomainExp amount="200" />
+		</Complete>
+		<FailMessage sender="카이저" target="17">정보의 회수 같은 중요한 임무를 자네 같은 신출내기에게 맞긴 게 잘못이군. 임무 실패에 따른 문책은 하지 않겠다. 음… 상부로부터 내가 문책을 받게 생겼군.</FailMessage>
+		<Fail>
+			<Killed num="1" index="1">수행 중 사망하지 않아야 한다.</Killed>
+			<RideMotorcycle index="2">오토바이 사용 금지.</RideMotorcycle>
+		</Fail>
+		<Reward>
+			<GiveItem class="RING" type="2" option="STR+2" />
+		</Reward>
+	</Quest>
+	<Quest id="204">
+		<Title>군견 훈련 지침</Title>
+		<Script sender="스미스">에슬라니아에 서식하는 야생 들개들은 훈련을 통해서 군견으로서 활용할 수 있는 것으로 보고되고 있다. 분명 군견이 있다면 작전 수행에 도움이 될 것이다. 귀관은 지금부터 군견 양성 임무를 수행하도록 한다. 우선은 들개를 포획하는 것이 우선일 테지. 들개들은 고기를 꽤 좋아할 테니 준비를 잊지 말도록. 이상.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="20" max="20" />
+		</Happen>
+		<CompleteMessage sender="스미스" target="103">들개의 포획에 성공했군. 우선은 군견 적합성 검사를 해야 하니 부대로 귀환하도록. 부대의 테리가 검사를 시행할 것이다.</CompleteMessage>
+		<Complete>
+			<TamePet num="1" index="1">개의 조련.</TamePet>
+		</Complete>
+		<FailMessage sender="스미스" target="103">그까짓 들개하나 포획을 못해서야 어디 뱀파이어를 잡기나 하겠나. 이런 쉬운 임무도 수행 못하면서 어떻게 EVE 대원이 되었는지 궁금하군.</FailMessage>
+		<Fail>
+			<Time limit="20" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="PET_FOOD" type="3" num="5" />
+			<GiveItem class="HELM" type="4" option="HP+2" />
+		</Reward>
+	</Quest>
+	<Quest id="205" type="tutorial">
+		<Title>비밀 요원 발탁</Title>
+		<HappenRegion zoneid="12" x="218" y="96"/>
+		 <RewardMessage>Name: 발키리 미디엄 벨트(Valkirie Medium Belt)
+Option: HP+2
+Exp: 200
+Money: 10,000레이</RewardMessage>
+		<Script sender="비밀작전사령관">축하하네 자네는 EVE의 비밀 요원으로 발탁되었네. 나는 비밀 요원 양성과 임무 수행을 맡은 새로운 지휘관이고 내 이름은 차차 알게 될 것이야. 지금은 내가 누군지 모르는 것이 자네 신상에 좋아. 아무튼 앞으로 모든 테스트를 거쳐 봐야 하겠지만 새로운 비밀 요원 시스템을 통과할 때쯤이면 자넨 보다 위험한 임무를 맡게 될 것이고 자넨 진정한 하이랜더가 되어 있겠지. 지금 전황이 상당히 급박하지만 그때가 되면 처음부터 공을 들여 훈련 시킨 이유를 알게 될 것이야. 그럼 앞으로의 테스트를 위해 야전 사령부의 자크 녀석에게 가서 기본 장비와 필요한 자금을 받도록 하고 훈련을 시작하도록 하게! 그러나 모든 임무 수행은 나를 거쳐야 한다는 것과 신병 때의 훈련과는 다르다는 것을 잊지 말도록!</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="4"/>
+		</Happen>
+		<CompleteMessage sender="비밀작전사령관" target="1021">진지하게 훈련에 임하고 있군. 좋아, 다음 테스트에 대비하여 훈련을 게을리 하지 말도록!</CompleteMessage>
+		<Complete>
+			<SayNPC name="자크" target="16" index="1">자크에게 말을 건다.</SayNPC>
+		</Complete>
+		<FailMessage sender="비밀작전사령관" target="1021">신성한 임무를 포기 하겠다는 것인가? </FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="200" />
+			<GiveMoney amount="10000" />
+			<GiveItem class="BELT" type="9" option="HP+2" limitedtime="2592000"/>
+		</Reward>
+	</Quest>
+	<Quest id="206" type="adventure">
+		<Title>첫 번째 훈련</Title>
+		<HappenRegion zoneid="12" x="220" y="103"/>
+		<RewardMessage>( 도메인 발키리 무기 )
+Option: STR+3 / INT+3
+Bonus Exp: 400</RewardMessage>
+		<Script sender="비밀작전사령관">EVE의 정식 요원이 된 것을 축하하네. 자네에게 언제 어디서든지 내가 임무를 부여 할 수 있는 시스템이 설계 되었다네. 이것은 특수 요원과 사령관인 내가 직접 정보를 주고 받기 위해 특별히 제작 되었지. 이 방식은 보안상 규정되어 있으니 철저하게 지키도록 하게! 그럼 첫 번째 지령을 내리도록 하겠다. 자네의 능력을 테스트 하기 위해 가상 훈련장으로 들어가 좀 더 강한 녀석들과 싸워야 한다. 제한 시간 내에 임무 지시에 따른 치프급 몬스터를 사냥 하도록 하라! 자넨 아직 훈련 중이라는 것을 잊지 말도록!</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="7" />
+			<EnterZone ZoneID="12" />
+		</Happen>
+		<CompleteMessage sender="비밀작전사령관" target="1021">흠, 생각보다는 괜찮은 실력이군. 난 항상 자네를 보고 있다는 것을 잊지 말도록. 앞으로도 충분히 비밀요원으로써의 제 구실을 해낼 가능성이 있어 보이네.</CompleteMessage>
+		<Complete>
+			<KillMonster num="10" sort="1" index="1">%s치프 데드바디 머리 사냥 : %d / 10
+		    	<Target type="564" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="비밀작전사령관" target="1021">자네에겐 비밀요원이 그다지 적성에 맞지 않는가?</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="400" />
+            <OR>
+				<SlayerHighestSkillDomain domain="blade">
+	                <GiveItem class="BLADE" type="20" option="STR+3" limitedtime="2592000" />
+		        </SlayerHighestSkillDomain>
+
+	            <SlayerHighestSkillDomain domain="sword">
+	                <GiveItem class="SWORD" type="20" option="STR+3" limitedtime="2592000" />
+	            </SlayerHighestSkillDomain>
+
+	            <SlayerHighestSkillDomain domain="gun">
+	                <Random>
+	                    <GiveItem class="AR" type="20" option="DEX+3" limitedtime="2592000" />
+	                    <GiveItem class="SMG" type="18" option="DEX+3" limitedtime="2592000" />
+	                    <GiveItem class="SG" type="18" option="DEX+3" limitedtime="2592000" />
+	                    <GiveItem class="SR" type="20" option="DEX+3" limitedtime="2592000" />
+	                </Random>
+	            </SlayerHighestSkillDomain>
+
+	            <SlayerHighestSkillDomain domain="heal">
+	                <GiveItem class="CROSS" type="18" option="INT+3" limitedtime="2592000" />
+	            </SlayerHighestSkillDomain>
+
+	            <SlayerHighestSkillDomain domain="enchant">
+	                <GiveItem class="MACE" type="18" option="INT+3" limitedtime="2592000" />
+	            </SlayerHighestSkillDomain>
+            </OR>
+		</Reward>
+	</Quest>
+	<Quest id="207" type="charge">
+		<Title>잭을 찾아라</Title>
+		<HappenRegion zoneid="12" x="160" y="168"/>
+		<RewardMessage>Name: 발키리 스콜피온 키(Valkirie Scorpion Key)
+No. 208 퀘스트 시작</RewardMessage>
+		<Script sender="비밀작전사령관">테스트를 무사 통과 한 것을 축하한다. 훈련은 이쯤에서 마치도록 하고 자네는 이제 비밀리에 여러 가지 임무들을 수행해야 한다. 물론 많은 어려움도 따르겠지만 잊지 않았겠지 모든 과정이 지나면 귀관에게 돌아갈 영광의 칭호를! 그럼 정식으로 비밀 요원으로써의 첫 특수 임무를 주겠네. 우선 잭에게 찾아가 이 무공 훈장을 잭에게 보여주고 특수 장비를 요청 해야 한다. 그는 네가 비밀요원으로써 모든 수행을 이겨나갈 도움을 줄 것 이다. 이제 시작에 불과 하다. 그럼 야전 사령부의 잭에게 가서 내 임무를 받도록 하게!</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="11" />
+		</Happen>
+		<CompleteMessage sender="잭" target="109">훈련을 마친 요원이로군요! 테스트를 완료 했다면 제가 원하는 것을 가지고 왔겠죠? 좋아요. 보상을 받아가도록 하세요.</CompleteMessage>
+		<Complete>
+			<GiveQuestItem id="29" />
+			<SayNPC name="잭" target="109" index="1">잭에게 말을 건다.</SayNPC>
+			<LoseQuestItem id="29" />
+		</Complete>
+		<FailMessage sender="비밀작전사령관" target="1021">왜 다시 돌아왔나? 뭐? 무공 훈장이 사라졌다고? 잭에게 가지 않고서 임무를 수행 했다가는 싸늘한 시신만 될 뿐이다.</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="KEY" type="17" limitedtime="2592000"/>
+			<StartOtherQuest id="208"/>
+       	</Reward>
+	</Quest>
+	<Quest id="208" type="charge">
+		<Title>혹독한 임무</Title>
+		<HappenRegion zoneid="12" x="160" y="168"/>
+		<RewardMessage>Name: 발키리 배틀슈트(Valkirie Battle Suit M) 발키리 레깅즈(Valkirie Leggings M)
+Option: ATTR+1 / ATTR+1
+Name: 발키리 배틀슈트(Valkirie Battle Suit W) 발키리 레깅즈(Valkirie Leggings W)
+Option: ATTR+1 / ATTR+1(남/여 구분)
+Bonus Exp: 1000</RewardMessage>
+		<Script sender="비밀작전사령관">자 그럼 임무를 주도록 하겠다. 아군의 특수 요원들은 창설 이후 가장 발 빠르게 에슬라니아 지역에 대한 정찰을 진행해 왔다. 그러나 최근 에슬라니아 북서지방을 조사하던 요원으로부터 최근 이 지역에 우리와 동일한 목적으로 정탐하는 자들이 있다고 한다. 아마도 고도로 훈련된 자들이 눈속임을 사용하는 것 같다. 확인된 그들의 주요 출몰 지역으로 가서 더러운 자들을 쓸어내야한다. 에슬라니아 북서 지점이다. 잭에게 받은 선물이 있겠지? 오토바이를 사용하여 그들보다 빠른 속도로 처단해 내야 한다. 자 그럼 임무를 시작 하도록!</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="11" />
+			<CompleteQuest id="207" />	
+		</Happen>
+		<CompleteMessage sender="비밀작전사령관" target="1021">앞으로의 임무 역시 절대 쉽지 만은 않을 것이다. 부디 몸조심 하기를…</CompleteMessage>
+		<Complete>
+			<KillMonster num="10" sort="1" index="1">%s 치프 키드 머리 사냥 : %d / 10 
+		              <Target type="567" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="비밀작전사령관" target="1021">두려운건가? 능력이 없는건가? 나를 자꾸 실망 시키지 말도록 하게!</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="1000" />
+			<GiveItem class="COAT" type="30" option="ATTR+1" limitedtime="2592000"/>
+			<GiveItem class="TROUSER" type="30" option="ATTR+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="209" type="adventure">
+		<Title>영광의 지도</Title>
+		<HappenRegion zoneid="14" x="196" y="240"/>
+		<RewardMessage>Name: 발키리 오러스 링(Valkirie Aurous Ring) 2개
+Option: RES+1 / RES+1
+Bonus Exp: 2000 </RewardMessage>
+		<Script sender="비밀작전사령관">수고했네 지난번 임무는 깔끔하게 잘 처리 되었다고 잭 녀석도 그렇게 보고하더군!  하지만 일 하나 처리 했다고 해서 자네가 우리 요원으로써 부족함이 없다고 자만하지는 말게나. 방심은 곧 죽음이라네! 이번 임무는 좀 위험 할 수도 있네. 이미 자네는 제한 시간 내에 지시에 따라 치프급 몬스터를 사냥 했었지만 모든 일에는 예외란 것이 있지. 특수 요원이라면 모든 예외 상황에 대처 할 줄 알아야 하는 법! 목숨이 두 개라도 모자라겠지만 난 이미 자네를 믿고 있네. 에슬라니안 SW 지역에 테메리에 성지란 곳이 있다. 이미 그곳에서 우리는 많은 희생을 했으며 지금도 우리의 목을 노리고 많은 적들이 도사리고 있지. 그들은 인정 사정 없이 자네를 죽이려고 들겠지만 그곳은 피 끓는 전장이다! 특수 요원답게 신속하고 빠르게 그들의 눈을 피해 치프들을 사냥하여 영광스럽게 귀환하라! 그러나 적들에게 자네의 신원이 노출된다면 잡히기 전에 스스로 자결 하는 것을 잊지 말도록!</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+		    <Level min="16" />
+	        <EnterZone ZoneID="14" />
+		</Happen>
+		<CompleteMessage sender="비밀작전사령관" target="1021">수고 했네. 그럼 다음 임무가 주어질 때까지 몸조심하게나.</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%s 치프 알칸 머리 사냥 : %d / 5
+		              <Target type="469" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="비밀작전사령관" target="1021">자네는 왜 자결하지 못했나? 아직도 내가 원하는 능력 밖이란 말인가? 당장 자네를 처단 하고 싶지만 한번의 기회는 주겠다 그러나 나의 인내심에도 한계가 있다는 것을 잊지 말게!</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="2000" />
+			<GiveItem class="RING" type="16" option="RES+1" limitedtime="2592000"/>
+			<GiveItem class="RING" type="16" option="RES+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="210" type="adventure">
+		<Title>의문의 지령</Title>
+		<HappenRegion zoneid="33" x="206" y="190"/>
+		<RewardMessage>케르베로스 인장(Cerberus’s seal) 5개
+카브라캄의 심장 B1(Heart of Cabracam B1) 4개
+No. 211 퀘스트 시작</RewardMessage>
+		<Script sender="비밀작전사령관">브리핑을 시작 하겠네 제군! 지금까지 살아 남았다면 벌써 자네는 우리를 천국의 땅으로 인도할 발키리 작전의 중심에 서 있다고 말할 수 있지. 그러나 아직 갈 길은 험하고 멀다네! 그런 의미에서 이번 작전은 자네의 담력과 능력을 평가 할 좋은 기회군. 최신 정보에 따르면 드로베타 공단의 폐수장 근처에 위치한 어느 민가에서 얼마 전 호송 작전에서 탈취 당한 물건들이 발견 되었다고 한다. 정확한 좌표는 알려 지지 않았으나 자네가 가진 GPS 통신 네비게이션 맵에 표시된 지점으로 시간이 없으니 오토바이를 이용해서 가도록 하고 전방위 수색 작업을 펼쳐서 중요한 작전 물품을 회수하라! 그때가 되면 내가 지령을 내리도록 하겠다. 자네에게 그곳은 아직 위험한 지역이니 이번 임무에서 그 지역을 정리하는 일는 절대 금한다.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+		    <Level min="21" />
+	        <EnterZone ZoneID="12" />
+		</Happen>
+		<CompleteMessage sender="비밀작전사령관" target="1021">수고 했네. 그럼 다음 임무를 바로 받도록 하게</CompleteMessage>
+		<Complete>
+			<TouchWayPoint zoneid="33" x="206" y="190" index="1">드로베타 남동 X=206, Y=190 지역을 수색</TouchWayPoint>
+		</Complete>
+		<FailMessage sender="비밀작전사령관" target="1021">실패 했다고 크게 문책 하지는 않겠지만 솔직히 자네에게 실망 했네. 도대체 뭐가 문제인가?</FailMessage>
+		<Fail>
+			<Killed num="3" index="1">수행 중 3회이상 사망하지 않아야 한다.</Killed>
+			<IllegalWarp index="2">헬기 사용 금지.</IllegalWarp>
+			<Time limit="20" index="3">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="5"/>
+			<GiveItem class="COMMON_QUEST_ITEM" type="12" num="4"/>
+			<StartOtherQuest id="211"/>
+       	</Reward>
+	</Quest>
+	<Quest id="211" type="charge">
+		<Title>어둠의 지하 속으로</Title>
+		<HappenRegion zoneid="12" x="49" y="179"/>
+		<RewardMessage>케르베로스 인장(Cerberus’s seal) 20개
+Exp: 3000
+Money: 50,000레이</RewardMessage>
+		<Script sender="비밀작전사령관">수고했네! 제군! 물건을 잘 회수 했군. 그럼 바로 지령을 내리도록 하겠다. 이번 작전은 급박하게 돌아가는 만큼 매우 위험하다네. 회수한 그 물건을 가지고 당장 메네그로스 지하 던전1층으로 가서 그곳의 보스를 저지하도록 하게! 카브라캄은 예전부터 뱀파이어들을 견제 하기 위해 그곳에 진입해 있는 우리 요원들을 갈기 갈기 찢어 죽이고 있지. 야전 사령부 서쪽에 있는 아르고나스에게 그 인장을 들고 던전에 들어 간 다음 그 심장으로 보스 카브라캄 녀석을 불러내어 현지에 잠입해 있는 우리 요원들과 협력하여 처치하도록 하게. 끔찍하겠지만 그 녀석을 잡게 된다면 위대한 칼리의 증표를 받을 수 있는데 그 증표는 자네가 가지도록 허락 하지! 보스를 처치하고 무사히 돌아온다면 내가 자네에게 특별한 보상을 더 얹어 주겠네! 약속하지 그리고 메네그로스 지하 1층에 머물 수 있는 시간은 1시간이라는 것을 잊지 말게! 그럼 살아서 돌아오게!</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+		    <Level min="21" />
+			<CompleteQuest id="210" />	
+		</Happen>
+		<CompleteMessage sender="비밀작전사령관" target="1021">수고 했네. 그럼 다음 임무가 주어질 때까지 몸조심하게나. </CompleteMessage>
+		<Complete>
+			<KillMonster num="1" sort="2" index="1">%s카브라캄 사냥 : %d / 1회 
+		              <Target type="1021" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="비밀작전사령관" target="1021">어느 정도 예상은 했지만 아직까지 이정도 임무를 맡기에는 무리인가. 어쨌든 수고했네. 다친 곳은 곡 치료를 받도록 하고, 이만 쉬게나.</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="20"/>
+			<GiveDomainExp amount="3000" />
+			<GiveMoney amount="50000" />
+       	</Reward>
+	</Quest>
+
+	<Quest id="301">
+		<Title>당신의 힘을 되찾으십시오.</Title>
+		<Script sender="마네스쿠">거룩한 자연의 영광이 늘 함께 하시길. 반갑습니다, 동지여. 뱀파이어의 난립으로 당신의 달콤한 잠이 깨어졌군요. 하지만 아직 당신의 힘이 미약함이 느껴집니다. 마을 밖의 파괴자들을 상대하려면 오랜 수면과 함께 잠들어버린 당신의 힘을 일깨울 시간이 필요할 것 같군요. 다행스럽게도 카리사스님의 결계력이 마을 안으로 연결된 하니알 던전 1층까지 유효한 상태입니다. 하지만 가끔 미약한 존재들이 이곳에 나타나곤 한답니다. 이들을 상대로 당신의 힘을 조금씩 개방시킬 수 있을 겁니다. 자, 시간이 없습니다. 한시라도 빨리 힘을 되찾아야 합니다.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level max="3" />
+		</Happen>
+		<CompleteMessage sender="마네스쿠" target="655">당신의 힘이 일부 개방된 것이 느껴집니다. 이로서 우리의 힘은 좀 더 커질 것입니다. 마을의 라비니아님께 도움을 받을 수 있을 것입니다.</CompleteMessage>
+		<Complete>
+			<Level min="6" index="1">레벨 6 달성</Level>
+		</Complete>
+		<FailMessage sender="라비니아" target="653">자연은 결코 태만하지 않습니다. 자연의 일부인 당신 역시 자연의 법칙을 따라야 할 것입니다. 좀더 분발해 주시길… </FailMessage>
+		<Fail>
+			<Time limit="20" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveMoney amount="10000" />
+			<GiveOustersExp amount="100" />
+		</Reward>
+	</Quest>
+	<Quest id="302">
+		<Title>힘의 원천인 영혼</Title>
+		<Script sender="라비니아">우리에게 인위적인 가르침은 의미가 없는 것입니다. 자연이 내려준 능력을 어떻게 발전시킬 것인가는 모두 스스로의 의지로 결정해야 합니다. 하지만 이 능력을 사용하기 위해 영혼의 힘이 필요함을 잊지 마십시오. 영혼의 힘이 고갈되지 않도록 유지하는 것이 기본임을 잊지 마십시오.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="3" max="5" />
+		</Happen>
+		<CompleteMessage sender="라비니아" target="653">힘의 개방을 위해 영의 흡수는 절대 잊어서는 안 되는 것입니다. 리파티에게 부탁해 앞으로의 여정에 조금이나마 도움이 될 것을 준비해두었습니다.</CompleteMessage>
+		<Complete>
+			<BloodDrain num="20" index="1">%s흡영 회수 : %d / 20회</BloodDrain>
+		</Complete>
+		<FailMessage sender="라비니아" target="653">흡영을 귀찮거나 잔인한 일이라 생각하지 마십시오. 뱀파이어들의 정화를 위해 어쩔 수 없는 일입니다. 하지만 스스로 원치 않는다면 강요할 수는 없겠지요.</FailMessage>
+		<Fail>
+			<Time limit="30" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveOustersExp amount="100" />
+			<GiveItem class="PUPA" type="1" num="9" />
+		</Reward>
+	</Quest>
+	<Quest id="303">
+		<Title>대지 오염의 위협</Title>
+		<Script sender="시오람">배척 받아왔던 우리 일족은 지금껏 자애로운 자연에 기대어 살아왔다네. 하지만 인간과 뱀파이어는 끊임없이 어머니의 대지를 오염시켜왔고 지금도 계속되고 있지. 더욱이 우리 은거지와 인접한 곳에 위치한 인간들의 공업시설이 언제 뱀파이어들에 의해 파괴되어 위협이 될지 알 수 없네. 당신이라면 그곳의 상황을 살펴봐 주실 수 있으리라 생각하네만. 실프의 불안정한 힘이 안 좋은 영향을 줄 수 있으니 실프의 힘은 잠시 봉인하는 것이 좋을 걸세.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="10" max="14" />
+		</Happen>
+		<CompleteMessage sender="시오람" target="656">아직까지는 큰 위협요소가 없다는 것은 다행스러운 일이군. 하지만 파괴적인 뱀파이어들이 그곳에 계속 출몰한다는 소식은 커다란 근심이 아닐 수 없지. 좀더 주의를 기울여야 할것이네.</CompleteMessage>
+		<Complete>
+			<TouchWayPoint zoneid="32" x="15" y="185" type="673" dir="2" index="1">드로베타NW(15,185) 정찰</TouchWayPoint>
+		</Complete>
+		<FailMessage sender="시오람" target="656">아… 당신의 정신에서 흐트러짐이 느껴지는군. 그 상태라면 이번 일은 처리가 곤란할 것 같네. 자신을 더 다스릴 줄 아는 것이 필요하다는 걸 앞으로는 잊지 말도록 하게. 자신을 다스리려면 자신을 알아야 하겠지… </FailMessage>
+		<Fail>
+			<Killed num="1" index="1">수행 중 사망해서는 안 된다.</Killed>
+			<RideMotorcycle index="2">실프 사용 금지</RideMotorcycle>
+		</Fail>
+		<Reward>
+			<GiveOustersExp amount="350" />
+			<GiveItem class="OUSTERS_COAT" type="1" option="STR+2" />
+		</Reward>
+	</Quest>
+	<Quest id="304">
+		<Title>또 다른 동료</Title>
+		<Script sender="마네스쿠">더럽혀진 영혼을 가진 외부의 침입자들과는 달리 자연에 순응하는 생명들은 우리에게 힘을 빌려줄 것입니다. 불행히도 침입자들에 의해 그 수가 줄긴 했지만 아직까지도 살아남은 야생의 들개들이 조력자들을 기다리고 있습니다. 그들이 먹이감을 찾는 시간을 줄여준다면 그 시간동안 충실히 당신을 도울 것입니다.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="20" max="20" />
+		</Happen>
+		<CompleteMessage sender="마네스쿠" target="655">그들 역시 자연에 순응하는 생명입니다. 당신은 조력자로서 그들의 능력을 키워주며 공존해야 할 것입니다. 당신을 따르는 존재라면 그 역시 카리사스님의 가호를 받을 것입니다.</CompleteMessage>
+		<Complete>
+			<TamePet num="1" index="1">개의 조련.</TamePet>
+		</Complete>
+		<FailMessage sender="마네스쿠" target="655">자연은 억지로 다스려지는 것이 아닙니다. 힘으로 모든 것을 얻고자 한다면 뱀파이어와 다를 것이 없겠죠. 우리에게 있어서 자연과 친해지는 것은 무엇보다 중요한 일입니다. 이번에는 실패했지만 서서히 나아지는 모습을 보여주시기 바랍니다.</FailMessage>
+		<Fail>
+			<Time limit="30" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="PET_FOOD" type="3" num="5" />
+			<GiveItem class="OUSTERS_CIRCLET" type="4" option="HP+2" />
+		</Reward>
+	</Quest>
+	<Quest id="305" type="tutorial">
+		<Title>대자연의 분노</Title>
+		<HappenRegion zoneid="81" x="173" y="83"/>
+		<RewardMessage>Name: 네이쳐스 웨이브 암스밴드(Nature's Wave Armsband)
+Option: HP+2
+Exp: 200
+Money: 10,000자드</RewardMessage>
+		<Script sender="대자연의 수호자">도대체 무엇들을 하는 것이죠? 나의 비명이 들리지도 않는단 말인가요? 보이지 않는다고 존재존재 않는 것이 아닙니다. 이제 저의 말에 귀 기울이셔야 합니다. 제 말을 거부하신다면 우리에게 남는 것은 파멸뿐 입니다. 지금은 매우 급박한 상황이지만 스스로 자연의 힘을 받으려고 노력하세요. 그러한 의지를 보여주신다면 대자연의 위대한 힘이 함께할 것입니다. 그러나 자연의 힘을 받기 위하고 싶다면 조건이 있습니다. 이제부터 저와 동행 하시고 저의 지시에 응해야만 합니다. 아우스터즈 마을의 리파티에게 가서 기본 장비와 필요한 자금을 받도록 하고 여행을 시작하도록 하세요! 동족의 파멸을 막아야만 합니다</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="4"/>
+		</Happen>
+		<CompleteMessage sender="대자연의 수호자" target="1023">저의 목소리를 들으셨군요? 이번 모든 퀘스트에서 당신을 강하게 인도해줄 선물을 드리겠습니다. 절대 빼앗기거나 잃어버리면 안됩니다. 이것은 곧 저의 생명과도 같고 저의 지시는 곧 모두의 생명과도 같습니다. 절대 제 말을 잊지 마세요! </CompleteMessage>
+		<Complete>
+			<SayNPC name="리파티" target="654" index="1">리파티에게 말을 건다.</SayNPC>
+		</Complete>
+		<FailMessage sender="대자연의 수호자" target="1023">이렇게 나약해서는 안됩니다. 우리에겐 중간계 만이 살길입니다! 동족이여...</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveOustersExp amount="200" />
+			<GiveMoney amount="10000" />
+			<GiveItem class="OUSTERS_ARMSBAND" type="15" option="HP+2" limitedtime="2592000"/>
+		</Reward>
+	</Quest>
+	<Quest id="306" type="adventure">
+		<Title>바람처럼</Title>
+		<HappenRegion zoneid="81" x="173" y="83"/>
+		<RewardMessage>( 도메인 별 랜덤 무기 지급 )
+Name: 네이쳐스 리트라 챠크람 (Naturer's Raetra Chakram)
+Option: STR+3
+Name: 네이쳐스 라크리마 리스틀릿 (Nature's Lacrima Wristlet)
+Option: INT+3</RewardMessage>
+		<Script sender="대자연의 수호자">갑작스러운 제 목소리에 많이 놀라셨겠지만 이젠 당신과 나는 계약을 통해 언제 어디서든지 내가 임무를 지시 할 수 있습니다. 저의 힘이 언제나 당신을 도와 드릴 것 입니다. 하지만 누구에게도 이 사실을 알려줘서는 안됩니다! 그럼 임무를 내리도록 하겠습니다. 이곳 던전에는 악한 존재들이 아주 많습니다. 저의 지시에 따라 몬스터를 처치 하여 주세요! 그럼 당신이 가진 지도가 축복으로 물들어 가는 것을 볼 수 있을 것입니다. 아주 중요한 것 이니 확인 하지 않으면 안됩니다. 당신은 이제 저와 항상 함께 라는 것을 잊지 마세요!</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="7" />
+			<EnterZone ZoneID="1311" />
+		</Happen>
+		<CompleteMessage sender="대자연의 수호자" target="1023">생각보다 괜찮은 실력입니다. 저는 항상 당신을 수호 하기 위해 지켜 보고 있다는 것을 잊지 마세요. 이 보상은 제가 주는 축복이니 앞으로도 더욱 더 분발 해 주시기 바랍니다!</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%s 치프 데드바디 머리 사냥 : %d / 5 
+		    	<Target type="564" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="대자연의 수호자" target="1023">더욱 큰 고통이 어떤 것 인지 모르세요? 당신 혼자 살아 남아서 동족의 말살을 두 눈으로 확인하고 싶으세요?</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<Random>
+	    		<GiveItem class="OUSTERS_CHAKRAM" type="20" option="STR+3" limitedtime="2592000" />
+	    		<GiveItem class="OUSTERS_WRISTLET" type="60" option="INT+3" limitedtime="2592000" />
+	    		<GiveItem class="OUSTERS_WRISTLET" type="61" option="INT+3" limitedtime="2592000" />
+	    		<GiveItem class="OUSTERS_WRISTLET" type="62" option="INT+3" limitedtime="2592000" />
+			</Random>
+		</Reward>
+	</Quest>
+	<Quest id="307" type="charge">
+		<Title>아마타의 선물</Title>
+		<HappenRegion zoneid="81" x="173" y="83"/>
+		<RewardMessage>Name: 네이쳐스 웨이브 암스밴드(Nature's Wave Armsband)
+Option: HP+2
+No. 208 퀘스트 시작</RewardMessage>
+		<Script sender="대자연의 수호자">드디어 중간계 정복을 위한 임무가 시작되었습니다. 대자연의 위대한 힘이 당신을 이끌 것입니다. 우선 아마타에게 지금 찾아간다면 그는 당신이 모든 수행을 이겨나갈 도움을 드릴 수 있겠지요. 자 이제 시작에 불과 합니다. 자 그럼 이것을 가지고 아우스터즈 마을의 아마타에게 가서 임무를 받도록 하세요.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="11" />
+		</Happen>
+		<CompleteMessage sender="아마타" target="657">수고하셨습니다. 앞으로도 아우스터즈의 전사로써 더 힘든 고통도 이기셔야 할 것 입니다. 제가원하는 것을 가지고 왔겠죠? 좋아요. 보상을 받아가도록 하세요</CompleteMessage>
+		<Complete>
+			<GiveQuestItem id="28" />
+			<SayNPC name="아마타" target="657" index="1">아마타에게 말을 건다.</SayNPC>
+			<LoseQuestItem id="28" />
+		</Complete>
+		<FailMessage sender="대자연의 수호자" target="1023">왜 다시 돌아왔죠? 네?! 영혼이 사라졌다구요? 어떻게 그런일이…</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="OUSTERS_ARMSBAND" type="15" option="HP+2" limitedtime="2592000"/>
+			<StartOtherQuest id="308"/>
+       	</Reward>
+	</Quest>
+	<Quest id="308" type="charge">
+		<Title>칼날바람</Title>
+		<HappenRegion zoneid="23" x="130" y="86"/>
+		 <RewardMessage>네이쳐스 스프라이트 코트(Nature's Sprite's Coat)
+Option: ATTR+1
+네이쳐스 스프라이트 부츠(Nature's Sprite's Boots)
+Option: ATTR+1</RewardMessage>
+		<Script sender="대자연의 수호자">자 그럼 위험한 임무를 주도록 하겠어요. 최근 우리 정령들은 이 지역에 대한 정찰을 진행해 왔어요. 그러나 최근 카스탈로 북서지방을 조사하던 중 최근 이 지역에 저희와 동일한 목적으로 정탐하는 자들이 많아 졌답니다. 아마도 고도로 훈련된 자들이 눈속임을 사용하는 것 같아요. 확인된 그들의 주요 출몰 지역인 림보성 남동 지역으로 가서 더러운 자들을 신속하게 쓸어내야만 합니다. 도움을 받은 장비를 사용하여 그들보다 빠른 속도로 처단해 내야 합니다. 자 그럼 임무를 시작 하세요!</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="11" />
+			<CompleteQuest id="307" />	
+		</Happen>
+		<CompleteMessage sender="대자연의 수호자" target="1023">앞으로의 임무 역시 절대 쉽지 만은 않을 것입니다. 부디 몸조심 하시기를…</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%s 치프 키드 머리 사냥 : %d / 5 
+		              <Target type="567" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="대자연의 수호자" target="1023">아직 능력이 부족하다는 것을… 제가 느끼지 못했나요? 부디 좀더 힘을 내세요!</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="OUSTERS_COAT" type="15" option="ATTR+1" limitedtime="2592000"/>
+			<GiveItem class="OUSTERS_BOOTS" type="15" option="ATTR+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="309" type="adventure">
+		<Title>빛나는 휘장</Title>
+		<HappenRegion zoneid="14" x="196" y="240"/>
+		<RewardMessage>Name: 네이쳐스 엠포스 링(Nature's Mpos Ring)2개
+Option: RES+1</RewardMessage>
+		<Script sender="대자연의 수호자">지난번 임무는 칭찬할 만큼 아주 훌륭했어요. 아마타에게 들었지요. 하지만 일 하나 처리 했다고 해서 당신이 부족함이 없다고 자만하지는 않는 것 이 좋습니다. 방심하는 순간 곧 어두운 죽음의 그림자가 찾아오니까요. 그럼 다음 임무를 드리도록 하겠습니다. 이번 임무는 좀 위험 할 수도 있답니다. 이미 당신은 제한 시간 내에 지시에 따라 치프급 몬스터를 사냥 했었지만 모든 일에는 예외란 것이 있기에 마련이죠. 그러나 자연의 위대한 힘이 있다면 어떤 상황에서도 살아 남을 수 있답니다! 목숨이 위험해 지겠지만 전 이미 당신을 믿고 있어요. 에슬라니안 SW 지역에 테메리에 성지란 곳이 있어요. 이미 그곳에서 우리는 많은 희생을 했으며 지금도 우리의 목숨을 노리는 많은 적들이 도사리고 있지요. 그들은 인정 사정 없이 당신을 죽이려고 들겠지만 이미 그곳은 황폐한 피 끓는 전장이에요! 아름답고 빛나는 속도로 그들의 눈을 피해 치프들을 사냥하여 귀환하세요! 언제나 자연의 축복이 당신에게 있기를…</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+		    <Level min="16" />
+	        <EnterZone ZoneID="14" />
+		</Happen>
+		<CompleteMessage sender="대자연의 수호자" target="1023">수고 하셨습니다. 보상을 하나 드리도록 하겠습니다. 그럼 다음 임무가 주어질 때까지 조용히 저의 속삭임을 기다려 주세요. 언제 어디서든 제가 지켜드린다는 것을 꼭 잊지 마세요.</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%s 치프 알칸 머리 사냥 : %d / 5
+		              <Target type="469" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="대자연의 수호자" target="1023">아직도 내가 원하는 능력 밖이란 말입니까? 제발 제가 동족을 져버리지 않도록 해주세요!</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="OUSTERS_RING" type="16" option="RES+1" limitedtime="2592000"/>
+			<GiveItem class="OUSTERS_RING" type="16" option="RES+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="310" type="adventure">
+		<Title>돌풍지역</Title>
+		<HappenRegion zoneid="33" x="206" y="190"/>
+        <RewardMessage>케르베로스 인장(Cerberus’s seal) 5개
+카브라캄의 심장 B1(Heart of Cabracam B1) 4개
+No. 211 퀘스트 시작</RewardMessage>
+		<Script sender="대자연의 수호자">수고하셨습니다! 지금까지 살아 남았다면 벌써 당신은 동족을 평화로 인도할 이 네이쳐스 정복의 중심에 서 있다고 말할 수 있지요. 그러나 아직 갈 길은 험하고 멀답니다! 그런 의미에서 이번 에는 제가 당신의 능력을 한번 더 살펴보도록 하겠어요. 바람의 소리에 따르면 지금 어떤 곳에서 자연의 섭리를 무시하는 하등한 존재들의 싸움이 벌어지고 있는 상황이에요. 드로베타 공단의 폐수장 근처에 위치한 어느 민가 주변에서는 뱀파이어들과 슬레이어들이 귀중한 물건을 놓고 다툼을 시작하여 전쟁 수준으로 발전 되었다고 합니다. 그 물건을 우리가 먼저 가져야만 합니다. 위치는 당신이 가진 지도에 내가 표시를 해놓았지만 정확한 위치는 좀더 살펴 봐야 할 것 같아요. 시간이 없으니 실프를 이용하세요. 그곳은 당신에겐 아직 위험한 지역이니 그 지역을 배회하는 몬스터들은 피하도록 하셔야 합니다. 시간이 없습니다. </Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+		    <Level min="21" />
+	        <EnterZone ZoneID="81" />
+		</Happen>
+		<CompleteMessage sender="대자연의 수호자" target="1023">수고 하셨습니다. 그럼 다음 임무를 어서 시작하세요</CompleteMessage>
+		<Complete>
+			<TouchWayPoint zoneid="33" x="206" y="190" index="1">드로베타 남동 X=206, Y=190 지역을 수색</TouchWayPoint>
+		</Complete>
+		<FailMessage sender="대자연의 수호자" target="1023">실패 했다고 실망하지는 않겠지만 앞으로 동족의 운명이 어떻게 될지 정말 걱정입니다…</FailMessage>
+		<Fail>
+			<Killed num="3" index="1">수행 중 3회이상 사망하지 않아야 한다.</Killed>
+			<IllegalWarp index="2">대지정령의 뿔 사용 금지</IllegalWarp>
+			<Time limit="20" index="3">%s남은 시간 : %d분</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="5"/>
+			<GiveItem class="COMMON_QUEST_ITEM" type="12" num="4"/>
+			<StartOtherQuest id="311"/>
+       	</Reward>
+	</Quest>
+	<Quest id="311" type="charge">
+		<Title>어둠을 빛으로</Title>
+		<HappenRegion zoneid="81" x="192" y="111"/>
+        <RewardMessage>케르베로스 인장(Cerberus’s seal) 20개
+Exp: 3000
+Money: 50,000자드</RewardMessage>
+		<Script sender="대자연의 수호자">수고하셨습니다! 그럼 바로 임무를 내리도록 하겠습니다. 이번 임무는 매우 위험하고 시간 또한 없습니다. 회수한 물건들을 가지고 메네그로스 지하 던전1층으로 가도록 하세요! 카브라캄이라고 하는 지하의 보스가 우리 동족들을 살해 하고 있다는 소식이 들려오고 있어요. 그곳에 들어가려면 아우스터즈 마을 동쪽에 있는 에아에게 이 인장을 들고 가셔야 합니다. 그곳에 들어 가셔서 이 심장으로 보스 카브라캄을 소환한 다음 그곳을 지키고 있는 동족들과 합심하여 그 보스를 처치 하셔야 합니다. 끔찍하겠지만 그 보스를 잡게 된다면 위대한 리르의 증표를 받을 수 있는데 그 증표의 주인은 바로 당신 입니다. 무사히 돌아 오신다면 제가 당신에게 특별한 보상을 더 얹어 주겠어요! 약속하겠습니다 그럼 살아서 돌아오세요! 그리고 메네그로스 지하 1층에 머물 수 있는 시간은 1시간이라는 것을 잊지 마시길..</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+		    <Level min="21" />
+			<CompleteQuest id="310" />	
+		</Happen>
+		<CompleteMessage sender="대자연의 수호자" target="1023">수고 하셨습니다. 그럼 다음 임무가 주어질 때까지 평안하시길.</CompleteMessage>
+		<Complete>
+			<KillMonster num="1" sort="2" index="1">%s카브라캄 사냥 : %d / 1회 
+		              <Target type="1021" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="대자연의 수호자" target="1023">어느 정도 예상은 했지만 아직까지 이정도 임무를 맡기에는 무리인가요. 어쨌든 수고하셨습니다. 다친 곳은 곡 치료를 받도록 하고, 이만 쉬세요.</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="20"/>
+			<GiveOustersExp amount="3000" />
+			<GiveMoney amount="50000" />
+       	</Reward>
+	</Quest>
+</QuestList>

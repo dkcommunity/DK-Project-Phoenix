@@ -1,0 +1,115 @@
+# Project Phoenix — VPS nginx: /updates/ + PayPal ayni makinede, ayri HTTP sozlesmeleri.
+#
+# Neden ayri listen 80 server'lari:
+#   certbot --redirect, sertifikada olmayan server_name (VPS IP) icin
+#   HTTP catch-all 404 uretir. Python GUI ve Updater.exe HttpUrl IP kullanir.
+#   DuckDNS HTTP->HTTPS kalsin; IP HTTP /updates/ GET/HEAD servis etsin.
+#
+# Kurulum (VPS):
+#   sudo cp phoenix-updates.conf.example /etc/nginx/sites-available/phoenix-updates.conf
+#   sudo nginx -t && sudo systemctl reload nginx
+#
+# PayPal location'larini silme. paypal.service durdurma.
+# ClientLoginServerIP bu dosyada yok.
+
+# HTTPS: updater + PayPal + dklunox landing (Let's Encrypt dklunox.duckdns.org)
+# Landing root /var/www/dklunox-home. sites-enabled/default kapatilmaz
+# (baska host'lar 80 default_server kullanabilir). location / PayPal/updater
+# prefix'lerini golgelemez: daha uzun /updates/ /pay/ ve = /health /paypal/webhook kazanir.
+server {
+    listen 443 ssl;
+    server_name 169.58.161.68 dklunox.duckdns.org;
+
+    access_log /var/log/nginx/phoenix-updates.access.log;
+    error_log  /var/log/nginx/phoenix-updates.error.log warn;
+
+    ssl_certificate /etc/letsencrypt/live/dklunox.duckdns.org/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/dklunox.duckdns.org/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+    root /var/www/dklunox-home;
+    index index.html;
+    charset utf-8;
+
+    location /updates/ {
+        alias /var/www/phoenix-updates/;
+        autoindex off;
+        try_files $uri =404;
+
+        limit_except GET HEAD {
+            deny all;
+        }
+
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Cache-Control "public, max-age=60" always;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+
+    location = /health {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+    }
+
+    location /pay/ {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = /paypal/webhook {
+        client_max_body_size 64k;
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = / {
+        try_files /index.html =404;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+
+# HTTP DuckDNS -> HTTPS (PayPal checkout + webhook origin)
+server {
+    listen 80;
+    server_name dklunox.duckdns.org;
+    return 301 https://$host$request_uri;
+}
+
+# HTTP VPS IP: Updater.exe (updateclient.inf HttpUrl) + Patch Manifest GUI
+# Certbot --redirect bu blogu `return 404` ile degistirmemeli.
+server {
+    listen 80;
+    server_name 169.58.161.68;
+
+    access_log /var/log/nginx/phoenix-updates.access.log;
+    error_log  /var/log/nginx/phoenix-updates.error.log warn;
+
+    location /updates/ {
+        alias /var/www/phoenix-updates/;
+        autoindex off;
+        try_files $uri =404;
+
+        limit_except GET HEAD {
+            deny all;
+        }
+
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Cache-Control "public, max-age=60" always;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+}

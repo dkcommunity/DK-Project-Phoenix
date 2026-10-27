@@ -1,0 +1,16 @@
+# Copy to /etc/phoenix/security-db.conf on the server and set chmod 600.
+# This file is sourced by /usr/local/sbin/phoenix_fail2ban_audit.sh.
+
+DB_HOST=127.0.0.1
+DB_NAME=DARKEDEN
+DB_USER=phoenix_security
+DB_PASS=CHANGE_ME
+
+# 1 = queue safe in-game notice rows for GameServer SecurityNoticeManager.
+# 0 = DB audit only.
+NOTICE_QUEUE=1
+NOTICE_COOLDOWN_SECONDS=300
+NOTICE_MESSAGE="Security: suspicious login traffic was blocked."
+
+# Optional override:
+# PHOENIX_SECURITY_LOG_DIR=/home/phoenix/phoenix/ServerSRC/bin/log

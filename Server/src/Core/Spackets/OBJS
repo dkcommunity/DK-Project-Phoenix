@@ -1,0 +1,24 @@
+OBJS	= \
+		SGAddGuildOK.o SGAddGuildOKHandler.o \
+		SGAddGuildMemberOK.o SGAddGuildMemberOKHandler.o \
+		SGQuitGuildOK.o SGQuitGuildOKHandler.o \
+		SGExpelGuildMemberOK.o SGExpelGuildMemberOKHandler.o \
+		SGModifyGuildMemberOK.o SGModifyGuildMemberOKHandler.o \
+		SGDeleteGuildOK.o SGDeleteGuildOKHandler.o \
+		SGModifyGuildOK.o SGModifyGuildOKHandler.o \
+		SGGuildInfo.o SGGuildInfoHandler.o \
+		SGModifyGuildIntroOK.o SGModifyGuildIntroOKHandler.o \
+		SGGuildMemberLogOnOK.o SGGuildMemberLogOnOKHandler.o \
+		SGFriendList.o SGFriendListHandler.o \
+		SGFriendReqToAdd.o SGFriendReqToAddHandler.o \
+		SGFriendSuggestToAdd.o SGFriendSuggestToAddHandler.o \
+		SGFriendAdd.o SGFriendAddHandler.o \
+		SGFriendDel.o SGFriendDelHandler.o \
+		SGFriendViewInfo.o SGFriendViewInfoHandler.o \
+		SGFriendUpdateZone.o SGFriendUpdateZoneHandler.o \
+		SGFriendUpdateConnect.o SGFriendUpdateConnectHandler.o \
+		SGFriendWaitList.o SGFriendWaitListHandler.o \
+		SGFriendResToAdd.o SGFriendResToAddHandler.o 
+
+SRCS	= $(OBJS1:.o=.cpp)
+

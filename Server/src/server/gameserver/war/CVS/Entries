@@ -1,0 +1,36 @@
+/CorpseItemPosition.cpp/1.7/Mon Aug 11 07:33:56 2003//
+/CorpseItemPosition.h/1.2/Thu Feb  6 08:46:56 2003//
+/DragonEyeManager.cpp/1.1/Wed Oct 27 07:04:12 2004//
+/DragonEyeManager.h/1.1/Wed Oct 27 07:04:12 2004//
+/GlobalItemPosition.h/1.4/Tue Mar 29 05:46:26 2005//
+/GuildWar.cpp/1.19/Tue May  2 08:21:34 2006//
+/GuildWar.h/1.3/Mon Aug 11 07:23:16 2003//
+/InventoryItemPosition.cpp/1.10/Sat Dec 29 13:20:00 2007//
+/InventoryItemPosition.h/1.2/Sun Feb  2 04:47:59 2003//
+/Makefile/1.30/dummy timestamp from new-entry//
+/MouseItemPosition.cpp/1.9/Wed Oct 27 07:03:19 2004//
+/MouseItemPosition.h/1.2/Sun Feb  2 04:48:07 2003//
+/RaceWar.cpp/1.18/Wed Dec 26 03:26:33 2007//
+/RaceWar.h/1.2/Mon Aug 11 07:25:55 2003//
+/RaceWarLimiter.cpp/1.3/Mon Aug 11 07:29:49 2003//
+/RaceWarLimiter.h/1.2/Mon Aug 11 07:29:47 2003//
+/Schedule.cpp/1.9/Sat Aug  2 01:04:24 2003//
+/Schedule.h/1.7/Sun Feb  9 06:56:39 2003//
+/Scheduler.cpp/1.1/Wed Jan 29 01:13:47 2003//
+/Scheduler.h/1.2/Tue Sep  7 05:16:11 2004//
+/SiegeWar.cpp/1.8/Fri Nov  4 05:59:00 2005//
+/SiegeWar.h/1.2/Tue Sep 21 04:02:17 2004//
+/SubInventoryItemPosition.cpp/1.1/Tue Mar 29 05:13:19 2005//
+/SubInventoryItemPosition.h/1.1/Tue Mar 29 05:13:19 2005//
+/War.cpp/1.15/Mon Aug 27 06:52:53 2007//
+/War.h/1.8/Mon Aug 11 07:28:27 2003//
+/WarSchedule.cpp/1.12/Mon Dec 10 12:06:06 2007//
+/WarSchedule.h/1.5/Mon Dec 10 12:05:46 2007//
+/WarScheduler.cpp/1.28/Tue Feb 17 09:37:24 2009//
+/WarScheduler.h/1.6/Tue Feb 17 09:37:24 2009//
+/WarSystem.cpp/1.31/Mon Dec 17 10:58:04 2007//
+/WarSystem.h/1.16/Mon Dec 10 11:15:45 2007//
+/Work.h/1.2/Sun Feb  2 04:48:18 2003//
+/ZoneItemPosition.cpp/1.7/Wed Feb 12 09:37:15 2003//
+/ZoneItemPosition.h/1.2/Sun Feb  2 04:51:15 2003//
+D

@@ -1,0 +1,1556 @@
+#----------------------------------------------------------------------
+#
+# Filename    : Makefile
+# Written By  : Reiot
+# Description :
+#
+#----------------------------------------------------------------------
+
+#----------------------------------------------------------------------
+# Directories Setting
+#----------------------------------------------------------------------
+#VSHOME  = ../../..
+STLDIR  = /usr/include/STL
+BINDIR  = $(VSHOME)/bin
+LIBDIR  = $(VSHOME)/lib
+LOGDIR  = $(VSHOME)/log
+DBINCDIR  = /usr/local/include/mysql
+SRCDIR  = ../..
+COREDIR = ../../Core
+SERVDIR = ..
+DBDIR   = ../database
+MYSQLDIR = /usr/local/lib/mysql
+PYTHONDIR = /usr/local/include/python2.2
+
+#----------------------------------------------------------------------
+# General Rules
+#----------------------------------------------------------------------
+.SUFFIXES    : .cpp .o
+
+CC       = g++
+DEFS     = -D__LINUX__ -D_REENTRANT -D__SHARED_SERVER__ -D__DEBUG__
+INCLUDES = -I$(STLDIR) -I$(COREDIR) -I$(SERVDIR) -I$(DBDIR) -I$(DBINCDIR) -I$(PYTHONDIR) -I.
+CCFLAGS  = -Wall -c -g 
+#CCFLAGS  = -Wall -c
+LIBS     = -L$(LIBDIR) -lDatabase -lSharedServerPackets -lGameServerPackets -lServerCore -lCore -lstlport
+SYSLIBS  = -L$(MYSQLDIR) -static -lmysqlclient -lpthread -lnsl -lz
+#SYSLIBS  = -L$(MYSQLDIR) -lmysqlclient -lpthread -lnsl -lz -ldl -lutil -lpython2.2 -rdynamic
+
+.cpp.o :
+	$(CC) $(CCFLAGS) $(DEFS) $(INCLUDES) $<
+
+
+#----------------------------------------------------------------------
+# Objects
+#----------------------------------------------------------------------
+OBJS = \
+	Guild.o GuildManager.o ResurrectLocationManager.o GameServerPlayer.o \
+	HeartbeatManager.o GameServerInfoManager.o \
+	GameServerGroupInfoManager.o GameServerManager.o \
+	SharedServer.o main.o StringPool.o \
+
+SRCS = $(OBJS:.o=.cpp)
+
+TARGET = $(BINDIR)/sharedserver
+
+
+#----------------------------------------------------------------------
+# actions
+#----------------------------------------------------------------------
+$(TARGET) : $(OBJS) $(LIBDIR)/libDatabase.a $(LIBDIR)/libGameServerPackets.a $(LIBDIR)/libSharedServerPackets.a $(LIBDIR)/libServerCore.a $(LIBDIR)/libCore.a
+	$(CC) -o $@ $(OBJS) $(LIBS) $(SYSLIBS)
+
+clean :
+	rm -rf *.o
+
+cleanall :
+	rm -rf *.o $(TARGET)
+
+depall :
+	gccmakedep $(SRCS) $(INCLUDES)
+
+dep :
+	gccmakedep $(SRCS) $(INCLUDES)
+
+# DO NOT DELETE
+Guild.o: Guild.cpp /usr/include/STL/algorithm \
+  /usr/include/STL/stl/_prolog.h /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_cstdio.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdio \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/cstddef \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/libio.h /usr/include/_G_config.h /usr/include/STL/wchar.h \
+  /usr/include/../include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/STL/stl/_mbstate_t.h /usr/include/gconv.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+  /usr/include/STL/stl/_algo.h /usr/include/STL/stl/_algobase.h \
+  /usr/include/STL/stl/_cstddef.h /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/string.h /usr/include/../include/string.h \
+  /usr/include/xlocale.h /usr/include/STL/using/cstring \
+  /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/sys/types.h /usr/include/STL/time.h \
+  /usr/include/../include/time.h /usr/include/sys/select.h \
+  /usr/include/bits/select.h /usr/include/bits/sigset.h \
+  /usr/include/bits/time.h /usr/include/sys/sysmacros.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/alloca.h \
+  /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/type_traits.h \
+  /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/_iterator_base.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_heap.h \
+  /usr/include/STL/stl/_heap.c /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_algo.c /usr/include/STL/stl/_tempbuf.h \
+  /usr/include/STL/stl/_uninitialized.h /usr/include/STL/stl/_construct.h \
+  /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_tempbuf.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h Guild.h ../../Core/Types.h \
+  ../../Core/types/SystemTypes.h /usr/include/STL/iostream \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_locale.h /usr/include/STL/stl/_threads.h \
+  /usr/include/STL/stl/_threads.c /usr/include/STL/stl/_ctime.h \
+  /usr/include/sys/time.h /usr/include/STL/stl/_string.h \
+  /usr/include/STL/stl/_alloc.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Assert.h ../../Core/Exception.h ../../Core/StringStream.h \
+  /usr/include/STL/list /usr/include/STL/stl/_list.h \
+  /usr/include/STL/stl/_list.c /usr/include/STL/stl/_carray.h \
+  /usr/include/STL/stl/_relops_cont.h ../../Core/Exception.h ../Mutex.h \
+  /usr/include/STL/pthread.h /usr/include/../include/pthread.h \
+  /usr/include/sched.h /usr/include/bits/sched.h \
+  /usr/include/STL/signal.h /usr/include/../include/signal.h \
+  /usr/include/bits/setjmp.h ../../Core/Types.h ../../Core/Exception.h \
+  /usr/include/STL/hash_map /usr/include/STL/stl/_hash_map.h \
+  /usr/include/STL/stl/_hashtable.h /usr/include/STL/stl/_vector.h \
+  /usr/include/STL/stl/_vector.c /usr/include/STL/stl/_bvector.h \
+  /usr/include/STL/stl/_slist.h /usr/include/STL/stl/_slist_base.h \
+  /usr/include/STL/stl/_slist_base.c /usr/include/STL/stl/_slist.c \
+  /usr/include/STL/stl/_hashtable.c \
+  /usr/include/STL/stl/_relops_hash_cont.h ../../Core/VSDateTime.h \
+  ../../Core/StringStream.h ../database/DB.h \
+  ../database/DatabaseManager.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Connection.h /usr/include/mysql/mysql.h \
+  /usr/include/mysql/mysql_com.h /usr/include/mysql/mysql_version.h \
+  ../Mutex.h ../database/Statement.h ../database/Result.h \
+  ../../Core/GuildInfo.h ../../Core/Packet.h \
+  ../../Core/SocketInputStream.h ../../Core/Socket.h \
+  ../../Core/SocketImpl.h ../../Core/SocketAPI.h \
+  ../../Core/SocketOutputStream.h ../../Core/Gpackets/GCGuildMemberList.h \
+  /usr/include/STL/slist ../../Core/Packet.h ../../Core/PacketFactory.h \
+  ../../Core/GuildMemberInfo.h ../../Core/GuildMemberInfo.h \
+  ../../Core/Properties.h /usr/include/STL/map \
+  /usr/include/STL/stl/_map.h /usr/include/STL/stl/_tree.h \
+  /usr/include/STL/stl/_tree.c
+GuildManager.o: GuildManager.cpp Guild.h ../../Core/Types.h \
+  ../../Core/types/SystemTypes.h /usr/include/STL/iostream \
+  /usr/include/STL/stl/_prolog.h /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Assert.h ../../Core/Exception.h ../../Core/StringStream.h \
+  /usr/include/STL/list /usr/include/STL/stl/_list.h \
+  /usr/include/STL/stl/_list.c /usr/include/STL/stl/_carray.h \
+  /usr/include/STL/stl/_relops_cont.h ../../Core/Exception.h ../Mutex.h \
+  /usr/include/STL/pthread.h /usr/include/../include/pthread.h \
+  /usr/include/sched.h /usr/include/bits/sched.h \
+  /usr/include/STL/signal.h /usr/include/../include/signal.h \
+  /usr/include/bits/setjmp.h ../../Core/Types.h ../../Core/Exception.h \
+  /usr/include/STL/hash_map /usr/include/STL/stl/_hash_map.h \
+  /usr/include/STL/stl/_hashtable.h /usr/include/STL/stl/_vector.h \
+  /usr/include/STL/stl/_vector.c /usr/include/STL/stl/_bvector.h \
+  /usr/include/STL/stl/_slist.h /usr/include/STL/stl/_slist_base.h \
+  /usr/include/STL/stl/_slist_base.c /usr/include/STL/stl/_slist.c \
+  /usr/include/STL/stl/_hashtable.c \
+  /usr/include/STL/stl/_relops_hash_cont.h ../../Core/VSDateTime.h \
+  GuildManager.h ../Timeval.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
+  /usr/include/bits/confname.h /usr/include/getopt.h \
+  ../../Core/StringStream.h ../database/DB.h \
+  ../database/DatabaseManager.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Connection.h /usr/include/mysql/mysql.h \
+  /usr/include/mysql/mysql_com.h /usr/include/mysql/mysql_version.h \
+  ../Mutex.h ../database/Statement.h ../database/Result.h \
+  ../../Core/Properties.h /usr/include/STL/map \
+  /usr/include/STL/stl/_map.h /usr/include/STL/stl/_tree.h \
+  /usr/include/STL/stl/_tree.c ../../Core/Gpackets/GCWaitGuildList.h \
+  /usr/include/STL/slist ../../Core/Packet.h \
+  ../../Core/SocketInputStream.h ../../Core/Socket.h \
+  ../../Core/SocketImpl.h ../../Core/SocketAPI.h \
+  ../../Core/SocketOutputStream.h ../../Core/PacketFactory.h \
+  ../../Core/Packet.h ../../Core/GuildInfo.h \
+  ../../Core/Gpackets/GCActiveGuildList.h
+ResurrectLocationManager.o: ResurrectLocationManager.cpp \
+  ResurrectLocationManager.h ../../Core/Types.h \
+  ../../Core/types/SystemTypes.h /usr/include/STL/iostream \
+  /usr/include/STL/stl/_prolog.h /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Exception.h ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  /usr/include/STL/hash_map /usr/include/STL/stl/_hash_map.h \
+  /usr/include/STL/stl/_hashtable.h /usr/include/STL/stl/_vector.h \
+  /usr/include/STL/stl/_vector.c /usr/include/STL/stl/_bvector.h \
+  /usr/include/STL/stl/_slist.h /usr/include/STL/stl/_slist_base.h \
+  /usr/include/STL/stl/_slist_base.c /usr/include/STL/stl/_slist.c \
+  /usr/include/STL/stl/_hashtable.c \
+  /usr/include/STL/stl/_relops_hash_cont.h ../database/DB.h \
+  ../database/DatabaseManager.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Connection.h /usr/include/mysql/mysql.h \
+  /usr/include/mysql/mysql_com.h /usr/include/mysql/mysql_version.h \
+  ../Mutex.h /usr/include/STL/pthread.h /usr/include/../include/pthread.h \
+  /usr/include/sched.h /usr/include/bits/sched.h \
+  /usr/include/STL/signal.h /usr/include/../include/signal.h \
+  /usr/include/bits/setjmp.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Statement.h ../database/Result.h
+GameServerPlayer.o: GameServerPlayer.cpp GameServerPlayer.h \
+  ../../Core/Types.h ../../Core/types/SystemTypes.h \
+  /usr/include/STL/iostream /usr/include/STL/stl/_prolog.h \
+  /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Exception.h ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  ../../Core/Player.h ../../Core/Exception.h ../../Core/Socket.h \
+  ../../Core/SocketImpl.h ../../Core/SocketAPI.h \
+  ../../Core/SocketInputStream.h ../../Core/Socket.h \
+  ../../Core/SocketOutputStream.h ../../Core/Assert.h ../../Core/Packet.h \
+  ../../Core/SocketInputStream.h ../../Core/SocketOutputStream.h \
+  ../../Core/PacketFactoryManager.h ../../Core/Packet.h \
+  ../../Core/PacketFactory.h /usr/include/STL/map \
+  /usr/include/STL/stl/_map.h /usr/include/STL/stl/_tree.h \
+  /usr/include/STL/stl/_tree.c
+HeartbeatManager.o: HeartbeatManager.cpp HeartbeatManager.h \
+  ../../Core/Types.h ../../Core/types/SystemTypes.h \
+  /usr/include/STL/iostream /usr/include/STL/stl/_prolog.h \
+  /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Exception.h ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  ../../Core/Assert.h ../../Core/Exception.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
+  /usr/include/bits/confname.h /usr/include/getopt.h
+GameServerInfoManager.o: GameServerInfoManager.cpp \
+  GameServerInfoManager.h ../../Core/Types.h \
+  ../../Core/types/SystemTypes.h /usr/include/STL/iostream \
+  /usr/include/STL/stl/_prolog.h /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Exception.h ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  GameServerInfo.h ../../Core/StringStream.h /usr/include/STL/hash_map \
+  /usr/include/STL/stl/_hash_map.h /usr/include/STL/stl/_hashtable.h \
+  /usr/include/STL/stl/_vector.h /usr/include/STL/stl/_vector.c \
+  /usr/include/STL/stl/_bvector.h /usr/include/STL/stl/_slist.h \
+  /usr/include/STL/stl/_slist_base.h /usr/include/STL/stl/_slist_base.c \
+  /usr/include/STL/stl/_slist.c /usr/include/STL/stl/_hashtable.c \
+  /usr/include/STL/stl/_relops_hash_cont.h ../database/DB.h \
+  ../database/DatabaseManager.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Connection.h /usr/include/mysql/mysql.h \
+  /usr/include/mysql/mysql_com.h /usr/include/mysql/mysql_version.h \
+  ../Mutex.h /usr/include/STL/pthread.h /usr/include/../include/pthread.h \
+  /usr/include/sched.h /usr/include/bits/sched.h \
+  /usr/include/STL/signal.h /usr/include/../include/signal.h \
+  /usr/include/bits/setjmp.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Statement.h ../database/Result.h ../../Core/Properties.h \
+  ../../Core/Exception.h /usr/include/STL/map /usr/include/STL/stl/_map.h \
+  /usr/include/STL/stl/_tree.h /usr/include/STL/stl/_tree.c
+GameServerGroupInfoManager.o: GameServerGroupInfoManager.cpp \
+  GameServerGroupInfoManager.h ../../Core/Types.h \
+  ../../Core/types/SystemTypes.h /usr/include/STL/iostream \
+  /usr/include/STL/stl/_prolog.h /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Exception.h ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  GameServerGroupInfo.h ../../Core/StringStream.h \
+  /usr/include/STL/hash_map /usr/include/STL/stl/_hash_map.h \
+  /usr/include/STL/stl/_hashtable.h /usr/include/STL/stl/_vector.h \
+  /usr/include/STL/stl/_vector.c /usr/include/STL/stl/_bvector.h \
+  /usr/include/STL/stl/_slist.h /usr/include/STL/stl/_slist_base.h \
+  /usr/include/STL/stl/_slist_base.c /usr/include/STL/stl/_slist.c \
+  /usr/include/STL/stl/_hashtable.c \
+  /usr/include/STL/stl/_relops_hash_cont.h ../database/DatabaseManager.h \
+  ../../Core/Types.h ../../Core/Exception.h ../database/Connection.h \
+  /usr/include/mysql/mysql.h /usr/include/mysql/mysql_com.h \
+  /usr/include/mysql/mysql_version.h ../Mutex.h \
+  /usr/include/STL/pthread.h /usr/include/../include/pthread.h \
+  /usr/include/sched.h /usr/include/bits/sched.h \
+  /usr/include/STL/signal.h /usr/include/../include/signal.h \
+  /usr/include/bits/setjmp.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Connection.h ../database/Statement.h ../database/Result.h \
+  ../database/DB.h ../database/DatabaseManager.h ../database/Statement.h \
+  ../database/Result.h
+GameServerManager.o: GameServerManager.cpp /usr/include/STL/stdio.h \
+  /usr/include/STL/stl/_prolog.h /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/../include/stdio.h /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/libio.h /usr/include/_G_config.h /usr/include/STL/wchar.h \
+  /usr/include/../include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/STL/stl/_mbstate_t.h /usr/include/gconv.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+  /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h GameServerManager.h \
+  ../Thread.h ../../Core/Types.h ../../Core/types/SystemTypes.h \
+  /usr/include/STL/iostream /usr/include/STL/stl/_ioserr.h \
+  /usr/include/STL/stl/_iosfwd.h /usr/include/STL/stl/char_traits.h \
+  /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/STL/stl/_algobase.c /usr/include/STL/stl/_iterator.h \
+  /usr/include/STL/stl/_alloc.c /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Exception.h ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  ../pthreadAPI.h /usr/include/STL/pthread.h \
+  /usr/include/../include/pthread.h /usr/include/sched.h \
+  /usr/include/bits/sched.h /usr/include/STL/signal.h \
+  /usr/include/../include/signal.h /usr/include/bits/setjmp.h \
+  ../../Core/Types.h ../Timeval.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
+  /usr/include/bits/confname.h /usr/include/getopt.h \
+  ../../Core/Exception.h GameServerPlayer.h ../../Core/Player.h \
+  ../../Core/Exception.h ../../Core/ServerSocket.h \
+  ../../Core/SocketImpl.h ../../Core/SocketAPI.h ../../Core/Socket.h \
+  ../Mutex.h ../../Core/Assert.h ../../Core/SocketAPI.h \
+  ../../Core/Socket.h /usr/include/STL/algorithm \
+  /usr/include/STL/stl/_cstdio.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdio \
+  /usr/include/STL/stl/_algo.h /usr/include/STL/stl/_heap.h \
+  /usr/include/STL/stl/_heap.c /usr/include/STL/stl/_algo.c \
+  /usr/include/STL/stl/_tempbuf.h /usr/include/STL/stl/_tempbuf.c \
+  ../../Core/Properties.h /usr/include/STL/map \
+  /usr/include/STL/stl/_map.h /usr/include/STL/stl/_tree.h \
+  /usr/include/STL/stl/_tree.c Guild.h /usr/include/STL/hash_map \
+  /usr/include/STL/stl/_hash_map.h /usr/include/STL/stl/_hashtable.h \
+  /usr/include/STL/stl/_vector.h /usr/include/STL/stl/_vector.c \
+  /usr/include/STL/stl/_bvector.h /usr/include/STL/stl/_slist.h \
+  /usr/include/STL/stl/_slist_base.h /usr/include/STL/stl/_slist_base.c \
+  /usr/include/STL/stl/_slist.c /usr/include/STL/stl/_hashtable.c \
+  /usr/include/STL/stl/_relops_hash_cont.h ../../Core/VSDateTime.h \
+  GuildManager.h ../../Core/Packet.h ../../Core/SocketInputStream.h \
+  ../../Core/SocketOutputStream.h ../database/DB.h \
+  ../database/DatabaseManager.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Connection.h /usr/include/mysql/mysql.h \
+  /usr/include/mysql/mysql_com.h /usr/include/mysql/mysql_version.h \
+  ../Mutex.h ../database/Statement.h ../database/Result.h
+SharedServer.o: SharedServer.cpp SharedServer.h ../../Core/Types.h \
+  ../../Core/types/SystemTypes.h /usr/include/STL/iostream \
+  /usr/include/STL/stl/_prolog.h /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Exception.h ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  ../../Core/Assert.h ../../Core/Exception.h GameServerInfoManager.h \
+  GameServerInfo.h ../../Core/StringStream.h /usr/include/STL/hash_map \
+  /usr/include/STL/stl/_hash_map.h /usr/include/STL/stl/_hashtable.h \
+  /usr/include/STL/stl/_vector.h /usr/include/STL/stl/_vector.c \
+  /usr/include/STL/stl/_bvector.h /usr/include/STL/stl/_slist.h \
+  /usr/include/STL/stl/_slist_base.h /usr/include/STL/stl/_slist_base.c \
+  /usr/include/STL/stl/_slist.c /usr/include/STL/stl/_hashtable.c \
+  /usr/include/STL/stl/_relops_hash_cont.h GameServerGroupInfoManager.h \
+  GameServerGroupInfo.h GameServerManager.h ../Thread.h \
+  ../../Core/Types.h ../../Core/Exception.h ../pthreadAPI.h \
+  /usr/include/STL/pthread.h /usr/include/../include/pthread.h \
+  /usr/include/sched.h /usr/include/bits/sched.h \
+  /usr/include/STL/signal.h /usr/include/../include/signal.h \
+  /usr/include/bits/setjmp.h ../Timeval.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
+  /usr/include/bits/confname.h /usr/include/getopt.h GameServerPlayer.h \
+  ../../Core/Player.h ../../Core/ServerSocket.h ../../Core/SocketImpl.h \
+  ../../Core/SocketAPI.h ../../Core/Socket.h ../Mutex.h \
+  HeartbeatManager.h ../database/DatabaseManager.h ../../Core/Types.h \
+  ../../Core/Exception.h ../database/Connection.h \
+  /usr/include/mysql/mysql.h /usr/include/mysql/mysql_com.h \
+  /usr/include/mysql/mysql_version.h ../Mutex.h \
+  ../../Core/PacketFactoryManager.h ../../Core/Packet.h \
+  ../../Core/SocketInputStream.h ../../Core/SocketOutputStream.h \
+  ../../Core/PacketFactory.h /usr/include/STL/map \
+  /usr/include/STL/stl/_map.h /usr/include/STL/stl/_tree.h \
+  /usr/include/STL/stl/_tree.c ../../Core/PacketValidator.h \
+  ../../Core/PacketIDSet.h ../../Core/PlayerStatus.h \
+  /usr/include/STL/vector ../GameWorldInfoManager.h ../GameWorldInfo.h \
+  ../../Core/StringStream.h GuildManager.h ResurrectLocationManager.h \
+  StringPool.h ../LogClient.h ../../Core/types/ServerType.h
+main.o: main.cpp ../../Core/Types.h ../../Core/types/SystemTypes.h \
+  /usr/include/STL/iostream /usr/include/STL/stl/_prolog.h \
+  /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h ../../Core/Types.h \
+  ../../Core/Exception.h ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  SharedServer.h ../LogClient.h ../../Core/Types.h \
+  ../../Core/Properties.h ../../Core/Exception.h /usr/include/STL/map \
+  /usr/include/STL/stl/_map.h /usr/include/STL/stl/_tree.h \
+  /usr/include/STL/stl/_tree.c ../../Core/StringStream.h \
+  /usr/include/STL/new /usr/include/sys/resource.h \
+  /usr/include/bits/resource.h
+StringPool.o: StringPool.cpp StringPool.h ../../Core/Exception.h \
+  ../../Core/Types.h ../../Core/types/SystemTypes.h \
+  /usr/include/STL/iostream /usr/include/STL/stl/_prolog.h \
+  /usr/include/STL/stl/config/features.h \
+  /usr/include/STL/stl/_stlport_version.h \
+  /usr/include/STL/stl/config/user_config.h \
+  /usr/include/STL/stl/config/compat.h /usr/include/STL/stl/config/host.h \
+  /usr/include/STL/stl/config/_system.h \
+  /usr/include/STL/stl/config/_linux.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/STL/stl/config/_gcc.h \
+  /usr/include/STL/stl/config/stl_confix.h \
+  /usr/include/STL/stl/config/_native_headers.h \
+  /usr/include/STL/stl/_ioserr.h /usr/include/STL/stl/_iosfwd.h \
+  /usr/include/STL/stl/char_traits.h /usr/include/STL/stl/_cstddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstddef \
+  /usr/include/STL/stddef.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stddef.h \
+  /usr/include/STL/stl/_cstring.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstring \
+  /usr/include/STL/cstddef /usr/include/STL/string.h \
+  /usr/include/../include/string.h /usr/include/xlocale.h \
+  /usr/include/STL/using/cstring /usr/include/sys/types.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/STL/time.h /usr/include/../include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/STL/stl/_construct.h /usr/include/STL/stl/_new.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/new \
+  /usr/include/STL/exception \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/exception \
+  /usr/include/STL/stl/_iterator_base.h \
+  /usr/include/STL/stl/_move_construct_fwk.h \
+  /usr/include/STL/stl/type_traits.h /usr/include/STL/stl/type_manips.h \
+  /usr/include/STL/stl/_cwchar.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cwchar \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/c++config.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/os_defines.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/i386-redhat-linux/bits/cpu_defines.h \
+  /usr/include/STL/ctime \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/ctime \
+  /usr/include/STL/wchar.h /usr/include/../include/wchar.h \
+  /usr/include/STL/stdio.h /usr/include/../include/stdio.h \
+  /usr/include/STL/stdarg.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/stdarg.h \
+  /usr/include/bits/wchar.h /usr/include/STL/stl/_mbstate_t.h \
+  /usr/include/STL/stl/_istream.h /usr/include/STL/stl/_ios.h \
+  /usr/include/STL/stl/_ios_base.h /usr/include/STL/stl/_stdexcept_base.h \
+  /usr/include/STL/stl/_exception.h /usr/include/STL/stl/_string_fwd.h \
+  /usr/include/STL/iosfwd /usr/include/STL/utility \
+  /usr/include/STL/stl/_pair.h /usr/include/STL/stl/_locale.h \
+  /usr/include/STL/stl/_cstdlib.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cstdlib \
+  /usr/include/STL/stdlib.h /usr/include/../include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/alloca.h /usr/include/STL/stl/_cmath.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cmath \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cpp_type_traits.h \
+  /usr/include/STL/math.h /usr/include/../include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/bits/cmath.tcc \
+  /usr/include/STL/stl/_threads.h /usr/include/STL/stl/_threads.c \
+  /usr/include/STL/stl/_ctime.h /usr/include/sys/time.h \
+  /usr/include/STL/stl/_string.h /usr/include/STL/stl/_alloc.h \
+  /usr/include/STL/stl/_algobase.h /usr/include/STL/climits \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/climits \
+  /usr/include/STL/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/limits.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+  /usr/include/bits/stdio_lim.h /usr/include/STL/stl/_algobase.c \
+  /usr/include/STL/stl/_iterator.h /usr/include/STL/stl/_alloc.c \
+  /usr/include/STL/stl/_function_base.h \
+  /usr/include/STL/stl/_uninitialized.h \
+  /usr/include/STL/stl/_string_base.h /usr/include/STL/stl/_string_npos.h \
+  /usr/include/STL/stl/_string_operators.h /usr/include/STL/stl/_string.c \
+  /usr/include/STL/stl/_ctraits_fns.h \
+  /usr/include/STL/stl/_range_errors.h /usr/include/STL/stl/_ctype.h \
+  /usr/include/STL/stl/c_locale.h /usr/include/STL/ctype.h \
+  /usr/include/../include/ctype.h /usr/include/STL/stl/_numpunct.h \
+  /usr/include/STL/stl/_ios.c /usr/include/STL/stl/_streambuf.h \
+  /usr/include/STL/stl/_streambuf.c /usr/include/STL/stl/_ostream.h \
+  /usr/include/STL/stl/_ostreambuf_iterator.h \
+  /usr/include/STL/stl/_ostream.c /usr/include/STL/stl/_num_put.h \
+  /usr/include/STL/stl/_iostream_string.h /usr/include/STL/stl/_num_put.c \
+  /usr/include/STL/stl/_limits.h /usr/include/STL/cfloat \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/../../../../include/c++/4.1.1/../4.1.1/cfloat \
+  /usr/include/STL/float.h \
+  /usr/lib/gcc/i386-redhat-linux/4.1.1/include/../include/float.h \
+  /usr/include/STL/stl/_limits.c \
+  /usr/include/STL/stl/_istreambuf_iterator.h \
+  /usr/include/STL/stl/_istream.c /usr/include/STL/stl/_num_get.h \
+  /usr/include/STL/stl/_num_get.c /usr/include/STL/stl/_epilog.h \
+  /usr/include/STL/stl/_config_compat_post.h /usr/include/STL/fstream \
+  /usr/include/STL/stl/_fstream.h /usr/include/STL/stl/_codecvt.h \
+  /usr/include/STL/stl/_fstream.c /usr/include/STL/string \
+  /usr/include/STL/stl/_string_hash.h /usr/include/STL/stl/_hash_fun.h \
+  /usr/include/STL/stl/_string_io.h /usr/include/STL/stl/_string_io.c \
+  ../../Core/types/PlayerTypes.h ../../Core/types/SystemTypes.h \
+  ../../Core/types/ObjectTypes.h ../../Core/types/CreatureTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/ZoneTypes.h \
+  ../../Core/types/QuestTypes.h ../../Core/types/ShopTypes.h \
+  ../../Core/types/ItemTypes.h ../../Core/types/GuildTypes.h \
+  ../../Core/types/WarTypes.h ../../Core/types/ServerType.h \
+  ../../Core/types/VersionType.h ../../Core/Utility.h \
+  ../../Core/StringStream.h /usr/include/STL/list \
+  /usr/include/STL/stl/_list.h /usr/include/STL/stl/_list.c \
+  /usr/include/STL/stl/_carray.h /usr/include/STL/stl/_relops_cont.h \
+  /usr/include/STL/hash_map /usr/include/STL/stl/_hash_map.h \
+  /usr/include/STL/stl/_hashtable.h /usr/include/STL/stl/_vector.h \
+  /usr/include/STL/stl/_vector.c /usr/include/STL/stl/_bvector.h \
+  /usr/include/STL/stl/_slist.h /usr/include/STL/stl/_slist_base.h \
+  /usr/include/STL/stl/_slist_base.c /usr/include/STL/stl/_slist.c \
+  /usr/include/STL/stl/_hashtable.c \
+  /usr/include/STL/stl/_relops_hash_cont.h ../database/DB.h \
+  ../database/DatabaseManager.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Connection.h /usr/include/mysql/mysql.h \
+  /usr/include/mysql/mysql_com.h /usr/include/mysql/mysql_version.h \
+  ../Mutex.h /usr/include/STL/pthread.h /usr/include/../include/pthread.h \
+  /usr/include/sched.h /usr/include/bits/sched.h \
+  /usr/include/STL/signal.h /usr/include/../include/signal.h \
+  /usr/include/bits/setjmp.h ../../Core/Types.h ../../Core/Exception.h \
+  ../database/Statement.h ../database/Result.h

@@ -1,0 +1,57 @@
+//////////////////////////////////////////////////////////////////////////////
+// Filename    : CGRemoveRankGem.cpp 
+// Written By  : excel96
+// Description : 
+// 牢亥配府 救狼 酒捞袍阑 荤侩且 锭, 努扼捞攫飘啊 X, Y 棺 ObjectID甫
+// 焊郴搁 酒捞袍 努贰胶俊 蝶扼辑, 辑滚啊 捞俊 嘎绰 内靛甫 贸府茄促.
+//////////////////////////////////////////////////////////////////////////////
+
+#include "CGRemoveRankGem.h"
+#include "SocketEncryptInputStream.h"
+#include "SocketEncryptOutputStream.h"
+#include "Assert.h"
+
+
+void CGRemoveRankGem::read (SocketInputStream & iStream) 
+	 throw (ProtocolException , Error)
+{
+	__BEGIN_TRY
+		
+	iStream.read(m_SlotID);
+
+	__END_CATCH
+}
+
+void CGRemoveRankGem::write (SocketOutputStream & oStream) const 
+     throw (ProtocolException , Error)
+{
+	__BEGIN_TRY
+		
+	oStream.write(m_SlotID);
+
+	__END_CATCH
+}
+
+void CGRemoveRankGem::execute (Player* pPlayer) 
+	 throw (ProtocolException , Error)
+{
+	__BEGIN_TRY
+
+	CGRemoveRankGemHandler::execute (this , pPlayer);
+		
+	__END_CATCH
+}
+
+string CGRemoveRankGem::toString () 
+	const throw ()
+{
+	__BEGIN_TRY
+		
+	StringStream msg;
+	msg << "CGRemoveRankGem("
+		<< ",SlotID:" << (int)m_SlotID
+		<< ")";
+	return msg.toString();
+
+	__END_CATCH
+}

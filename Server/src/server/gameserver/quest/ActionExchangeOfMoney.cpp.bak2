@@ -1,0 +1,300 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename    : ActionExchangeOfMoney.cpp
+// Written By  : 
+// Description :
+////////////////////////////////////////////////////////////////////////////////
+
+#include "ActionExchangeOfMoney.h"
+#include "DB.h"
+#include "Creature.h"
+#include "NPC.h"
+#include "GamePlayer.h"
+#include "PlayerCreature.h"
+#include "Slayer.h"
+#include "Vampire.h"
+#include "Ousters.h"
+#include "Item.h"
+#include "ItemUtil.h"
+#include "PacketUtil.h"
+#include "Inventory.h"
+#include "ItemFactoryManager.h"
+#include "ItemInfoManager.h"
+#include "Zone.h"
+#include "ZoneInfo.h"
+#include "item/CheckMoney.h"
+#include "PacketUtil.h"
+
+#include "Gpackets/GCNPCResponse.h"
+#include "Gpackets/GCWaitGuildList.h"
+#include "Gpackets/GCActiveGuildList.h"
+#include "Gpackets/GSQuitGuild.h"
+#include "Gpackets/GCDeleteInventoryItem.h"
+#include "Gpackets/GCCreateItem.h"
+#include "Gpackets/GCNPCAsk.h"
+#include "Gpackets/GCModifyInformation.h"
+
+#include "SystemAvailabilitiesManager.h"
+
+struct ITEM_TEMPLATE
+{
+	Item::ItemClass		ItemClass;
+	ItemType_t			ItemType;
+};
+
+const int CHECK_MONEY_MAX = 1;
+
+// const ITEM_TEMPLATE	CheckMoneyTemplateSlayer[CHECK_MONEY_MAX] = 
+// {
+// 	{ Item::ITEM_CLASS_CHECK_MONEY,		0 },
+// };
+
+// const ITEM_TEMPLATE	CheckMoneyTemplateVampire[CHECK_MONEY_MAX] =
+// {
+// 	{ Item::ITEM_CLASS_CHECK_MONEY,		1 },
+// };
+
+// const ITEM_TEMPLATE	CheckMoneyTemplateOusters[CHECK_MONEY_MAX] =
+// {
+// 	{ Item::ITEM_CLASS_CHECK_MONEY,		2 },
+// };
+
+////////////////////////////////////////////////////////////////////////////////
+// read from property buffer
+////////////////////////////////////////////////////////////////////////////////
+void ActionExchangeOfMoney::read (PropertyBuffer & propertyBuffer)
+{
+    __BEGIN_TRY
+
+	try
+	{
+		// 환전의 종류
+		m_ExchangeType = (int)propertyBuffer.getPropertyInt("ExchangeType");
+		// 나중에 환전의 금액이 틀려 질수도 있을거 같아서 받아오는걸로 만들었다.
+		m_CheckMoney = (Gold_t)propertyBuffer.getPropertyInt("CheckMoney");
+	}
+	catch (NoSuchElementException & nsee)
+	{
+		throw Error(nsee.toString());
+	}
+
+    __END_CATCH
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// 액션을 실행한다.
+////////////////////////////////////////////////////////////////////////////////
+void ActionExchangeOfMoney::execute (Creature * pCreature1, Creature * pCreature2)
+{
+	__BEGIN_TRY
+
+	Assert(pCreature1 != NULL);
+	Assert(pCreature2 != NULL);
+	Assert(pCreature1->isNPC());
+	Assert(pCreature2->isPC());
+
+	Player* pPlayer = pCreature2->getPlayer();
+	Assert(pPlayer != NULL);
+
+	GamePlayer* pGamePlayer = dynamic_cast<GamePlayer*>(pPlayer);
+	Assert( pGamePlayer != NULL );
+
+	Creature* pCreature = pGamePlayer->getCreature();
+	Assert( pCreature != NULL );
+
+	PlayerCreature* pPC = dynamic_cast<PlayerCreature*>(pCreature2);
+	Assert( pPC != NULL );
+
+	Gold_t		playerMoney = 0;
+	Gold_t		checkExchangeOfMoney = 0;
+	Slayer* 	pSlayer = NULL;
+	Vampire* 	pVampire = NULL;
+	Ousters* 	pOusters = NULL;
+	bool		bSlayer = false;
+	bool		bVampire = false;
+	bool		bOusters = false;
+	Zone*		pZone = pPC->getZone();
+
+	Item* pItem = NULL;
+
+	if( pCreature2->isSlayer() )
+	{
+		pSlayer = dynamic_cast<Slayer*>(pCreature2);
+		playerMoney = pSlayer->getGold();
+		bSlayer = true;
+	}
+	else if( pCreature2->isVampire() )
+	{
+		pVampire = dynamic_cast<Vampire*>(pCreature2);
+		playerMoney = pVampire->getGold();
+		bVampire = true;
+	}
+	else if( pCreature2->isOusters() )
+	{
+		pOusters = dynamic_cast<Ousters*>(pCreature2);
+		playerMoney = pOusters->getGold();
+		bOusters = true;
+	}
+	else
+	{
+		return;
+	}
+
+	GCNPCResponse		gcNPCResponse;
+	Inventory*			pInventory = pPC->getInventory();
+	list<OptionType_t>	optionType;
+	GCModifyInformation gcMI;
+
+	switch( m_ExchangeType )
+	{
+		// 게임 머니를 수표로 환전하는 경우이다.
+		case 0:
+			{
+				// 수표의 가격보다 플레이어 소지금이 적은 경우는 환전 할수 없다.
+				if( playerMoney < m_CheckMoney )
+				{
+					gcNPCResponse.setCode( NPC_NOT_ENOUGH_EXCHANGE_OF_MONEY );
+					pPlayer->sendPacket(&gcNPCResponse);
+					return;
+				}
+				if( bSlayer )
+				{
+					pItem = g_pItemFactoryManager->createItem( CheckMoneyTemplateSlayer[0].ItemClass, CheckMoneyTemplateSlayer[0].ItemType, optionType );
+					Assert( pItem != NULL );
+				}
+				else if( bVampire )
+				{
+					pItem = g_pItemFactoryManager->createItem( CheckMoneyTemplateVampire[0].ItemClass, CheckMoneyTemplateVampire[0].ItemType, optionType );
+					Assert( pItem != NULL );
+				}
+				else if( bOusters )
+				{
+					pItem = g_pItemFactoryManager->createItem( CheckMoneyTemplateOusters[0].ItemClass, CheckMoneyTemplateOusters[0].ItemType, optionType );
+					Assert( pItem != NULL );
+				}
+
+				_TPOINT	tp;
+				
+				if( !pInventory->getEmptySlot( pItem, tp ) )
+				{
+					pInventory->deleteItem( pItem->getObjectID() );
+					SAFE_DELETE( pItem );
+
+					gcNPCResponse.setCode( NPC_RESPONSE_SHOW_COMMON_MESSAGE_DIALOG );
+					gcNPCResponse.setParameter( NOT_ENOUGH_INVENTORY_SPACE );
+					pPlayer->sendPacket( &gcNPCResponse );
+
+					return;
+				}
+
+				pZone->registerObject( pItem );
+
+				if( !pInventory->addItem( pItem, tp ) )
+				{
+					pInventory->deleteItem( pItem->getObjectID() );
+
+					SAFE_DELETE( pItem );
+
+					gcNPCResponse.setCode( NPC_RESPONSE_SHOW_COMMON_MESSAGE_DIALOG );
+					gcNPCResponse.setParameter( NOT_ENOUGH_INVENTORY_SPACE );
+					pPlayer->sendPacket( &gcNPCResponse );
+
+					return;
+				}
+
+				pPC->decreaseGoldEx( m_CheckMoney );
+
+				pItem->create( pPC->getName(), STORAGE_INVENTORY, 0, tp.x, tp.y );
+
+				gcMI.addLongData( MODIFY_GOLD, pPC->getGold() );
+				pPlayer->sendPacket( &gcMI );
+
+				GCCreateItem gcCI;
+				makeGCCreateItem(&gcCI, pItem, tp.x, tp.y);
+
+				pPlayer->sendPacket( &gcCI );
+
+				// 머니 트레이스에 정보를 남긴다.
+				remainMoneyTraceLog( pCreature1->getName(), pPC->getName(), ITEM_LOG_TRADE, DETAIL_TRADE, m_CheckMoney );
+				break;
+			}
+		// 수표를 게임머니로 환전 하는 경우이다.
+		case 1:
+			{
+				checkExchangeOfMoney = m_CheckMoney - Gold_t(m_CheckMoney * 0.005);
+				// 환전 수수료를 빼고 남은 금액과 소지금액이 20억( 플레이어가 소지할수 있는 최대금액)보다 크면 "너 돈많아서 안대~" 라고 보내준다.
+				if( (checkExchangeOfMoney+playerMoney) > MAX_MONEY )
+				{
+					gcNPCResponse.setCode( NPC_ENOUGH_PLAYER_MONEY );
+					pPlayer->sendPacket( &gcNPCResponse );
+					return;
+				}
+
+				pItem = pInventory->findItem( Item::ITEM_CLASS_CHECK_MONEY );
+
+				if( pItem == NULL )
+				{
+					gcNPCResponse.setCode( NPC_NOT_ENOUGH_CHECK_MONEY );
+					pPlayer->sendPacket( &gcNPCResponse );
+					return;
+				}
+/*
+				if( bSlayer )
+				{
+					pSlayer->setGoldEx( playerMoney + checkExchangeOfMoney );
+					gcMI.addLongData( MODIFY_GOLD, pSlayer->getGold() );
+				}
+				else if ( bVampire )
+				{
+					pVampire->setGoldEx( playerMoney + checkExchangeOfMoney );
+					gcMI.addLongData( MODIFY_GOLD, pVampire->getGold() );
+				}
+				else if( bOusters )
+				{
+					pOusters->setGoldEx( playerMoney + checkExchangeOfMoney );
+					gcMI.addLongData( MODIFY_GOLD, pOusters->getGold() );
+				}
+*/
+				pPC->setGoldEx( playerMoney + checkExchangeOfMoney );
+				gcMI.addLongData( MODIFY_GOLD, pPC->getGold() );
+				pPlayer->sendPacket( &gcMI );
+
+				pInventory->deleteItem( pItem->getObjectID() );
+
+				GCDeleteInventoryItem	gcDeleteInventoryItem;
+				gcDeleteInventoryItem.setObjectID( pItem->getObjectID() );
+				pPlayer->sendPacket( &gcDeleteInventoryItem );
+				pItem->destroy();
+				SAFE_DELETE( pItem );
+				// 머니 트레이스에 정보를 남긴다.
+				remainMoneyTraceLog( pCreature1->getName(), pPC->getName(), ITEM_LOG_TRADE, DETAIL_TRADE, checkExchangeOfMoney );
+				break;
+			}
+		default:
+			return;
+	}
+
+	gcNPCResponse.setCode( NPC_RESPONSE_SHOW_COMMON_MESSAGE_DIALOG );
+	gcNPCResponse.setParameter( NPC_EXCHANGE_OF_MONEY_OK );
+	pPlayer->sendPacket( &gcNPCResponse );
+
+	gcNPCResponse.setCode( NPC_RESPONSE_QUIT_DIALOGUE );
+	pPlayer->sendPacket( &gcNPCResponse );
+	
+	__END_CATCH
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// get debug string
+////////////////////////////////////////////////////////////////////////////////
+string ActionExchangeOfMoney::toString () const
+{
+	__BEGIN_TRY
+
+	string str = "ActionExchangeOfMoney";
+
+	return str;
+
+	__END_CATCH
+}

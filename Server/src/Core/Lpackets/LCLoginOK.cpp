@@ -1,0 +1,75 @@
+//////////////////////////////////////////////////////////////////////
+// 
+// Filename    : LCLoginOK.cpp
+// Written By  : Reiot
+// Description : 
+// 
+//////////////////////////////////////////////////////////////////////
+
+// include files
+#include "LCLoginOK.h"
+
+//////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////
+void LCLoginOK::read ( SocketInputStream & iStream )
+	throw ( ProtocolException , Error )
+{
+	__BEGIN_TRY
+
+	// 서버 그룹 이름을 읽는다.
+	iStream.read( m_isAdult );
+	iStream.read( m_bUnderFifthteen );
+	iStream.read( m_bFamily );
+	iStream.read( m_Stat );
+	//iStream.read( m_LastDays );
+	iStream.read( m_PayType );
+	iStream.read( m_ServerID );
+	iStream.read( m_ServerIDA );
+	iStream.read( m_ServerIDB );
+	iStream.read( m_ServerIDC );
+
+	__END_CATCH
+}
+
+
+//////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////
+void LCLoginOK::write ( SocketOutputStream & oStream ) const
+	throw ( ProtocolException , Error )
+{
+	__BEGIN_TRY
+
+	// 그룹 이름을 쓴다.
+	oStream.write( m_isAdult );
+	oStream.write( m_bUnderFifthteen );
+	oStream.write( m_bFamily );
+	oStream.write( m_Stat );
+	//oStream.write( m_LastDays );
+	oStream.write( m_PayType );
+	oStream.write( m_ServerID );
+	oStream.write( m_ServerIDA );
+	oStream.write( m_ServerIDB );
+	oStream.write( m_ServerIDC);
+
+//	cout << "**************" << m_LastDays << " 일 남았습니다." << endl;
+
+	__END_CATCH
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// execute packet's handler
+//////////////////////////////////////////////////////////////////////
+void LCLoginOK::execute ( Player * pPlayer ) 
+	 throw ( ProtocolException , Error )
+{
+	__BEGIN_TRY
+		
+	LCLoginOKHandler::execute( this , pPlayer );
+		
+	__END_CATCH
+}
+
+

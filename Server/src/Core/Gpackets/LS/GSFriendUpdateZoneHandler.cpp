@@ -1,0 +1,67 @@
+//----------------------------------------------------------------------
+//
+// Filename    : GSFriendUpdateZoneHandler.cpp
+// Written By  : 
+// Description :
+//
+//----------------------------------------------------------------------
+
+// include files
+#include "GSFriendUpdateZone.h"
+#include "Assert.h"
+
+#ifdef __SHARED_SERVER__
+	#include "GameServerManager.h"
+	#include "FriendManager.h"
+
+	#include "Spackets/SGFriendUpdateZone.h"
+#endif
+
+void GSFriendUpdateZoneHandler::execute ( GSFriendUpdateZone* pPacket, Player* pPlayer )
+	 throw ( ProtocolException , Error )
+{
+	__BEGIN_TRY
+
+#ifdef __SHARED_SERVER__
+	
+	FriendInfo *pFriendInfo;
+	
+	pFriendInfo = g_pFriendManager->GetFriendInfo(pPacket->GetSender());
+	pFriendInfo->SetZoneID(pPacket->GetZoneID());
+
+	// 존 변경을 친구들에게 알림
+	FriendListManager *pFriendListManager = g_pFriendManager->GetFriendListManager(pPacket->GetSender());
+	
+	if ( pFriendListManager == NULL )
+	{
+		return;
+	}
+	
+	TFriendList::iterator iter;
+	string strFriendName;
+	Player *pFriendPlayer;
+	
+	TFriendList *pFriendList = &pFriendListManager->GetFriendFWList();
+
+	iter = pFriendList->begin();
+	for(; iter != pFriendList->end() ; ++iter )
+	{
+		strFriendName = iter->second;
+		
+		pFriendPlayer = g_pGameServerManager->GetPlayer(strFriendName);
+		if ( pFriendPlayer != NULL )
+		{
+			SGFriendUpdateZone sgFriendUpdateZone;
+			
+			sgFriendUpdateZone.SetReceiver(strFriendName);
+			sgFriendUpdateZone.SetPCName(pPacket->GetSender());
+			sgFriendUpdateZone.SetZoneID(pFriendInfo->GetZoneID());
+			
+			g_pGameServerManager->broadcast( &sgFriendUpdateZone, pFriendPlayer );
+		}
+	}
+
+#endif
+		
+	__END_CATCH
+}

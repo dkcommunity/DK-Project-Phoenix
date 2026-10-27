@@ -1,0 +1,51 @@
+#include "GQuestGiveMoneyElement.h"
+#include "PlayerCreature.h"
+#include "Gpackets/GCModifyInformation.h"
+#include "Gpackets/GCSystemMessage.h"
+#include "Player.h"
+#include <cstdio>
+#include "StringPool.h"
+
+#include "StringPool.h"
+
+GQuestElement::ResultType GQuestGiveMoneyElement::checkCondition( PlayerCreature* pPC ) const
+{
+	GCModifyInformation gcMI;
+	pPC->increaseGoldEx(m_Amount);
+	gcMI.addLongData(MODIFY_GOLD, pPC->getGold());
+	pPC->getPlayer()->sendPacket( &gcMI );
+
+	GCSystemMessage gcSM;
+	char buffer[256];
+	if ( pPC->isSlayer() )
+	{
+		sprintf(buffer, g_pStringPool->c_str(STRID_GET_RAY), m_Amount); // 20070814
+		gcSM.setMessage( buffer );
+		pPC->getPlayer()->sendPacket( &gcSM );
+	}
+	else if ( pPC->isVampire() )
+	{
+		sprintf(buffer, g_pStringPool->c_str(STRID_GET_GELD), m_Amount); // 20070814
+		gcSM.setMessage( buffer );
+		pPC->getPlayer()->sendPacket( &gcSM );
+	}
+	else if ( pPC->isOusters() )
+	{
+		sprintf(buffer, g_pStringPool->c_str(STRID_GET_ZARD), m_Amount); // 20070814
+		gcSM.setMessage( buffer );
+		pPC->getPlayer()->sendPacket( &gcSM );
+	}
+
+	return OK;
+}
+
+GQuestGiveMoneyElement* GQuestGiveMoneyElement::makeElement(XMLTree* pTree)
+{
+	GQuestGiveMoneyElement* pRet = new GQuestGiveMoneyElement;
+
+	pTree->GetAttribute("amount", pRet->m_Amount);
+
+	return pRet;
+}
+
+GQuestGiveMoneyElement g_GiveMoneyElement;

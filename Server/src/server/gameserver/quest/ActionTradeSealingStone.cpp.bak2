@@ -1,0 +1,235 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename    : ActionTradeSealingStone.cpp
+// Written By  : 
+// Description :
+////////////////////////////////////////////////////////////////////////////////
+#include "ActionTradeSealingStone.h"
+#include "Item.h"
+#include "Slayer.h"
+#include "Vampire.h"
+#include "Ousters.h"
+#include "NPC.h"
+#include "Player.h"
+#include "Inventory.h"
+#include "ItemFactoryManager.h"
+#include "ItemUtil.h"
+#include "ItemInfoManager.h"
+#include "OptionInfo.h"
+#include "Zone.h"
+#include "VariableManager.h"
+#include "FlagSet.h"
+#include "DB.h"
+#include "PacketUtil.h"
+
+#include "Gpackets/GCCreateItem.h"
+#include "Gpackets/GCNPCResponse.h"
+#include "Gpackets/GCNPCAsk.h"
+
+#include <list>
+
+struct ITEM_TEMPLATE
+{
+	Item::ItemClass		ItemClass;
+	ItemType_t			ItemType;
+	string				ItemName;
+	int					ItemNum;
+};
+
+const int NEED_ITEM_MAX = 3;
+// const ITEM_TEMPLATE NeedItemTemplate[NEED_ITEM_MAX] = 
+// {
+// 	{ Item::ITEM_CLASS_EVENT_STAR, 7, "블루 드롭", 10},
+// 	{ Item::ITEM_CLASS_QUEST_ITEM, 0, "바토리 비쥬", 7},
+// 	{ Item::ITEM_CLASS_QUEST_ITEM, 1, "바토리 팬던트", 2},
+// };
+
+// const ITEM_TEMPLATE ExchangeItemTemplate[1] =
+// {
+// 	{ Item::ITEM_CLASS_QUEST_ITEM, 10, "봉인석", 1},
+// };
+
+const unsigned int NEED_MONEY = 600000;
+////////////////////////////////////////////////////////////////////////////////
+// ActionTradeSealingStone
+////////////////////////////////////////////////////////////////////////////////
+ActionTradeSealingStone::ActionTradeSealingStone()
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+////////////////////////////////////////////////////////////////////////////////
+ActionTradeSealingStone::~ActionTradeSealingStone()
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// 
+////////////////////////////////////////////////////////////////////////////////
+void ActionTradeSealingStone::read(PropertyBuffer & propertyBuffer)
+{
+    __BEGIN_TRY
+
+	try
+	{
+		// read script id
+	}
+	catch (NoSuchElementException & nsee)
+	{
+		throw Error(nsee.toString());
+	}
+
+	__END_CATCH
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// 액션을 실행한다.
+////////////////////////////////////////////////////////////////////////////////
+void ActionTradeSealingStone::execute(Creature * pCreature1 , Creature * pCreature2)
+{
+	__BEGIN_TRY
+
+	Assert(pCreature1 != NULL);
+	Assert(pCreature2 != NULL);
+	Assert(pCreature1->isNPC());
+	Assert(pCreature2->isPC());
+
+	PlayerCreature* pPC = dynamic_cast<PlayerCreature*>(pCreature2);
+	Assert(pPC != NULL);
+
+	Player* pPlayer = pPC->getPlayer();
+	Assert(pPlayer != NULL);
+
+	Inventory* pInventory = pPC->getInventory();
+	Assert( pInventory != NULL );
+
+	Zone* pZone = pPC->getZone();
+	Assert( pZone != NULL );
+
+	bool			bSlayer = pPC->isSlayer();
+	bool			bVampire = pPC->isVampire();
+	bool			bOusters = pPC->isOusters();
+
+	int		tradeitemNum[3] = { 0, 0, 0 };
+	unsigned int	playerGold = 0;
+	bool	bTradeOK = true;
+
+	if( bSlayer )
+	{
+		Slayer* pSlayer = dynamic_cast<Slayer*>(pCreature2);
+		playerGold = pSlayer->getGold();
+	}
+	else if( bVampire )
+	{
+		Vampire* pVampire = dynamic_cast<Vampire*>(pCreature2);
+		playerGold = pVampire->getGold();
+	}
+	else if( bOusters )
+	{
+		Ousters* pOusters = dynamic_cast<Ousters*>(pCreature2);
+		playerGold = pOusters->getGold();
+	}
+
+	for( int i = 0; i < 3; ++i )
+	{
+		tradeitemNum[i] = pPC->getItemClassTypeNum( NeedItemTemplate[i].ItemClass, NeedItemTemplate[i].ItemType );
+
+		if( tradeitemNum[i] < NeedItemTemplate[i].ItemNum )
+			bTradeOK = false;
+	}
+
+	GCNPCResponse	gcNPCResponse;
+
+	if( !bTradeOK || playerGold < NEED_MONEY )
+	{
+		gcNPCResponse.setCode( NPC_NOT_ENOUGH_EXCHANGE_SEALING_STONE );
+		pPlayer->sendPacket(&gcNPCResponse);
+
+		gcNPCResponse.setCode( NPC_RESPONSE_QUIT_DIALOGUE );
+		pPlayer->sendPacket( &gcNPCResponse );
+
+		return;
+	}
+
+	string			itemOption; 
+	
+	ItemInfo* pItemInfo = g_pItemInfoManager->getItemInfo( ExchangeItemTemplate[0].ItemClass, ExchangeItemTemplate[0].ItemType );
+	Assert( pItemInfo != NULL );
+
+	// 인벤토리의 공간을 체크
+	_TPOINT	pt;
+	if( !pInventory->getEmptySlot(pItemInfo->getVolumeWidth(), pItemInfo->getVolumeHeight(), pt) )
+	{
+		GCNPCResponse response;
+		response.setCode( NPC_RESPONSE_SHOW_COMMON_MESSAGE_DIALOG );
+		response.setParameter( NOT_ENOUGH_INVENTORY_SPACE );
+		pPlayer->sendPacket( &response );
+		return;
+	}
+
+	list<OptionType_t> options;
+
+	Item* pItem = g_pItemFactoryManager->createItem( pItemInfo->getItemClass(), pItemInfo->getItemType(), options );
+	Assert( pItem != NULL );
+
+	pZone->registerObject( pItem );
+
+	if( pInventory->addItem( pItem, pt) )
+	{
+//		pPC->decreaseItemClassTypeNum( Item::ITEM_CLASS_COMMON_QUEST_ITEM, itemType, m_QuestItemNum );
+		GCModifyInformation	gcMI;
+
+		for( int i = 0; i < 3;  ++i )
+		{
+			pPC->decreaseItemClassTypeNum( NeedItemTemplate[i].ItemClass, NeedItemTemplate[i].ItemType, NeedItemTemplate[i].ItemNum );
+		}
+		pPC->decreaseGoldEx( NEED_MONEY );
+		gcMI.addLongData( MODIFY_GOLD, pPC->getGold() );
+		pPlayer->sendPacket( &gcMI );
+
+		pItem->create( pPC->getName(), STORAGE_INVENTORY, 0, pt.x, pt.y );
+
+		remainTraceLog( pItem, "Sealing Stone", pPC->getName(), ITEM_LOG_CREATE, DETAIL_EVENTNPC );
+
+		GCCreateItem gcCreateItem;
+		makeGCCreateItem(&gcCreateItem, pItem, pt.x, pt.y);
+
+		pPlayer->sendPacket( &gcCreateItem );
+	}
+	else
+	{
+		pInventory->deleteItem( pItem->getObjectID() );
+
+		SAFE_DELETE( pItem );
+
+		gcNPCResponse.setCode( NPC_NOT_ENOUGH_EXCHANGE_SEALING_STONE );
+		pPlayer->sendPacket( &gcNPCResponse );
+
+	}
+
+	// 대화창 닫기
+	GCNPCResponse response;
+	response.setCode( NPC_RESPONSE_GIVE_EVENT_ITEM_OK );
+	pPlayer->sendPacket( &response );
+
+	response.setCode( NPC_RESPONSE_QUIT_DIALOGUE );
+	pPlayer->sendPacket( &response );
+
+	__END_CATCH
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// get debug string
+////////////////////////////////////////////////////////////////////////////////
+string ActionTradeSealingStone::toString () const
+{
+	__BEGIN_TRY
+
+	StringStream msg;
+	msg << "ActionTradeSealingStone("
+	    << ")";
+	return msg.toString();
+
+	__END_CATCH
+}

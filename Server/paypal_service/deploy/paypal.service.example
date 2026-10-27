@@ -1,0 +1,30 @@
+# Phoenix PayPal Cash servisi — systemd unit örneği.
+# Kurulum: cp paypal.service.example /etc/systemd/system/paypal.service
+#          systemctl daemon-reload && systemctl enable --now paypal
+
+[Unit]
+Description=Phoenix PayPal Cash Service (FastAPI)
+After=network.target mysql.service mariadb.service
+
+[Service]
+Type=simple
+# Ayrıcalıksız servis kullanıcısı: useradd -r -s /usr/sbin/nologin paypal
+User=paypal
+Group=paypal
+WorkingDirectory=/opt/paypal_service
+# Secret'lar bu dosyada tutulur (chmod 600, root:paypal). .env.example şablonuna bak.
+EnvironmentFile=/etc/paypal_service/paypal.env
+ExecStart=/opt/paypal_service/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+
+# Sertleştirme
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+# LOG_FILE=/var/log/... için yazma izni
+ReadWritePaths=/var/log
+
+[Install]
+WantedBy=multi-user.target

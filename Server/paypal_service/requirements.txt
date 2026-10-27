@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+httpx
+pymysql
+jinja2
+python-dotenv
+# FastAPI Form(...) alanları için zorunlu (multipart form parse)
+python-multipart

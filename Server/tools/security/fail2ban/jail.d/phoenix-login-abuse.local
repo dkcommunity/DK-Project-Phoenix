@@ -1,0 +1,23 @@
+[phoenix-login-abuse]
+enabled = true
+filter = phoenix-login-abuse
+logpath = /home/phoenix/phoenix/ServerSRC/bin/log/phoenix_packet_abuse.log
+backend = auto
+
+port = 9999
+protocol = tcp
+
+# Conservative first line of defense:
+# 5 protocol-abuse attempts in 60 seconds => 30 minutes ban.
+findtime = 60
+maxretry = 5
+bantime = 1800
+
+# Keep local/admin ranges safe. Add fixed admin public IPs here when needed.
+ignoreip = 127.0.0.1/8 ::1 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+
+# Ubuntu 22+ normally uses nftables. If this VPS uses legacy iptables,
+# change nftables-multiport to iptables-multiport before install.
+banaction = nftables-multiport
+action = %(banaction)s[name=phoenix-login-abuse, port="9999", protocol=tcp]
+         phoenix-db-audit[name=phoenix-login-abuse, service=LoginServer, reason=packet_abuse]

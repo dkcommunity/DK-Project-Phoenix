@@ -1,0 +1,274 @@
+//////////////////////////////////////////////////////////////////////////////
+// Filename    : Action.h
+// Written By  : 
+// Description :
+// rallser
+//////////////////////////////////////////////////////////////////////////////
+
+#ifndef __ACTION_H__
+#define __ACTION_H__
+
+#include "Types.h"
+#include "Exception.h"
+#include "PropertyBuffer.h"
+
+//////////////////////////////////////////////////////////////////////////////
+// class Action
+//////////////////////////////////////////////////////////////////////////////
+
+class Creature;
+
+class Action 
+{
+public:
+
+	enum ActionTypes 
+	{
+		ACTION_SET_POSITION,             // 设置NPC坐标
+		ACTION_WANDER,                   // 随机
+		ACTION_SAY,                      // NPC说话
+		ACTION_RANDOM_SAY,               // NPC随机说话
+		ACTION_ASK,                      // 提问
+		ACTION_QUIT_DIALOGUE,            // 退出面板
+		ACTION_PREPARE_SHOP,             // 商店面板
+		ACTION_SELL,                     // 卖
+		ACTION_BUY,                      // 买
+		ACTION_REGEN_SHOP,               // 药水商店
+		ACTION_PREPARE_TEACH,            // 准备传授
+		ACTION_TEACH_SKILL,              // 传授技能
+		ACTION_HEAL,                     // 治疗
+		ACTION_REDEEM_MOTORCYCLE,        // 召唤摩托
+		ACTION_SEARCH_MOTORCYCLE,        // 寻找摩托
+		ACTION_REPAIR,                   // 修理
+		ACTION_STASH_SELL,               // 珍贵物品卖
+		ACTION_STASH_OPEN,               // 珍贵物品打开
+		ACTION_RESTORE,                  // 恢复，加血
+		ACTION_SET_RESURRECT_ZONE,       // 设置复活点
+		ACTION_SILVER_COATING,           // 渡银
+		ACTION_CREATE_GUILD,             // 建立行会
+		ACTION_DESTROY_GUILD,            // 取消行会
+		ACTION_TUTORIAL,                 // 图书室
+		ACTION_GIVE_NEWBIE_ITEM,         // 借圣书
+		ACTION_ACTIVATE_PORTAL,          // 传送坐标
+		ACTION_TURN_ON_FLAG,             // 开启夺旗站
+		ACTION_TURN_OFF_FLAG,            // 关闭夺旗站
+		ACTION_SYSTEM_MESSAGE,           // 系统公告
+		ACTION_TAKE_DONATION,            // 捐款
+		ACTION_CALL_HELICOPTER,          // 召唤直升机
+		ACTION_REGEN_EVENT_SHOP,         // 复活活动商店
+		ACTION_SAY_DYNAMIC,              // 说话动态
+		ACTION_ASK_DYNAMIC,              // 提问动态
+		ACTION_GIVE_SPECIAL_EVENT_ITEM,  // 
+		ACTION_REDISTRIBUTE_ATTR,        // 
+		ACTION_GIVE_GARBAGE_ITEM,        // 给予赌博物品
+
+		//ACTION_TALK ,
+		//ACTION_RANDOM_TALK ,
+		//ACTION_GIVE ,
+		//ACTION_TAKE ,
+		//ACTION_DROP ,
+		//ACTION_CREATE_ITEM ,
+		//ACTION_DESTROY_ITEM ,
+		//ACTION_SET_ATTRIBUTE ,
+		//ACTION_SET_DISCOUNT_RATE ,
+		//ACTION_DIE ,
+		//ACTION_USE_SKILL ,
+		//ACTION_USE_ITEM ,
+		//ACTION_REMOVE_QUEST ,
+		//ACTION_AFTER ,
+
+		// Monster AI specific actions
+		ACTION_ATTACK ,	
+		ACTION_RETREAT ,	
+		ACTION_MOVE ,
+		ACTION_ATTACK_MOVE ,	
+		ACTION_STOP ,
+		ACTION_HOLD_POSITION ,
+		ACTION_PATROL ,
+
+		ACTION_TRADE_EVENT_ITEM,
+		ACTION_SHOW_GUILD_DIALOG,
+
+		ACTION_TRADE_LAIR_ITEM,
+
+		ACTION_SIMPLE_QUEST_LIST,
+		ACTION_SIMPLE_QUEST_COMPLETE,
+		ACTION_SIMPLE_QUEST_REGEN,
+
+		ACTION_TRADE_GIFT_BOX,
+
+		ACTION_GIVE_TEST_SERVER_REWARD,
+
+		// 
+		// 2003. 1.20. by bezz,Sequoia
+		ACTION_ENTER_CASTLE_WITH_FEE,
+
+		//
+		ACTION_SHOW_TAX_BALANCE,
+
+		ACTION_ASK_VARIABLE,
+
+		//
+		ACTION_WAR_REGISTRATION,
+		ACTION_SHOW_WAR_SCHEDULE,
+
+		// 
+		ACTION_JOIN_RACE_WAR,
+
+		// 
+		ACTION_GIVE_EVENT_ITEM,				// 活动物品奖励
+		ACTION_GIVE_ACCOUNT_EVENT_ITEM,		// 账户活动物品奖励
+
+		// 
+		ACTION_INIT_PARTNER_WAITING_MANAGER,
+		ACTION_WAIT_FOR_MEET_COUPLE,
+		ACTION_WAIT_FOR_APART_COUPLE,
+		ACTION_ACCEPT_COUPLE_REQUEST,
+		ACTION_ACCEPT_APART_COUPLE,
+
+		ACTION_FORCE_APART_COUPLE,
+
+		ACTION_ENTER_PK_ZONE,
+		ACTION_WARP_TO_RESURRECT_POSITION,
+
+		ACTION_SELECT_QUEST,
+		ACTION_QUEST_REWARD,
+
+		ACTION_WARP_TO_NOVICE_ZONE,
+		ACTION_CANCEL_QUEST,
+
+		ACTION_INIT_SIMPLE_QUEST,
+		ACTION_WANDER_ZONE,
+
+		ACTION_INIT_EVENT_QUEST,
+		ACTION_ASK_BY_QUEST_LEVEL,
+		ACTION_GIVE_EVENT_QUEST,
+		ACTION_ADVANCE_EVENT_QUEST,
+		ACTION_REWARD_EVENT_QUEST,
+		ACTION_CANCEL_EVENT_QUEST_SCRIPT,
+		ACTION_GIVE_LOTTO,
+		ACTION_GIVE_EVENT_QUEST_SCRIPT,
+		ACTION_START_EVENT_QUEST,
+		ACTION_WARP_IN_ZONE,
+		ACTION_EVENT_MEET,
+		ACTION_GIVE_FINAL_LOTTO_SCRIPT,
+		ACTION_GIVE_QUEST_ITEM,
+		ACTION_TAKE_OUT_GOODS,
+		ACTION_CLEAR_RANK_BONUS,
+		ACTION_CONTRACT_GNOMES_HORN,
+		ACTION_DOWN_SKILL,
+		ACTION_MINI_GAME,
+		ACTION_GIVE_ITEM,
+		ACTION_ACTIVATE_MAZE_EXIT,
+		ACTION_ACTIVATE_MAZE_ENTER,
+		ACTION_ACTIVATE_MAZE_RETURN,
+
+		ACTION_SYSTEM_MESSAGE_PER_RACE,           // 系统公告战争结果
+
+		ACTION_WARP_LEVEL_WAR_ZONE,
+
+		ACTION_CHECK_PARTNER_NAME,				// 检测参与者名字
+
+		ACTION_START_PET_QUEST,					// 开始宠物任务
+
+		ACTION_PET_WITHDRAW,					// 取回宠物
+		ACTION_PET_DEPOSIT,						// 存放宠物
+
+		ACTION_ENTER_EVENT_ZONE,				// 进入活动地图
+		ACTION_ENTER_GDR_LAIR,					// 进入音乐行宫
+
+		ACTION_TRADE_GQUEST_EVENT_ITEM,			// 任务道具交换
+
+		ACTION_ENTER_SIEGE,						// 进入战争
+
+		ACTION_REGISTER_SIEGE,					// 登记排名
+		ACTION_REGISTER_REINFORCE,				// 候选
+		ACTION_ACCEPT_REINFORCE,				// 加入行会
+		ACTION_DENY_REINFORCE,					// 拒绝加入行会
+
+		ACTION_RECALL_SIEGE,					// 记忆战争
+		ACTION_SELECT_BLOOD_BIBLE,				// 选择圣书
+		ACTION_CLEAR_BLOOD_BIBLE,				// 还圣书
+
+		ACTION_MODIFY_TAX_RATIO,				// 修改税收比率
+		ACTION_SWAP_ADVANCEMENT_ITEM,			// 转职道具
+
+		ACTION_SHOW_DONATION_DIALOG,			// 捐赠奖励细节
+		ACTION_ENTER_QUEST_ZONE,				//进入任务地图
+		ACTION_SHOW_CONFIRM_GET_EVENT_ITEM_DIALOG,	// 活动奖励细节
+		ACTION_GIVE_COMMON_EVENT_ITEM,			//任务奖励
+		// 2006.03.13
+		ACTION_GIVE_COMMON_QUEST_ITEM,
+		ACTION_CHECK_COMMON_QUEST_ITEM,
+
+		ACTION_RESET_ATTRIBUTE,
+
+		ACTION_CHECK_EVENT_LEVELUP_200604,
+		ACTION_GIVE_EVENT_LEVELUP_200604,
+
+		// 2006.03.30
+		ACTION_CHECK_COMEBACK_EVENT_ITEM_200604,
+		ACTION_GIVE_COMEBACK_EVENT_ITEM_200604,
+
+		ACTION_REDISTRIBUTE_ATTR_50,
+		ACTION_CHANGE_PLAYER_COLOR,
+
+		ACTION_EXCHANGE_OF_MONEY,       //交换金币
+
+		ACTION_SOCCER_EVENT_200606,
+		ACTION_TRADE_SEALING_STONE,
+
+		ACTION_ENTER_CASTLE_B2F,
+		ACTION_ENTER_SURVIVAL_ZONE,
+
+		ACTION_GAMBLE_SYSTEM,
+
+		ACTION_CHECK_GLUTINOUS_RICE_KNEADING,
+
+		ACTION_GIVE_EVENT_BOX_ITEM,
+
+		ACTION_TRADE_MYSTERY_POTION,
+		ACTION_TRADE_LEATHER,
+
+		ACTION_GIVE_HELLGARDEN_CROSS_ITEM,
+		ACTION_GIVE_HELLGARDEN_SEED_ITEM,
+
+		ACTION_ENTER_HELLGARDEN,
+		ACTION_ATTEND_CHECK,
+#ifdef __CONTRIBUTION_SYSTEM__
+		ACTION_GIVE_CONTRIBUTE_REWARD,
+		ACTION_CHECK_LEVEL_WAR_REWARD,
+#endif
+
+#ifdef __MENEGROTH_DOUNGEON_SYSTEM__
+		ACTION_ENTER_MENEGROTH,
+		ACTION_INSERT_CABRACAM_HEART,
+#endif // __MENEGROTH_DOUNGEON_SYSTEM__
+		ACTION_GIVE_CRASHING_REWARD,
+
+		ACTION_INIT_INSTANCEDOUNGEON,
+		
+		ACTION_BLITZ_REGISTER, 	// 注册闪电图样
+		ACTION_BLITZ_REWARD,	// 闪电图样收集奖励
+
+		ACTION_MAPLE_REGISTER, 	// 枫木
+		ACTION_MAPLE_REWARD,	// 枫木奖励
+
+		ACTION_RECALL_PARTY,
+				ACTION_MONSTER_SUMMON,
+		ACTION_ENTER_INSTANT,
+		ACTION_QUIT_MOBA_QUEUE,
+		ACTION_OPEN_AUCTION_HOUSE,
+		ACTION_MAX
+	};
+
+public:
+	virtual ~Action() {}
+	virtual ActionType_t getActionType() const = 0;
+	virtual void read(PropertyBuffer & buffer) = 0;
+	virtual void execute(Creature* pCreature1, Creature* pCreature2 = NULL) = 0;	
+	virtual string toString() const = 0;
+
+};
+
+#endif

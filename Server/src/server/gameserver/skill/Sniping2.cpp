@@ -1,0 +1,154 @@
+//////////////////////////////////////////////////////////////////////////////
+// Filename    : Sniping2.cpp
+// Written by  : elca@ewestsoft.com
+// Description : 
+//////////////////////////////////////////////////////////////////////////////
+
+#include "Sniping2.h"
+#include "ItemUtil.h"
+#include "ZoneUtil.h"
+#include "EffectFadeOut.h"
+#include "EffectSnipingMode2.h"
+
+#include "Gpackets/GCSkillToSelfOK1.h"
+#include "Gpackets/GCSkillToSelfOK2.h"
+#include "Gpackets/GCDeleteObject.h"
+
+//////////////////////////////////////////////////////////////////////////////
+// 슬레이어 셀프 핸들러
+//////////////////////////////////////////////////////////////////////////////
+SkillResultType Sniping2::execute(Slayer* pSlayer, SlayerSkillSlot* pSkillSlot, CEffectID_t CEffectID)
+	throw(Error)
+{
+	__BEGIN_TRY
+
+	Assert(pSlayer != NULL);
+	Assert(pSkillSlot != NULL);
+
+	try 
+	{
+		Player* pPlayer = pSlayer->getPlayer();
+		Zone* pZone = pSlayer->getZone();
+
+		Assert(pPlayer != NULL);
+		Assert(pZone != NULL);
+
+		Item* pItem = pSlayer->getWearItem(Slayer::WEAR_RIGHTHAND);
+		if (pItem == NULL 
+			|| isArmsWeapon(pItem) == false
+			|| pSlayer->hasRelicItem()
+			)
+		{
+			executeSkillFailException(pSlayer, getSkillType());
+
+			return SKILL_RESULT_FAIL_INVALID_ITEM;
+		}
+
+		GCSkillToSelfOK1 _GCSkillToSelfOK1;
+		GCSkillToSelfOK2 _GCSkillToSelfOK2;
+
+		SkillType_t       SkillType  = pSkillSlot->getSkillType();
+		SkillInfo*        pSkillInfo = g_pSkillInfoManager->getSkillInfo(SkillType);
+		SkillDomainType_t DomainType = pSkillInfo->getDomainType();
+
+		ZoneCoord_t x = pSlayer->getX();
+		ZoneCoord_t y = pSlayer->getY();
+		
+		if( pZone->getZoneID() == 8001 )
+		{
+			executeSkillFailException(pSlayer, getSkillType());
+			
+			return SKILL_RESULT_FAIL_CANNOT_USE_IN_ZONE;
+		}
+
+		Tile& rTile = pZone->getTile( pSlayer->getX(), pSlayer->getY() );
+		int  RequiredMP  = pSkillInfo->getConsumeMP();
+		bool bManaCheck  = hasEnoughMana(pSlayer, RequiredMP);
+		bool bTimeCheck  = verifyRunTime(pSkillSlot);
+		//bool bRangeCheck = checkZoneLevelToUseSkill(pSlayer);
+		//bool bHitRoll    = HitRoll::isSuccessMagic(pSlayer, pSkillInfo, pSkillSlot);
+		bool bEffected   = pSlayer->isFlag(Effect::EFFECT_CLASS_SNIPING_MODE) || 
+			                pSlayer->isFlag(Effect::EFFECT_CLASS_FADE_OUT) ||
+ 					pSlayer->isFlag(Effect::EFFECT_CLASS_SNIPING_MODE_2) || 
+							pSlayer->isFlag(Effect::EFFECT_CLASS_HAS_FLAG) ||
+							pSlayer->isFlag(Effect::EFFECT_CLASS_HAS_SWEEPER) ||
+							rTile.getEffect(Effect::EFFECT_CLASS_TRYING_POSITION)!=NULL;
+
+		if (bManaCheck && bTimeCheck && !bEffected)
+		{
+			decreaseMana(pSlayer, RequiredMP, _GCSkillToSelfOK1);
+
+			SkillInput input(pSlayer, pSkillSlot);
+			SkillOutput output;
+			computeOutput(input, output);
+
+			EffectFadeOut* pEffect= new EffectFadeOut(pSlayer);
+			pEffect->setDuration(output.Duration);
+			pEffect->setDeadline(40);
+			pEffect->setSniping();
+			pEffect->setSnipingMode(2);
+			pSlayer->addEffect(pEffect);
+			pSlayer->setFlag(Effect::EFFECT_CLASS_FADE_OUT);
+
+
+			_GCSkillToSelfOK1.setSkillType(SkillType);
+			_GCSkillToSelfOK1.setCEffectID(CEffectID);
+			_GCSkillToSelfOK1.setDuration(0);
+
+			_GCSkillToSelfOK2.setObjectID(pSlayer->getObjectID());
+			_GCSkillToSelfOK2.setSkillType(SkillType);
+			_GCSkillToSelfOK2.setDuration(0);
+		
+			postSkillSuccessProcess( SkillType, pSlayer, &_GCSkillToSelfOK1 );
+
+			pPlayer->sendPacket(&_GCSkillToSelfOK1);
+		
+			pZone->broadcastPacket(x, y, &_GCSkillToSelfOK2, pSlayer);
+
+			pSkillSlot->setRunTime(output.Delay);
+			
+			return SKILL_RESULT_SUCCESS;
+		} 
+		else 
+		{
+			executeSkillFailNormal(pSlayer, getSkillType(), NULL);
+		}
+	} 
+	catch(Throwable & t) 
+	{
+		executeSkillFailException(pSlayer, getSkillType());
+	}
+
+	return SKILL_RESULT_FAIL_UNKNOWN;
+
+	__END_CATCH
+}
+
+void Sniping2::checkRevealRatio2(Creature* pCreature, int base, int divisor)
+{
+	Assert(pCreature != NULL);
+	Assert(pCreature->isSlayer());
+	Assert(pCreature->isFlag(Effect::EFFECT_CLASS_SNIPING_MODE_2));
+	
+	Slayer* pSlayer = dynamic_cast<Slayer*>(pCreature);
+	Assert(pSlayer != NULL);
+
+	Zone* pZone = pSlayer->getZone();
+	Assert(pZone != NULL);
+
+	SlayerSkillSlot* pSkillSlot = pSlayer->getSkill(SKILL_SNIPING2);
+	Assert(pSkillSlot != NULL);
+
+	EffectSnipingMode2* pEffectSM = dynamic_cast<EffectSnipingMode2*>(pCreature->findEffect(Effect::EFFECT_CLASS_SNIPING_MODE_2));
+	Assert(pEffectSM != NULL);
+
+	int penalty = base - (100/divisor);
+	pEffectSM->setRevealRatio(pEffectSM->getRevealRatio() + penalty);
+
+	if (rand()%100 < pEffectSM->getRevealRatio())
+	{
+		pEffectSM->setDeadline(0);
+	}
+}
+
+Sniping2 g_Sniping2;

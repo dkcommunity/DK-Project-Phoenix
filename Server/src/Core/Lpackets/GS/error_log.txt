@@ -1,0 +1,1911 @@
+g++ -Wall -c -g -std=c++98 -std=c++11 -D__LINUX__ -D_REENTRANT -D__DEBUG__ -D__GAME_SERVER__  -I../../../../src/Core -I../../../../src/server -I../../../../src/server/database -I../../../../src/server/gameserver -I../../../../src/server/gameserver/skill -I../../../../src/server/gameserver/item -I../../../../src/server/gameserver/billing LGKickCharacterHandler.cpp
+In file included from ../../../../src/Core/SocketImpl.h:17,
+                 from ../../../../src/Core/Socket.h:11,
+                 from ../../../../src/Core/SocketInputStream.h:53,
+                 from ../../../../src/Core/Packet.h:15,
+                 from ../../../../src/Core/DatagramPacket.h:13,
+                 from LGKickCharacter.h:13,
+                 from LGKickCharacterHandler.cpp:10:
+../../../../src/Core/SocketAPI.h:56:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   56 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:63:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   63 |         throw (BindException, Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:70:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   70 |         throw (ConnectException, NonBlockingIOException, Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:76:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   76 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:83:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   83 |         throw (NonBlockingIOException, ConnectException, Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:90:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   90 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:93:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   93 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:99:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   99 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:105:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  105 |         throw (NonBlockingIOException, ConnectException, Error, ProtocolException);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:112:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  112 |         throw (NonBlockingIOException, ConnectException, Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:118:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  118 |         throw (NonBlockingIOException, ConnectException, Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:125:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  125 |         throw (NonBlockingIOException, ConnectException, Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:136:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  136 |         throw (FileNotOpenedException, Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:147:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  147 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:154:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  154 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:161:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  161 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:168:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  168 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:175:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  175 |         throw (Error);
+      |         ^~~~~
+../../../../src/Core/SocketAPI.h:182:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  182 |         throw (TimeoutException, InterruptedException, Error);
+      |         ^~~~~
+../../../../src/Core/SocketImpl.h:47:32: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   47 |         virtual ~SocketImpl () throw (Error);
+      |                                ^~~~~
+../../../../src/Core/SocketImpl.h:55:24: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   55 |         void create () throw (Error);
+      |                        ^~~~~
+../../../../src/Core/SocketImpl.h:58:23: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   58 |         void close () throw (Error);
+      |                       ^~~~~
+../../../../src/Core/SocketImpl.h:61:22: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   61 |         void bind () throw (BindException, Error);
+      |                      ^~~~~
+../../../../src/Core/SocketImpl.h:62:31: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   62 |         void bind (uint port) throw (BindException, Error);
+      |                               ^~~~~
+../../../../src/Core/SocketImpl.h:65:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   65 |         void listen (uint backlog) throw (Error);
+      |                                    ^~~~~
+../../../../src/Core/SocketImpl.h:68:25: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   68 |         void connect () throw (ConnectException, Error);
+      |                         ^~~~~
+../../../../src/Core/SocketImpl.h:69:55: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   69 |         void connect (const string & host, uint port) throw (ConnectException, Error);
+      |                                                       ^~~~~
+../../../../src/Core/SocketImpl.h:72:31: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   72 |         SocketImpl* accept () throw (NonBlockingIOException, ConnectException, Error);
+      |                               ^~~~~
+../../../../src/Core/SocketImpl.h:75:63: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   75 |         uint send (const void* buf, uint len, uint flags = 0) throw (IOException, InvalidProtocolException, Error);
+      |                                                               ^~~~~
+../../../../src/Core/SocketImpl.h:78:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   78 |         uint receive (void* buf, uint len, uint flags = 0) throw (IOException, Error);
+      |                                                            ^~~~~
+../../../../src/Core/SocketImpl.h:81:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   81 |         uint available () const throw (Error);
+      |                                 ^~~~~
+../../../../src/Core/SocketImpl.h:90:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   90 |         uint getLinger () const throw (Error);
+      |                                 ^~~~~
+../../../../src/Core/SocketImpl.h:91:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   91 |         void setLinger (uint lingertime) throw (Error);
+      |                                          ^~~~~
+../../../../src/Core/SocketImpl.h:94:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   94 |         bool isReuseAddr () const throw (Error);
+      |                                   ^~~~~
+../../../../src/Core/SocketImpl.h:95:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   95 |         void setReuseAddr (bool on = true) throw (Error);
+      |                                            ^~~~~
+../../../../src/Core/SocketImpl.h:98:34: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   98 |         bool isSockError() const throw (Error);
+      |                                  ^~~~~
+../../../../src/Core/SocketImpl.h:101:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  101 |         bool isNonBlocking () const throw (Error);
+      |                                     ^~~~~
+../../../../src/Core/SocketImpl.h:102:46: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  102 |         void setNonBlocking (bool on = true) throw (Error);
+      |                                              ^~~~~
+../../../../src/Core/SocketImpl.h:105:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  105 |         uint getReceiveBufferSize () const throw (Error);
+      |                                            ^~~~~
+../../../../src/Core/SocketImpl.h:106:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  106 |         void setReceiveBufferSize (uint size) throw (Error);
+      |                                               ^~~~~
+../../../../src/Core/SocketImpl.h:109:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  109 |         uint getSendBufferSize () const throw (Error);
+      |                                         ^~~~~
+../../../../src/Core/SocketImpl.h:110:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  110 |         void setSendBufferSize (uint size) throw (Error);
+      |                                            ^~~~~
+../../../../src/Core/Socket.h:36:28: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |         virtual ~Socket () throw (Error);
+      |                            ^~~~~
+../../../../src/Core/Socket.h:45:23: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   45 |         void close () throw (Error);
+      |                       ^~~~~
+../../../../src/Core/Socket.h:48:25: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   48 |         void connect () throw (ConnectException, Error);
+      |                         ^~~~~
+../../../../src/Core/Socket.h:49:55: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   49 |         void connect (const string & host, uint port) throw (ConnectException, Error);
+      |                                                       ^~~~~
+../../../../src/Core/Socket.h:52:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   52 |         void reconnect (const string & host, uint port) throw (ConnectException, Error);
+      |                                                         ^~~~~
+../../../../src/Core/Socket.h:55:63: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   55 |         uint send (const void* buf, uint len, uint flags = 0) throw (IOException, Error);
+      |                                                               ^~~~~
+../../../../src/Core/Socket.h:58:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   58 |         uint receive (void* buf, uint len, uint flags = 0) throw (IOException, ConnectException, Error);
+      |                                                            ^~~~~
+../../../../src/Core/Socket.h:60:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   60 |         uint available () const throw (Error);
+      |                                 ^~~~~
+../../../../src/Core/Socket.h:69:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   69 |     uint getLinger () const throw (Error);
+      |                             ^~~~~
+../../../../src/Core/Socket.h:70:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   70 |     void setLinger (uint lingertime) throw (Error);
+      |                                      ^~~~~
+../../../../src/Core/Socket.h:73:31: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   73 |     uint getSockError() const throw (Error);
+      |                               ^~~~~
+../../../../src/Core/Socket.h:76:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   76 |     bool isNonBlocking () const throw (Error);
+      |                                 ^~~~~
+../../../../src/Core/Socket.h:77:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   77 |     void setNonBlocking (bool on = true) throw (Error);
+      |                                          ^~~~~
+../../../../src/Core/Socket.h:80:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   80 |     uint getReceiveBufferSize () const throw (Error);
+      |                                        ^~~~~
+../../../../src/Core/Socket.h:81:43: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   81 |     void setReceiveBufferSize (uint size) throw (Error);
+      |                                           ^~~~~
+../../../../src/Core/Socket.h:84:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   84 |     uint getSendBufferSize () const throw (Error);
+      |                                     ^~~~~
+../../../../src/Core/Socket.h:85:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   85 |     void setSendBufferSize (uint size) throw (Error);
+      |                                        ^~~~~
+../../../../src/Core/SocketInputStream.h:98:90: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   98 |         SocketInputStream (Socket* sock, uint BufferSize = DefaultSocketInputBufferSize) throw (Error);
+      |                                                                                          ^~~~~
+../../../../src/Core/SocketInputStream.h:104:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  104 |         virtual ~SocketInputStream () throw (Error);
+      |                                       ^~~~~
+../../../../src/Core/SocketInputStream.h:122:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  122 |         uint read (char* buf, uint len) throw (ProtocolException, Error);
+      |                                         ^~~~~
+../../../../src/Core/SocketInputStream.h:124:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  124 |         uint read (string & str, uint len) throw (ProtocolException, Error);
+      |                                            ^~~~~
+../../../../src/Core/SocketInputStream.h:126:62: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  126 |         void readPacket (Packet* p, bool bSkipHeader = true) throw (ProtocolException, Error);
+      |                                                              ^~~~~
+../../../../src/Core/SocketInputStream.h:132:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  132 |                 uint read( T& buf ) throw (ProtocolException, Error);
+      |                                     ^~~~~
+../../../../src/Core/SocketInputStream.h:158:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  158 |         bool peek (char* buf, uint len) throw (ProtocolException, Error);
+      |                                         ^~~~~
+../../../../src/Core/SocketInputStream.h:164:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  164 |         void skip (uint len) throw (ProtocolException, Error);
+      |                              ^~~~~
+../../../../src/Core/SocketInputStream.h:170:22: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  170 |         uint fill () throw (IOException, Error);
+      |                      ^~~~~
+../../../../src/Core/SocketInputStream.h:172:26: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  172 |         uint fill_RAW () throw (IOException, Error);
+      |                          ^~~~~
+../../../../src/Core/SocketInputStream.h:178:32: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  178 |         void resize (int size) throw (IOException, Error);
+      |                                ^~~~~
+../../../../src/Core/SocketInputStream.h:269:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  269 |         throw ( ProtocolException , Error )
+      |         ^~~~~
+In file included from ../../../../src/Core/Packet.h:16:
+../../../../src/Core/SocketOutputStream.h:74:92: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   74 |         SocketOutputStream (Socket* sock, uint BufferSize = DefaultSocketOutputBufferSize) throw (Error);
+      |                                                                                            ^~~~~
+../../../../src/Core/SocketOutputStream.h:80:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   80 |         virtual ~SocketOutputStream () throw (Error);
+      |                                        ^~~~~
+../../../../src/Core/SocketOutputStream.h:108:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  108 |         uint write (const char* buf, uint len) throw (Error);
+      |                                                ^~~~~
+../../../../src/Core/SocketOutputStream.h:110:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  110 |         uint write (const string & buf) throw (Error) { return write(buf.c_str(),buf.size()); }
+      |                                         ^~~~~
+../../../../src/Core/SocketOutputStream.h:112:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  112 |         void writePacket (const Packet* pPacket) throw (ProtocolException, Error);
+      |                                                  ^~~~~
+../../../../src/Core/SocketOutputStream.h:118:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  118 |                 uint write( T buf ) throw (Error);
+      |                                     ^~~~~
+../../../../src/Core/SocketOutputStream.h:142:23: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  142 |         uint flush () throw (IOException, ProtocolException, InvalidProtocolException, Error);
+      |                       ^~~~~
+../../../../src/Core/SocketOutputStream.h:148:32: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  148 |         void resize (int size) throw (IOException, Error);
+      |                                ^~~~~
+../../../../src/Core/SocketOutputStream.h:272:6: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  272 |      throw ( Error )
+      |      ^~~~~
+../../../../src/Core/Packet.h:717:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  717 |         virtual void read (SocketInputStream & iStream) throw (ProtocolException, Error) = 0;
+      |                                                         ^~~~~
+../../../../src/Core/Packet.h:718:65: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  718 |         inline void readTimeStamp (SocketInputStream & iStream) throw (ProtocolException, Error)
+      |                                                                 ^~~~~
+../../../../src/Core/Packet.h:724:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  724 |         virtual void read (Socket* pSocket) throw (ProtocolException, Error) { throw UnsupportedError(__PRETTY_FUNCTION__); }
+      |                                             ^~~~~
+../../../../src/Core/Packet.h:727:65: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  727 |         virtual void write (SocketOutputStream & oStream) const throw (ProtocolException, Error) = 0;
+      |                                                                 ^~~~~
+../../../../src/Core/Packet.h:730:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  730 |         virtual void write (Socket* pSocket) const throw (ProtocolException, Error) { throw UnsupportedError(__PRETTY_FUNCTION__); }
+      |                                                    ^~~~~
+../../../../src/Core/Packet.h:742:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  742 |         virtual void execute (Player* pPlayer) throw (ProtocolException, Error) = 0;
+      |                                                ^~~~~
+In file included from ../../../../src/Core/DatagramPacket.h:14:
+../../../../src/Core/Datagram.h:47:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   47 |         void read (char* buf, uint len) throw (Error);
+      |                                         ^~~~~
+../../../../src/Core/Datagram.h:48:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   48 |         void read (string & str, uint len) throw (Error);
+      |                                            ^~~~~
+../../../../src/Core/Datagram.h:49:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   49 |         void read (DatagramPacket* & pPacket) throw (ProtocolException, Error);
+      |                                               ^~~~~
+../../../../src/Core/Datagram.h:51:34: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   51 |         void read (char   & buf) throw (Error) { read((char*)&buf, szchar  ); }
+      |                                  ^~~~~
+../../../../src/Core/Datagram.h:52:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   52 |     void read (uchar  & buf) throw (Error) { read((char*)&buf, szuchar ); }
+      |                              ^~~~~
+../../../../src/Core/Datagram.h:53:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   53 |     void read (short  & buf) throw (Error) { read((char*)&buf, szshort ); }
+      |                              ^~~~~
+../../../../src/Core/Datagram.h:54:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   54 |     void read (ushort & buf) throw (Error) { read((char*)&buf, szushort); }
+      |                              ^~~~~
+../../../../src/Core/Datagram.h:55:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   55 |     void read (int    & buf) throw (Error) { read((char*)&buf, szint   ); }
+      |                              ^~~~~
+../../../../src/Core/Datagram.h:56:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   56 |     void read (uint   & buf) throw (Error) { read((char*)&buf, szuint  ); }
+      |                              ^~~~~
+../../../../src/Core/Datagram.h:57:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   57 |     void read (long   & buf) throw (Error) { read((char*)&buf, szlong  ); }
+      |                              ^~~~~
+../../../../src/Core/Datagram.h:58:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   58 |     void read (ulong  & buf) throw (Error) { read((char*)&buf, szulong ); }
+      |                              ^~~~~
+../../../../src/Core/Datagram.h:61:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   61 |         void write (const char* buf, uint len) throw (Error);
+      |                                                ^~~~~
+../../../../src/Core/Datagram.h:62:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   62 |         void write (const string & buf) throw (Error);
+      |                                         ^~~~~
+../../../../src/Core/Datagram.h:63:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   63 |         void write (const DatagramPacket* pPacket) throw (ProtocolException, Error);
+      |                                                    ^~~~~
+../../../../src/Core/Datagram.h:65:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   65 |         void write (char   buf) throw (Error) { write((char*)&buf, szchar  ); }
+      |                                 ^~~~~
+../../../../src/Core/Datagram.h:66:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   66 |     void write (uchar  buf) throw (Error) { write((char*)&buf, szuchar ); }
+      |                             ^~~~~
+../../../../src/Core/Datagram.h:67:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   67 |     void write (short  buf) throw (Error) { write((char*)&buf, szshort ); }
+      |                             ^~~~~
+../../../../src/Core/Datagram.h:68:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   68 |     void write (ushort buf) throw (Error) { write((char*)&buf, szushort); }
+      |                             ^~~~~
+../../../../src/Core/Datagram.h:69:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   69 |     void write (int    buf) throw (Error) { write((char*)&buf, szint   ); }
+      |                             ^~~~~
+../../../../src/Core/Datagram.h:70:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   70 |     void write (uint   buf) throw (Error) { write((char*)&buf, szuint  ); }
+      |                             ^~~~~
+../../../../src/Core/Datagram.h:71:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   71 |     void write (long   buf) throw (Error) { write((char*)&buf, szlong  ); }
+      |                             ^~~~~
+../../../../src/Core/Datagram.h:72:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   72 |     void write (ulong  buf) throw (Error) { write((char*)&buf, szulong ); }
+      |                             ^~~~~
+../../../../src/Core/Datagram.h:78:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   78 |         void setData (char* data, uint len) throw (Error);
+      |                                             ^~~~~
+../../../../src/Core/Datagram.h:79:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   79 |         void setData (uint len) throw (Error);
+      |                                 ^~~~~
+../../../../src/Core/Datagram.h:88:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   88 |         void setAddress (SOCKADDR_IN* pSockAddr) throw (Error);
+      |                                                  ^~~~~
+../../../../src/Core/DatagramPacket.h:38:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   38 |         virtual void read (SocketInputStream & iStream) throw (ProtocolException, Error)
+      |                                                         ^~~~~
+../../../../src/Core/DatagramPacket.h:44:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   44 |         virtual void read (Datagram & iDatagram) throw (ProtocolException, Error) = 0;
+      |                                                  ^~~~~
+../../../../src/Core/DatagramPacket.h:48:65: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   48 |         virtual void write (SocketOutputStream & oStream) const throw (ProtocolException, Error)
+      |                                                                 ^~~~~
+../../../../src/Core/DatagramPacket.h:54:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   54 |         virtual void write (Datagram & oDatagram) const throw (ProtocolException, Error) = 0;
+      |                                                         ^~~~~
+../../../../src/Core/DatagramPacket.h:57:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   57 |         virtual void execute (Player* pPlayer) throw (ProtocolException, Error) = 0;
+      |                                                ^~~~~
+LGKickCharacter.h:33:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   33 |     void read(Datagram & iDatagram) throw(ProtocolException, Error);
+      |                                     ^~~~~
+LGKickCharacter.h:36:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |     void write(Datagram & oDatagram) const throw(ProtocolException, Error);
+      |                                            ^~~~~
+LGKickCharacter.h:39:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   39 |         void execute(Player* pPlayer) throw(ProtocolException, Error);
+      |                                       ^~~~~
+LGKickCharacter.h:119:55: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  119 |         static void execute(LGKickCharacter* pPacket) throw(ProtocolException, Error);
+      |                                                       ^~~~~
+In file included from ../../../../src/server/gameserver/GamePlayer.h:12,
+                 from LGKickCharacterHandler.cpp:14:
+../../../../src/Core/Player.h:46:19: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   46 |         Player () throw (Error);
+      |                   ^~~~~
+../../../../src/Core/Player.h:47:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   47 |         Player (Socket * pSocket) throw ( Error );
+      |                                   ^~~~~
+../../../../src/Core/Player.h:50:28: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   50 |         virtual ~Player () throw (Error);
+      |                            ^~~~~
+../../../../src/Core/Player.h:53:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   53 |         virtual void processInput () throw (IOException, Error);
+      |                                      ^~~~~
+../../../../src/Core/Player.h:56:58: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   56 |         virtual void processCommand (bool Option = true) throw (IOException, Error);
+      |                                                          ^~~~~
+../../../../src/Core/Player.h:59:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   59 |         virtual void processOutput () throw (IOException, Error, ProtocolException);
+      |                                       ^~~~~
+../../../../src/Core/Player.h:62:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   62 |         virtual void sendPacket (Packet* pPacket) throw (ProtocolException, Error);
+      |                                                   ^~~~~
+../../../../src/Core/Player.h:65:70: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   65 |         virtual void sendStream( SocketOutputStream* pOutputStream ) throw (ProtocolException, Error);
+      |                                                                      ^~~~~
+../../../../src/Core/Player.h:71:69: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   71 |         virtual void disconnect (bool bDisconnected = DISCONNECTED) throw (InvalidProtocolException, Error);
+      |                                                                     ^~~~~
+../../../../src/Core/Player.h:90:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   90 |         virtual string toString () const throw (Error);
+      |                                          ^~~~~
+In file included from ../../../../src/server/gameserver/GamePlayer.h:13:
+../../../../src/Core/SocketEncryptOutputStream.h:34:106: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   34 |         SocketEncryptOutputStream (Socket* sock, uint BufferSize = DefaultSocketEncryptOutputBufferSize) throw (Error);
+      |                                                                                                          ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:35:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   35 |         ~SocketEncryptOutputStream () throw (Error);
+      |                                       ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:48:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   48 |     uint writeEncrypt (bool   buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:49:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   49 |     uint writeEncrypt (char   buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:50:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   50 |     uint writeEncrypt (uchar  buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:51:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   51 |     uint writeEncrypt (short  buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:52:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   52 |     uint writeEncrypt (ushort buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:53:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   53 |     uint writeEncrypt (int    buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:54:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   54 |     uint writeEncrypt (uint   buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:55:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   55 |     uint writeEncrypt (long   buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptOutputStream.h:56:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   56 |     uint writeEncrypt (ulong  buf) throw (ProtocolException, Error) { buf = m_Encrypter.convert(buf); return write(buf); }
+      |                                    ^~~~~
+In file included from ../../../../src/server/gameserver/GamePlayer.h:14:
+../../../../src/Core/SocketEncryptInputStream.h:34:104: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   34 |         SocketEncryptInputStream (Socket* sock, uint BufferSize = DefaultSocketEncryptInputBufferSize) throw (Error);
+      |                                                                                                        ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:35:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   35 |         ~SocketEncryptInputStream () throw (Error);
+      |                                      ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:48:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   48 |     uint readEncrypt (bool   &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:49:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   49 |     uint readEncrypt (char   &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:50:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   50 |     uint readEncrypt (uchar  &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:51:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   51 |     uint readEncrypt (short  &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:52:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   52 |     uint readEncrypt (ushort &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:53:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   53 |     uint readEncrypt (int    &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:54:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   54 |     uint readEncrypt (uint   &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:55:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   55 |     uint readEncrypt (long   &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+../../../../src/Core/SocketEncryptInputStream.h:56:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   56 |     uint readEncrypt (ulong  &buf) throw (ProtocolException, Error) { uint n = read(buf); buf = m_Encrypter.convert(buf);  return n; }
+      |                                    ^~~~~
+In file included from ../../../../src/server/gameserver/GamePlayer.h:15:
+../../../../src/server/Mutex.h:24:43: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   24 |         Mutex ( MutexAttr * attr = NULL ) throw ( Error );
+      |                                           ^~~~~
+../../../../src/server/Mutex.h:25:27: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   25 |         virtual ~Mutex () throw ( Error );
+      |                           ^~~~~
+../../../../src/server/Mutex.h:31:22: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   31 |         void lock () throw ( Error );
+      |                      ^~~~~
+../../../../src/server/Mutex.h:32:24: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   32 |         void unlock () throw ( Error );
+      |                        ^~~~~
+../../../../src/server/Mutex.h:33:25: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   33 |         void trylock () throw ( Error );
+      |                         ^~~~~
+In file included from ../../../../src/server/gameserver/EventManager.h:12,
+                 from ../../../../src/server/gameserver/GamePlayer.h:20:
+../../../../src/server/gameserver/Event.h:46:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   46 |         Event(GamePlayer* pGamePlayer) throw(Error);
+      |                                        ^~~~~
+../../../../src/server/gameserver/Event.h:57:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   57 |         virtual void activate() throw(Error) = 0;
+      |                                 ^~~~~
+../../../../src/server/gameserver/EventManager.h:23:24: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   23 |         EventManager() throw(Error);
+      |                        ^~~~~
+../../../../src/server/gameserver/EventManager.h:31:28: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   31 |         void   heartbeat() throw(Error);
+      |                            ^~~~~
+In file included from ../../../../src/server/gameserver/GamePlayer.h:22:
+../../../../src/server/PaySystem.h:105:80: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  105 |         void                    setPayPlayAvailableDateTime(const string& pat) throw (Error);
+      |                                                                                ^~~~~
+../../../../src/server/PaySystem.h:108:86: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  108 |         void                    setFamilyPayPlayAvailableDateTime(const string& pat) throw (Error);
+      |                                                                                      ^~~~~
+../../../../src/server/PaySystem.h:111:81: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  111 |         void                    setPayStartAvailableDateTime(const string& pat) throw (Error);
+      |                                                                                 ^~~~~
+../../../../src/server/PaySystem.h:134:89: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  134 |                                                                                         throw (Error);
+      |                                                                                         ^~~~~
+../../../../src/server/PaySystem.h:138:89: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  138 |                                                                                         throw (Error);
+      |                                                                                         ^~~~~
+../../../../src/server/PaySystem.h:143:109: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  143 |                                                                                 const Timeval& currentTime) throw (ProtocolException, Error);
+      |                                                                                                             ^~~~~
+../../../../src/server/PaySystem.h:146:115: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  146 |         void                    logoutPayPlay(const string& playerID, bool bClear=false, bool bDecreaseTime=true) throw (Error);
+      |                                                                                                                   ^~~~~
+../../../../src/server/PaySystem.h:169:84: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  169 |         static bool             isPayPlayingPeriodPersonal(const string& PlayerID) throw (Error);
+      |                                                                                    ^~~~~
+../../../../src/server/PaySystem.h:171:95: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  171 |         bool                    isPlayInPayPCRoom( const string& ip, const string& playerID ) throw (Error);
+      |                                                                                               ^~~~~
+../../../../src/server/PaySystem.h:175:86: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  175 |         bool            loginPayPlayPCRoom(const string& ip, const string& playerID) throw (Error);
+      |                                                                                      ^~~~~
+../../../../src/server/PaySystem.h:176:69: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  176 |         void            logoutPayPlayPCRoom(const string& playerID) throw (Error);
+      |                                                                     ^~~~~
+../../../../src/server/PaySystem.h:179:78: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  179 |         void            decreasePayPlayTime(const string& playerID, uint mm) throw (Error);
+      |                                                                              ^~~~~
+../../../../src/server/PaySystem.h:180:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  180 |         void            decreasePayPlayTimePCRoom(uint mm) throw (Error);
+      |                                                            ^~~~~
+../../../../src/server/PaySystem.h:183:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  183 |         void            increasePayPlayTimePCRoom(uint mm) throw (Error);
+      |                                                            ^~~~~
+../../../../src/server/PaySystem.h:186:70: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  186 |         void            clearPayPlayDateTime(const string& playerID) throw (Error);
+      |                                                                      ^~~~~
+In file included from ../../../../src/server/gameserver/Object.h:12,
+                 from ../../../../src/server/gameserver/Item.h:10,
+                 from ../../../../src/server/gameserver/GamePlayer.h:23:
+../../../../src/Core/Assert.h:21:83: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   21 | void __assert__ (const char* file, uint line, const char* func, const char* expr) throw (AssertionError);
+      |                                                                                   ^~~~~
+../../../../src/Core/Assert.h:29:92: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   29 | void __protocol_assert__ (const char* file, uint line, const char* func, const char* expr) throw (InvalidProtocolException);
+      |                                                                                            ^~~~~
+../../../../src/server/gameserver/Object.h:72:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   72 |         ObjectID_t getObjectID() const throw(Error) { Assert(m_ObjectID != 0); return m_ObjectID; };
+      |                                        ^~~~~
+../../../../src/server/gameserver/Object.h:73:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   73 |         void setObjectID(ObjectID_t objectID) throw(Error) { Assert(objectID != 0); m_ObjectID = objectID; }
+      |                                               ^~~~~
+../../../../src/server/gameserver/Object.h:86:58: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   86 |         virtual ObjectPriority getObjectPriority() const throw(Error) = 0;
+      |                                                          ^~~~~
+In file included from ../../../../src/server/gameserver/Item.h:11:
+../../../../src/server/gameserver/Effect.h:1461:31: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1461 |         virtual void affect() throw(Error) { throw UnsupportedError(__PRETTY_FUNCTION__); }
+      |                               ^~~~~
+../../../../src/server/gameserver/Effect.h:1462:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1462 |         virtual void affect(Creature* pCreature) throw(Error) { throw UnsupportedError(__PRETTY_FUNCTION__); }
+      |                                                  ^~~~~
+../../../../src/server/gameserver/Effect.h:1463:89: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1463 |         virtual void affect(Zone* pZone, ZoneCoord_t x, ZoneCoord_t y, Object* pTarget) throw(Error) { throw UnsupportedError(__PRETTY_FUNCTION__); }
+      |                                                                                         ^~~~~
+../../../../src/server/gameserver/Effect.h:1464:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1464 |         virtual void affect(Item* pItem) throw(Error) { throw UnsupportedError(__PRETTY_FUNCTION__);}
+      |                                          ^~~~~
+../../../../src/server/gameserver/Effect.h:1466:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1466 |         virtual void unaffect(Item* pItem) throw(Error) { throw UnsupportedError(__PRETTY_FUNCTION__); }
+      |                                            ^~~~~
+../../../../src/server/gameserver/Effect.h:1467:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1467 |         virtual void unaffect() throw(Error) = 0;
+      |                                 ^~~~~
+../../../../src/server/gameserver/Effect.h:1468:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1468 |         virtual void unaffect(Creature* pCreature) throw(Error) { throw UnsupportedError(__PRETTY_FUNCTION__); } // ¿ø·¡´Â pure virtualÀÌ¾ú´Âµ¥ EffectRelicTable¶§¸Þ ¹Ù²å´Ù. by sigi
+      |                                                    ^~~~~
+../../../../src/server/gameserver/Effect.h:1469:91: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1469 |         virtual void unaffect(Zone* pZone, ZoneCoord_t x, ZoneCoord_t y, Object* pTarget) throw(Error) { throw UnsupportedError(__PRETTY_FUNCTION__); }
+      |                                                                                           ^~~~~
+../../../../src/server/gameserver/Effect.h:1502:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1502 |         virtual void create(const string & ownerID) throw(Error) {}
+      |                                                     ^~~~~
+../../../../src/server/gameserver/Effect.h:1503:78: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1503 |         virtual void create(const string & ownerID, float Weight, BYTE Type) throw(Error) {}
+      |                                                                              ^~~~~
+../../../../src/server/gameserver/Effect.h:1504:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1504 |         virtual void save(const string & ownerID) throw(Error) {}
+      |                                                   ^~~~~
+../../../../src/server/gameserver/Effect.h:1505:54: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+ 1505 |         virtual void destroy(const string & ownerID) throw(Error) {}
+      |                                                      ^~~~~
+In file included from ../../../../src/server/gameserver/EffectManager.h:13,
+                 from ../../../../src/server/gameserver/Item.h:12:
+../../../../src/Core/EffectInfo.h:40:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   40 |     void read (SocketInputStream & iStream) throw (ProtocolException, Error);
+      |                                             ^~~~~
+../../../../src/Core/EffectInfo.h:43:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   43 |     void write (SocketOutputStream & oStream) const throw (ProtocolException, Error);
+      |                                                     ^~~~~
+../../../../src/server/gameserver/EffectManager.h:24:25: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   24 |         EffectManager() throw(Error);
+      |                         ^~~~~
+../../../../src/server/gameserver/EffectManager.h:28:43: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   28 |         void save(const string & ownerID) throw(Error);
+      |                                           ^~~~~
+../../../../src/server/gameserver/EffectManager.h:54:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   54 |         int heartbeat(const Timeval& currentTime) throw(Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/EffectManager.h:56:96: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   56 |         void    sendEffectInfo(Creature* pCreature, Zone* pZone, ZoneCoord_t x, ZoneCoord_t y) throw(Error);
+      |                                                                                                ^~~~~
+../../../../src/server/gameserver/Item.h:657:58: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  657 |         virtual ObjectPriority getObjectPriority() const throw(Error) { return OBJECT_PRIORITY_ITEM; }
+      |                                                          ^~~~~
+../../../../src/server/gameserver/Item.h:663:122: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  663 |         virtual void create(const string & ownerID, Storage storage, DWORD storageID, BYTE x, BYTE y, ItemID_t itemID=0) throw(Error) = 0;      // itemID=0 <-- Æ¯ï¿½ï¿½ ItemIDï¿½ï¿½ ï¿½ï¿½. by sigi. 2002.10.28
+      |                                                                                                                          ^~~~~
+../../../../src/server/gameserver/Item.h:664:32: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  664 |         virtual bool destroy() throw(Error);
+      |                                ^~~~~
+../../../../src/server/gameserver/Item.h:665:101: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  665 |         virtual void save(const string & ownerID, Storage storage, DWORD storageID, BYTE x, BYTE y) throw(Error) = 0;
+      |                                                                                                     ^~~~~
+../../../../src/server/gameserver/Item.h:666:59: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  666 |         virtual void tinysave(const string & field) const throw (Error);
+      |                                                           ^~~~~
+../../../../src/server/gameserver/Item.h:667:62: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  667 |         void waste(Storage storage = STORAGE_GARBAGE ) const throw (Error);
+      |                                                              ^~~~~
+../../../../src/server/gameserver/Item.h:722:54: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  722 |         virtual VolumeWidth_t getVolumeWidth() const throw(Error) = 0;
+      |                                                      ^~~~~
+../../../../src/server/gameserver/Item.h:723:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  723 |         virtual VolumeHeight_t getVolumeHeight() const throw(Error) = 0;
+      |                                                        ^~~~~
+../../../../src/server/gameserver/Item.h:724:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  724 |         virtual Weight_t getWeight() const throw(Error) = 0;
+      |                                            ^~~~~
+../../../../src/server/gameserver/Item.h:726:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  726 |         virtual Durability_t getDurability() const throw(Error) { return 1; }
+      |                                                    ^~~~~
+../../../../src/server/gameserver/Item.h:727:61: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  727 |         virtual void setDurability(Durability_t durability) throw(Error) {}
+      |                                                             ^~~~~
+../../../../src/server/gameserver/Item.h:731:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  731 |         virtual Damage_t getMinDamage() const throw(Error) { return 0; }
+      |                                               ^~~~~
+../../../../src/server/gameserver/Item.h:732:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  732 |         virtual Damage_t getMaxDamage() const throw(Error) { return 0; }
+      |                                               ^~~~~
+../../../../src/server/gameserver/Item.h:734:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  734 |         virtual Range_t getRange() const throw(Error) { return 0; }
+      |                                          ^~~~~
+../../../../src/server/gameserver/Item.h:736:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  736 |         virtual ToHit_t getToHitBonus() const throw(Error) { return 0; }
+      |                                               ^~~~~
+../../../../src/server/gameserver/Item.h:738:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  738 |         virtual Defense_t getDefenseBonus() const throw(Error) { return 0; }
+      |                                                   ^~~~~
+../../../../src/server/gameserver/Item.h:739:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  739 |         virtual Protection_t getProtectionBonus() const throw(Error) { return 0; }
+      |                                                         ^~~~~
+../../../../src/server/gameserver/Item.h:740:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  740 |         virtual int getMagicProtectionBonus() const throw(Error) { return 0; } // 20080703
+      |                                                     ^~~~~
+../../../../src/server/gameserver/Item.h:742:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  742 |     virtual MP_t getMPBonus() const throw(Error) { return 0; }
+      |                                     ^~~~~
+In file included from ../../../../src/server/gameserver/GamePlayer.h:24:
+../../../../src/server/gameserver/billing/BillingPlayerInfo.h:30:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   30 |         BillingPlayerInfo () throw (Error);
+      |                              ^~~~~
+../../../../src/server/gameserver/billing/BillingPlayerInfo.h:33:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   33 |         virtual ~BillingPlayerInfo () throw (Error);
+      |                                       ^~~~~
+../../../../src/server/gameserver/billing/BillingPlayerInfo.h:36:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |         virtual string toString () const throw (Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/billing/BillingPlayerInfo.h:42:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   42 |         void            setBillingSession(Player* pPlayer) throw (Error);
+      |                                                            ^~~~~
+../../../../src/server/gameserver/billing/BillingPlayerInfo.h:50:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   50 |         virtual bool    sendBillingLogin() throw (Error) = 0;
+      |                                            ^~~~~
+In file included from ../../../../src/server/gameserver/GamePlayer.h:25:
+../../../../src/server/chinabilling/CBillingPlayerInfo.h:24:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   24 |         CBillingPlayerInfo() throw ( Error );
+      |                              ^~~~~
+../../../../src/server/chinabilling/CBillingPlayerInfo.h:27:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   27 |         virtual ~CBillingPlayerInfo() throw ( Error );
+      |                                       ^~~~~
+../../../../src/server/chinabilling/CBillingPlayerInfo.h:30:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   30 |         virtual string toString() const throw ( Error );
+      |                                         ^~~~~
+In file included from ../../../../src/server/gameserver/GamePlayer.h:26:
+../../../../src/Core/Gpackets/GCReconnectLogin.h:31:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   31 |     void read(SocketInputStream & iStream) throw(ProtocolException, Error);
+      |                                            ^~~~~
+../../../../src/Core/Gpackets/GCReconnectLogin.h:34:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   34 |     void write(SocketOutputStream & oStream) const throw(ProtocolException, Error);
+      |                                                    ^~~~~
+../../../../src/Core/Gpackets/GCReconnectLogin.h:37:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   37 |         void execute(Player* pPlayer) throw(ProtocolException, Error);
+      |                                       ^~~~~
+../../../../src/Core/Gpackets/GCReconnectLogin.h:129:73: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  129 |         static void execute(GCReconnectLogin* pPacket, Player* pPlayer) throw(ProtocolException, Error);
+      |                                                                         ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:56:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   56 |         GamePlayer (Socket * pSocket) throw ( Error );
+      |                                       ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:57:23: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   57 |         ~GamePlayer() throw(Error);
+      |                       ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:64:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   64 |         virtual void processCommand(bool Option = true) throw(IOException, Error);
+      |                                                         ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:67:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   67 |         virtual void processOutput() throw(IOException, Error);
+      |                                      ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:70:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   70 |         virtual void sendPacket(Packet* packet) throw(ProtocolException, Error);
+      |                                                 ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:74:68: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   74 |         virtual void disconnect(bool bDisconnected = DISCONNECTED) throw (InvalidProtocolException, Error);
+      |                                                                    ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:77:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   77 |         virtual string toString() const throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:82:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   82 |         virtual bool verifySpeed(Packet* pPacket) throw(Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:112:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  112 |         Packet* getOldPacket(uint prev = 0) throw(OutOfBoundException, NoSuchElementException);
+      |                                             ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:116:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  116 |         Packet* getOldPacket(PacketID_t packetID) throw(NoSuchElementException);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:125:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  125 |         void addEvent(Event* pEvent) throw(Error);
+      |                                      ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:126:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  126 |         Event* getEvent(Event::EventClass EClass) throw(Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:127:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  127 |         void deleteEvent(Event::EventClass EClass) throw(Error);
+      |                                                    ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:165:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  165 |         void lock() throw(Error) { m_Mutex.lock(); }
+      |                     ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:166:19: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  166 |     void unlock() throw(Error) { m_Mutex.unlock(); }
+      |                   ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:169:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  169 |         void    setBillingSession() throw (Error)       { BillingPlayerInfo::setBillingSession(this); }
+      |                                     ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:170:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  170 |         bool    sendBillingLogin() throw (Error);
+      |                                    ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:172:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  172 |         void    sendCBillingPayInfo() throw ( Error );
+      |                                       ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:176:34: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  176 |         void    setEncryptCode() throw (Error);
+      |                                  ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:180:64: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  180 |         void kickPlayer( uint nSeconds, uint KickMessageType ) throw (Error);
+      |                                                                ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:191:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  191 |                                 throw (Error);
+      |                                 ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:194:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  194 |                                 throw (Error);
+      |                                 ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:199:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  199 |                                 throw (ProtocolException, Error );
+      |                                 ^~~~~
+../../../../src/server/gameserver/GamePlayer.h:202:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  202 |                                 throw (Error);
+      |                                 ^~~~~
+In file included from ../../../../src/server/Thread.h:44,
+                 from ../../../../src/server/gameserver/LoginServerManager.h:12,
+                 from LGKickCharacterHandler.cpp:15:
+../../../../src/server/pthreadAPI.h:31:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   31 |         throw ( ThreadException , Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:37:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   37 |         throw ( ThreadException , Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:43:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   43 |         throw ( Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:61:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   61 |         throw ( Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:67:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   67 |         throw ( Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:73:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   73 |         throw ( Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:79:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   79 |         throw ( Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:96:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   96 |         throw ( Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:102:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  102 |         throw ( MutexException , Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:108:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  108 |         throw ( MutexException , Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:114:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  114 |         throw ( MutexException , Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:120:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  120 |         throw ( MutexException , Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:126:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  126 |         throw ( Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:132:9: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  132 |         throw ( Error );
+      |         ^~~~~
+../../../../src/server/pthreadAPI.h:155:10: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  155 |          throw ( Error );
+      |          ^~~~~
+../../../../src/server/pthreadAPI.h:161:10: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  161 |          throw ( CondVarException , Error );
+      |          ^~~~~
+../../../../src/server/pthreadAPI.h:167:10: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  167 |          throw ( Error );
+      |          ^~~~~
+../../../../src/server/pthreadAPI.h:173:10: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  173 |          throw ( Error );
+      |          ^~~~~
+../../../../src/server/pthreadAPI.h:179:10: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  179 |          throw ( CondVarException , InterruptedException , Error );
+      |          ^~~~~
+../../../../src/server/pthreadAPI.h:185:10: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  185 |          throw ( Error );
+      |          ^~~~~
+../../../../src/server/Thread.h:99:23: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   99 |         void start () throw ( ThreadException , Error );
+      |                       ^~~~~
+../../../../src/server/Thread.h:103:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  103 |         virtual void stop () throw ( Error );
+      |                              ^~~~~
+../../../../src/server/Thread.h:116:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  116 |         static void join ( const Thread & t ) throw ( ThreadException , Error );
+      |                                               ^~~~~
+../../../../src/server/Thread.h:117:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  117 |         static void join ( const Thread * t ) throw ( ThreadException , Error );
+      |                                               ^~~~~
+../../../../src/server/Thread.h:118:63: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  118 |         static void join ( const Thread & t , void * retval ) throw ( ThreadException , Error );
+      |                                                               ^~~~~
+../../../../src/server/Thread.h:119:63: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  119 |         static void join ( const Thread * t , void * retval ) throw ( ThreadException , Error );
+      |                                                               ^~~~~
+../../../../src/server/Thread.h:122:24: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  122 |         void detach () throw ( Error );
+      |                        ^~~~~
+In file included from ../../../../src/server/gameserver/LoginServerManager.h:13:
+../../../../src/Core/DatagramSocket.h:34:27: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   34 |         DatagramSocket () throw (Error, BindException);
+      |                           ^~~~~
+../../../../src/Core/DatagramSocket.h:37:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   37 |         DatagramSocket (uint port) throw (Error, BindException);
+      |                                    ^~~~~
+../../../../src/Core/DatagramSocket.h:40:28: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   40 |         ~DatagramSocket () throw (Error);
+      |                            ^~~~~
+../../../../src/Core/DatagramSocket.h:43:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   43 |         uint send (Datagram* pDatagram) throw (ConnectException, Error);
+      |                                         ^~~~~
+../../../../src/Core/DatagramSocket.h:46:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   46 |         Datagram* receive () throw (ConnectException, Error);
+      |                              ^~~~~
+../../../../src/server/gameserver/LoginServerManager.h:26:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   26 |         LoginServerManager() throw(Error);
+      |                              ^~~~~
+../../../../src/server/gameserver/LoginServerManager.h:30:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   30 |         void init() throw(Error) {}
+      |                     ^~~~~
+../../../../src/server/gameserver/LoginServerManager.h:32:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   32 |         void stop() throw(Error);
+      |                     ^~~~~
+../../../../src/server/gameserver/LoginServerManager.h:36:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |         void sendDatagram(Datagram* pDatagram) throw(ProtocolException, Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/LoginServerManager.h:38:81: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   38 |         void sendPacket(const string& host, uint port, DatagramPacket* pPacket) throw(ProtocolException, Error);
+      |                                                                                 ^~~~~
+../../../../src/server/gameserver/LoginServerManager.h:40:27: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   40 |         void lock() const throw(Error) { m_Mutex.lock(); }
+      |                           ^~~~~
+../../../../src/server/gameserver/LoginServerManager.h:41:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   41 |         void unlock() const throw(Error) { m_Mutex.unlock(); }
+      |                             ^~~~~
+In file included from LGKickCharacterHandler.cpp:16:
+../../../../src/server/gameserver/Creature.h:82:58: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   82 |         virtual ObjectPriority getObjectPriority() const throw(Error);
+      |                                                          ^~~~~
+../../../../src/server/gameserver/Creature.h:86:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   86 |         virtual bool load() throw (InvalidProtocolException, Error) = 0; // load from DB
+      |                             ^~~~~
+../../../../src/server/gameserver/Creature.h:87:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   87 |         virtual void save() const throw(Error) = 0; // save to DB
+      |                                   ^~~~~
+../../../../src/server/gameserver/Creature.h:92:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   92 |         Player* getPlayer() const throw(Error) { Assert(m_pPlayer != NULL); return m_pPlayer; }
+      |                                   ^~~~~
+../../../../src/server/gameserver/Creature.h:136:54: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  136 |         virtual void act(const Timeval& currentTime) throw(Error) = 0; // for monster & npc
+      |                                                      ^~~~~
+../../../../src/server/gameserver/Creature.h:148:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  148 |         virtual void registerObject() throw(Error) = 0;
+      |                                       ^~~~~
+../../../../src/server/gameserver/Creature.h:151:66: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  151 |         VisionState getVisionState(ZoneCoord_t x, ZoneCoord_t y) throw(Error);
+      |                                                                  ^~~~~
+../../../../src/server/gameserver/Creature.h:152:73: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  152 |         VisionState getVisionState(Coord_t x, Coord_t y, Sight_t sight) throw(Error);
+      |                                                                         ^~~~~
+../../../../src/server/gameserver/Creature.h:160:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  160 |         void setZoneID(ZoneID_t zoneID) throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Creature.h:187:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  187 |         bool canMove(ZoneCoord_t nx, ZoneCoord_t ny) const throw(Error);
+      |                                                            ^~~~~
+../../../../src/server/gameserver/Creature.h:188:73: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  188 |         bool isBlockedByCreature(ZoneCoord_t nx , ZoneCoord_t ny) const throw(Error);
+      |                                                                         ^~~~~
+../../../../src/server/gameserver/Creature.h:192:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  192 |         void setSight(Sight_t sight) throw(Error) { m_Sight = sight; Assert(m_Sight <= maxSight); }
+      |                                      ^~~~~
+../../../../src/server/gameserver/Creature.h:232:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  232 |         bool isEffect(Effect::EffectClass EClass) throw (Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/Creature.h:233:55: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  233 |         void deleteEffect(Effect::EffectClass EClass) throw (Error);
+      |                                                       ^~~~~
+../../../../src/server/gameserver/Creature.h:234:62: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  234 |         Effect* findEffect(Effect::EffectClass EClass) const throw (Error);
+      |                                                              ^~~~~
+../../../../src/server/gameserver/Creature.h:235:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  235 |         void addEffect(Effect* pEffect) throw (Error);
+      |                                         ^~~~~
+In file included from ../../../../src/server/gameserver/Tile.h:16,
+                 from ../../../../src/server/gameserver/Zone.h:12,
+                 from ../../../../src/server/gameserver/NPC.h:13,
+                 from ../../../../src/server/gameserver/PCFinder.h:13,
+                 from LGKickCharacterHandler.cpp:17:
+../../../../src/server/gameserver/Obstacle.h:46:58: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   46 |         virtual ObjectPriority getObjectPriority() const throw(Error) { return OBJECT_PRIORITY_OBSTACLE; }
+      |                                                          ^~~~~
+In file included from ../../../../src/server/gameserver/quest/Condition.h:15,
+                 from ../../../../src/server/gameserver/quest/Trigger.h:13,
+                 from ../../../../src/server/gameserver/quest/TriggerManager.h:14,
+                 from ../../../../src/server/gameserver/Portal.h:11,
+                 from ../../../../src/server/gameserver/Tile.h:18:
+../../../../src/server/gameserver/quest/PropertyBuffer.h:36:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |         string getProperty(string key) throw(NoSuchElementException, Error);
+      |                                        ^~~~~
+../../../../src/server/gameserver/quest/PropertyBuffer.h:37:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   37 |         int getPropertyInt(string key) throw(NoSuchElementException, Error);
+      |                                        ^~~~~
+../../../../src/server/gameserver/quest/PropertyBuffer.h:39:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   39 |         bool getProperty(string key, string& value) throw(NoSuchElementException, Error);
+      |                                                     ^~~~~
+../../../../src/server/gameserver/quest/PropertyBuffer.h:40:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   40 |         bool getPropertyInt(string key, int& value) throw(NoSuchElementException, Error);
+      |                                                     ^~~~~
+../../../../src/server/gameserver/quest/Condition.h:140:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  140 |         virtual ~Condition() throw(Error) {}
+      |                              ^~~~~
+../../../../src/server/gameserver/quest/Condition.h:149:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  149 |         virtual void read(PropertyBuffer & propertyBuffer) throw(Error) = 0;
+      |                                                            ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:53:19: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   53 |         Trigger() throw(Error);
+      |                   ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:54:20: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   54 |         ~Trigger() throw(Error);
+      |                    ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:58:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   58 |         void addCondition(Condition* pCondition) throw(Error);
+      |                                                  ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:59:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   59 |         void addAction(Action* pAction) throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:60:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   60 |         void addCounterAction(Action* pAction) throw(Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:61:64: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   61 |         bool hasCondition(ConditionType_t conditionType) const throw(Error) { return m_ConditionSet.test(conditionType); }
+      |                                                                ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:62:132: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   62 |         bool isAllSatisfied(TriggerMode triggerMode, Creature* pCreature1, Creature* pCreature2 = NULL, void* pParam = NULL) const throw(Error);
+      |                                                                                                                                    ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:63:80: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   63 |         bool activate(Creature* pCreature1, Creature* pCreature2 = NULL) const throw(Error);
+      |                                                                                ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:64:87: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   64 |         bool activateCounter(Creature* pCreature1, Creature* pCreature2 = NULL) const throw(Error);
+      |                                                                                       ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:70:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   70 |         void setTriggerType(const string & triggerType) throw(Error)
+      |                                                         ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:90:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   90 |         void setConditions(const string & str) throw(Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:91:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   91 |         void setActions(const string & str) throw(Error);
+      |                                             ^~~~~
+../../../../src/server/gameserver/quest/Trigger.h:92:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   92 |         void setCounterActions(const string & str) throw(Error);
+      |                                                    ^~~~~
+../../../../src/server/gameserver/quest/TriggerManager.h:23:26: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   23 |         TriggerManager() throw(Error);
+      |                          ^~~~~
+../../../../src/server/gameserver/quest/TriggerManager.h:24:27: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   24 |         ~TriggerManager() throw(Error);
+      |                           ^~~~~
+../../../../src/server/gameserver/quest/TriggerManager.h:27:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   27 |         void load(const string & name) throw(Error);
+      |                                        ^~~~~
+../../../../src/server/gameserver/quest/TriggerManager.h:28:78: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   28 |         void load(ZoneID_t zoneid, int left, int top, int right, int bottom) throw(Error);
+      |                                                                              ^~~~~
+../../../../src/server/gameserver/quest/TriggerManager.h:30:24: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   30 |         void refresh() throw(Error);
+      |                        ^~~~~
+../../../../src/server/gameserver/quest/TriggerManager.h:32:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   32 |         void addTrigger(Trigger* pTrigger) throw(DuplicatedException, Error);
+      |                                            ^~~~~
+../../../../src/server/gameserver/quest/TriggerManager.h:34:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   34 |         void deleteTrigger(TriggerID_t triggerID) throw(NoSuchElementException, Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/quest/TriggerManager.h:36:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |         Trigger* getTrigger(TriggerID_t triggerID) throw(NoSuchElementException, Error);
+      |                                                    ^~~~~
+../../../../src/server/gameserver/Portal.h:83:58: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   83 |         virtual ObjectPriority getObjectPriority() const throw(Error) { return OBJECT_PRIORITY_PORTAL; }
+      |                                                          ^~~~~
+../../../../src/server/gameserver/Portal.h:85:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   85 |         virtual bool activate(Creature* pCreature) throw(Error) { return false; };
+      |                                                    ^~~~~
+../../../../src/server/gameserver/Portal.h:86:69: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   86 |         virtual bool activate(Creature* pCreature, ZoneID_t ZoneID) throw(Error) { return false; };
+      |                                                                     ^~~~~
+../../../../src/server/gameserver/Portal.h:119:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  119 |         bool activate(Creature* pCreature) throw(Error);
+      |                                            ^~~~~
+../../../../src/server/gameserver/Portal.h:164:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  164 |         bool activate(Creature* pCreature) throw(Error);
+      |                                            ^~~~~
+../../../../src/server/gameserver/Portal.h:205:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  205 |         bool activate(Creature* pCreature) throw(Error);
+      |                                            ^~~~~
+../../../../src/server/gameserver/Portal.h:240:61: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  240 |         bool activate(Creature* pCreature, ZoneID_t ZoneID) throw(Error);
+      |                                                             ^~~~~
+../../../../src/server/gameserver/Portal.h:267:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  267 |         bool activate(Creature* pCreature) throw(Error);
+      |                                            ^~~~~
+../../../../src/server/gameserver/Portal.h:293:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  293 |         bool activate(Creature* pCreature) throw(Error);
+      |                                            ^~~~~
+In file included from ../../../../src/server/gameserver/Tile.h:19:
+../../../../src/server/gameserver/Sector.h:29:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   29 |         void addObject(Object* pObject) throw (DuplicatedException, Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Sector.h:30:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   30 |         void deleteObject(ObjectID_t id) throw (NoSuchElementException, Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/Sector.h:31:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   31 |         Object* getObject(ObjectID_t id) throw (NoSuchElementException, Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/Sector.h:33:43: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   33 |         Sector* getNearbySector(uint dir) throw (Error);
+      |                                           ^~~~~
+../../../../src/server/gameserver/Sector.h:34:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   34 |         void setNearbySector(uint dir, Sector* pSector) throw (Error);
+      |                                                         ^~~~~
+../../../../src/server/gameserver/Tile.h:61:95: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   61 |         bool addCreature(Creature* pCreature, bool bCheckEffect=true, bool bCheckPortal=true) throw(GameException, DuplicatedException, Error);
+      |                                                                                               ^~~~~
+../../../../src/server/gameserver/Tile.h:62:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   62 |         void deleteCreature(ObjectID_t creatureID) throw(NoSuchElementException, Error);
+      |                                                    ^~~~~
+../../../../src/server/gameserver/Tile.h:63:54: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   63 |         void deleteCreature(Creature::MoveMode mode) throw(NoSuchElementException, Error);
+      |                                                      ^~~~~
+../../../../src/server/gameserver/Tile.h:64:54: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   64 |         Creature* getCreature(ObjectID_t creatureID) throw(NoSuchElementException, Error);
+      |                                                      ^~~~~
+../../../../src/server/gameserver/Tile.h:65:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   65 |         Creature* getCreature(Creature::MoveMode mode) throw(NoSuchElementException, Error);
+      |                                                        ^~~~~
+../../../../src/server/gameserver/Tile.h:78:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   78 |         void addItem(Item* pItem) throw(DuplicatedException, Error);
+      |                                   ^~~~~
+../../../../src/server/gameserver/Tile.h:79:27: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   79 |         void deleteItem() throw(NoSuchElementException, Error);
+      |                           ^~~~~
+../../../../src/server/gameserver/Tile.h:80:25: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   80 |         Item* getItem() throw(NoSuchElementException, Error);
+      |                         ^~~~~
+../../../../src/server/gameserver/Tile.h:84:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   84 |         void addObstacle(Obstacle* pObstacle) throw(DuplicatedException, Error);
+      |                                               ^~~~~
+../../../../src/server/gameserver/Tile.h:85:31: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   85 |         void deleteObstacle() throw(NoSuchElementException, Error);
+      |                               ^~~~~
+../../../../src/server/gameserver/Tile.h:86:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   86 |         Obstacle* getObstacle() throw(NoSuchElementException, Error);
+      |                                 ^~~~~
+../../../../src/server/gameserver/Tile.h:90:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   90 |         void addEffect(Effect* pEffect) throw(DuplicatedException, Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Tile.h:91:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   91 |         bool canAddEffect() throw(Error);
+      |                             ^~~~~
+../../../../src/server/gameserver/Tile.h:92:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   92 |         void deleteEffect(ObjectID_t effectID) throw(NoSuchElementException, Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/Tile.h:93:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   93 |         Effect* getEffect(ObjectID_t effectID) throw(NoSuchElementException, Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/Tile.h:95:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   95 |         Effect* getEffect(Effect::EffectClass effectClass) throw(Error);
+      |                                                            ^~~~~
+../../../../src/server/gameserver/Tile.h:98:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   98 |         void addBuilding(BuildingID_t buildingID) throw(Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/Tile.h:99:31: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   99 |         void deleteBuilding() throw(Error);
+      |                               ^~~~~
+../../../../src/server/gameserver/Tile.h:100:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  100 |         BuildingID_t getBuilding() const throw(Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/Tile.h:104:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  104 |         void addPortal(Portal* pPortal) throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Tile.h:105:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  105 |         void deletePortal() throw(Error);
+      |                             ^~~~~
+../../../../src/server/gameserver/Tile.h:106:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  106 |         Portal* getPortal() const throw(Error);
+      |                                   ^~~~~
+../../../../src/server/gameserver/Tile.h:110:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  110 |         void addTerrain(TerrainID_t terrainID) throw(Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/Tile.h:111:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  111 |         void deleteTerrain() throw(Error);
+      |                              ^~~~~
+../../../../src/server/gameserver/Tile.h:112:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  112 |         TerrainID_t getTerrain() const throw(Error);
+      |                                        ^~~~~
+../../../../src/server/gameserver/Tile.h:126:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  126 |         void addObject(Object* pObject) throw(DuplicatedException);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Tile.h:127:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  127 |         void deleteObject(ObjectID_t objectID) throw(NoSuchElementException);
+      |                                                ^~~~~
+../../../../src/server/gameserver/Tile.h:128:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  128 |         void deleteObject(ObjectPriority tilePriority) throw(NoSuchElementException);
+      |                                                        ^~~~~
+../../../../src/server/gameserver/Tile.h:129:54: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  129 |         Object* getObject(ObjectID_t objectID) const throw(NoSuchElementException);
+      |                                                      ^~~~~
+../../../../src/server/gameserver/Tile.h:130:62: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  130 |         Object* getObject(ObjectPriority tilePriority) const throw(NoSuchElementException);
+      |                                                              ^~~~~
+In file included from ../../../../src/server/gameserver/Zone.h:14:
+../../../../src/server/gameserver/ObjectRegistry.h:28:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   28 |         void lock() throw(Error);
+      |                     ^~~~~
+../../../../src/server/gameserver/ObjectRegistry.h:29:23: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   29 |         void unlock() throw(Error);
+      |                       ^~~~~
+In file included from ../../../../src/server/gameserver/Party.h:12,
+                 from ../../../../src/server/gameserver/Zone.h:17:
+../../../../src/Core/ModifyInfo.h:260:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  260 |     void read (SocketInputStream & iStream) throw (ProtocolException, Error);
+      |                                             ^~~~~
+../../../../src/Core/ModifyInfo.h:261:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  261 |     void write (SocketOutputStream & oStream) const throw (ProtocolException, Error);
+      |                                                     ^~~~~
+../../../../src/server/gameserver/Party.h:65:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   65 |         bool hasInviteInfo(const string& HostName) throw (Error);
+      |                                                    ^~~~~
+../../../../src/server/gameserver/Party.h:66:59: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   66 |         bool canInvite(Creature* pHost, Creature* pGuest) throw (Error);
+      |                                                           ^~~~~
+../../../../src/server/gameserver/Party.h:67:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   67 |         bool isInviting(Creature* pHost, Creature* pGuest) throw (Error);
+      |                                                            ^~~~~
+../../../../src/server/gameserver/Party.h:68:64: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   68 |         void initInviteInfo(Creature* pHost, Creature* pGuest) throw (Error);
+      |                                                                ^~~~~
+../../../../src/server/gameserver/Party.h:69:62: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   69 |         void cancelInvite(Creature* pHost, Creature* pGuest) throw (Error);
+      |                                                              ^~~~~
+../../../../src/server/gameserver/Party.h:70:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   70 |         void cancelInvite(Creature* pCreature) throw (Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/Party.h:73:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   73 |         bool addInviteInfo(PartyInviteInfo* pInfo) throw (Error);
+      |                                                    ^~~~~
+../../../../src/server/gameserver/Party.h:74:55: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   74 |         void deleteInviteInfo(const string& HostName) throw (NoSuchElementException, Error);
+      |                                                       ^~~~~
+../../../../src/server/gameserver/Party.h:75:64: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   75 |         PartyInviteInfo* getInviteInfo(const string& HostName) throw (NoSuchElementException, Error);
+      |                                                                ^~~~~
+../../../../src/server/gameserver/Party.h:108:55: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  108 |         Creature* getMember(const string& name) const throw (NoSuchElementException, Error);
+      |                                                       ^~~~~
+../../../../src/server/gameserver/Party.h:109:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  109 |         void addMember(Creature* pCreature) throw (DuplicatedException, Error);
+      |                                             ^~~~~
+../../../../src/server/gameserver/Party.h:110:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  110 |         void deleteMember(const string& name) throw (NoSuchElementException, Error);
+      |                                               ^~~~~
+../../../../src/server/gameserver/Party.h:122:70: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  122 |         void broadcastPacket(Packet* pPacket, Creature* pOwner=NULL) throw (ProtocolException, Error);
+      |                                                                      ^~~~~
+../../../../src/server/gameserver/Party.h:142:61: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  142 |         void shareRevealer(Creature* pCaster, int Duration) throw (Error);
+      |                                                             ^~~~~
+../../../../src/server/gameserver/Party.h:143:65: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  143 |         void shareDetectHidden(Creature* pCaster, int Duration) throw (Error);
+      |                                                                 ^~~~~
+../../../../src/server/gameserver/Party.h:144:71: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  144 |         void shareDetectInvisibility(Creature* pCaster, int Duration) throw (Error);
+      |                                                                       ^~~~~
+../../../../src/server/gameserver/Party.h:145:75: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  145 |         void shareExpansion(Creature* pCaster, int Duration, int percent) throw (Error);
+      |                                                                           ^~~~~
+../../../../src/server/gameserver/Party.h:146:63: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  146 |         void shareActivation(Creature* pCaster, int Duration) throw (Error);
+      |                                                               ^~~~~
+../../../../src/server/gameserver/Party.h:147:82: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  147 |         void shareGnomesWhisper(Creature* pCaster, int Duration, int SkillLevel) throw (Error);
+      |                                                                                  ^~~~~
+../../../../src/server/gameserver/Party.h:148:79: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  148 |         void shareFLAMESIGHT(Creature* pCaster, int Duration, int SkillLevel) throw (Error);
+      |                                                                               ^~~~~
+../../../../src/server/gameserver/Party.h:149:78: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  149 |         void shareHolyArmor(Creature* pCaster, int DefBonus, int SkillLevel) throw (Error);
+      |                                                                              ^~~~~
+../../../../src/server/gameserver/Party.h:150:79: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  150 |         void shareHolyArmor2(Creature* pCaster, int DefBonus, int SkillLevel) throw (Error);
+      |                                                                               ^~~~~
+../../../../src/server/gameserver/Party.h:151:79: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  151 |         void shareDEPENDSOUL(Creature* pCaster, int Duration, int SkillLevel) throw (Error);
+      |                                                                               ^~~~~
+../../../../src/server/gameserver/Party.h:152:72: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  152 |         bool shareWaterElementalHeal(Creature* pCaster, int HealPoint) throw (Error);
+      |                                                                        ^~~~~
+../../../../src/server/gameserver/Party.h:153:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  153 |         void shareGDRLairEnter(Creature* pLeader) throw(Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/Party.h:155:69: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  155 |         void shareMonsterKill(Creature* pLeader, Monster* pMonster) throw(Error);//rallser
+      |                                                                     ^~~~~
+../../../../src/server/gameserver/Party.h:160:74: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  160 |         void dissectCorpse(Creature* pDissecter, MonsterCorpse* pCorpse) throw(Error);
+      |                                                                          ^~~~~
+../../../../src/server/gameserver/Party.h:161:32: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  161 |         void eventPartyCrash() throw(Error);
+      |                                ^~~~~
+../../../../src/server/gameserver/Party.h:208:67: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  208 |         virtual bool createParty(int ID, Creature::CreatureClass) throw (DuplicatedException, Error);
+      |                                                                   ^~~~~
+../../../../src/server/gameserver/Party.h:209:66: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  209 |         virtual bool addPartyMember(int ID, Creature* pCreature) throw (NoSuchElementException, DuplicatedException, Error);
+      |                                                                  ^~~~~
+../../../../src/server/gameserver/Party.h:210:69: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  210 |         virtual bool deletePartyMember(int ID, Creature* pCreature) throw (NoSuchElementException, Error);
+      |                                                                     ^~~~~
+../../../../src/server/gameserver/Party.h:211:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  211 |         virtual Party* getParty(int ID) throw (NoSuchElementException, Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Party.h:236:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  236 |         void heartbeat(void) throw (Error);
+      |                              ^~~~~
+../../../../src/server/gameserver/Party.h:241:74: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  241 |         void shareRevealer(int PartyID, Creature* pCaster, int Duration) throw (Error);
+      |                                                                          ^~~~~
+../../../../src/server/gameserver/Party.h:242:78: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  242 |         void shareDetectHidden(int PartyID, Creature* pCaster, int Duration) throw (Error);
+      |                                                                              ^~~~~
+../../../../src/server/gameserver/Party.h:243:84: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  243 |         void shareDetectInvisibility(int PartyID, Creature* pCaster, int Duration) throw (Error);
+      |                                                                                    ^~~~~
+../../../../src/server/gameserver/Party.h:244:88: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  244 |         void shareExpansion(int PartyID, Creature* pCaster, int Duration, int Percent) throw (Error);
+      |                                                                                        ^~~~~
+../../../../src/server/gameserver/Party.h:245:76: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  245 |         void shareActivation(int PartyID, Creature* pCaster, int Duration) throw (Error);
+      |                                                                            ^~~~~
+../../../../src/server/gameserver/Party.h:246:95: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  246 |         void shareGnomesWhisper(int PartyID, Creature* pCaster, int Duration, int SkillLevel) throw (Error);
+      |                                                                                               ^~~~~
+../../../../src/server/gameserver/Party.h:247:92: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  247 |         void shareFLAMESIGHT(int PartyID, Creature* pCaster, int Duration, int SkillLevel) throw (Error);
+      |                                                                                            ^~~~~
+../../../../src/server/gameserver/Party.h:248:91: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  248 |         void shareHolyArmor(int PartyID, Creature* pCaster, int DefBonus, int SkillLevel) throw (Error);
+      |                                                                                           ^~~~~
+../../../../src/server/gameserver/Party.h:249:92: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  249 |         void shareHolyArmor2(int PartyID, Creature* pCaster, int DefBonus, int SkillLevel) throw (Error);
+      |                                                                                            ^~~~~
+../../../../src/server/gameserver/Party.h:250:92: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  250 |         void shareDEPENDSOUL(int PartyID, Creature* pCaster, int Duration, int SkillLevel) throw (Error);
+      |                                                                                            ^~~~~
+../../../../src/server/gameserver/Party.h:252:85: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  252 |         bool shareWaterElementalHeal(int PartyID, Creature* pCaster, int HealPoint) throw (Error);
+      |                                                                                     ^~~~~
+../../../../src/server/gameserver/Party.h:253:64: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  253 |         void shareGDRLairEnter(int PartyID, Creature* pLeader) throw(Error);
+      |                                                                ^~~~~
+../../../../src/server/gameserver/Party.h:255:82: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  255 |         void shareMonsterKill(int PartyID, Creature* pLeader, Monster* pMonster) throw(Error);//rallser
+      |                                                                                  ^~~~~
+../../../../src/server/gameserver/Party.h:276:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  276 |         bool canAddMember(int ID) throw (NoSuchElementException, Error);
+      |                                   ^~~~~
+../../../../src/server/gameserver/Party.h:277:66: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  277 |         virtual bool addPartyMember(int ID, Creature* pCreature) throw (NoSuchElementException, DuplicatedException, Error);
+      |                                                                  ^~~~~
+../../../../src/server/gameserver/Party.h:278:69: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  278 |         virtual bool deletePartyMember(int ID, Creature* pCreature) throw (NoSuchElementException, Error);
+      |                                                                     ^~~~~
+../../../../src/server/gameserver/Party.h:279:96: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  279 |         virtual bool expelPartyMember(int ID, Creature* pExpeller, const string& ExpelleeName) throw (NoSuchElementException, Error);
+      |                                                                                                ^~~~~
+../../../../src/server/gameserver/Party.h:281:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  281 |         int registerParty(void) throw (Error);
+      |                                 ^~~~~
+In file included from ../../../../src/server/gameserver/PCManager.h:10,
+                 from ../../../../src/server/gameserver/Zone.h:18:
+../../../../src/server/gameserver/CreatureManager.h:27:55: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   27 |         virtual void addCreature(Creature* pCreature) throw(DuplicatedException, Error);
+      |                                                       ^~~~~
+../../../../src/server/gameserver/CreatureManager.h:32:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   32 |         virtual void processCreatures() throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/CreatureManager.h:33:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   33 |         virtual void killCreature(Creature* pDeadCreature) throw(Error);
+      |                                                            ^~~~~
+../../../../src/server/gameserver/CreatureManager.h:35:64: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   35 |         void broadcastPacket(Packet* pPacket, Creature* owner) throw(Error);
+      |                                                                ^~~~~
+../../../../src/server/gameserver/CreatureManager.h:36:92: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |         void broadcastDarkLightPacket(Packet* pPacket1, Packet* pPacket2, Creature* owner) throw(Error);
+      |                                                                                            ^~~~~
+../../../../src/server/gameserver/CreatureManager.h:37:77: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   37 |         void broadcastLevelWarBonusPacket(Packet* pPacket, Creature* owner) throw(Error);
+      |                                                                             ^~~~~
+../../../../src/server/gameserver/PCManager.h:36:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |         virtual void processCreatures() throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/PCManager.h:39:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   39 |         virtual void killCreature(Creature* pDeadCreature) throw(Error);
+      |                                                            ^~~~~
+../../../../src/server/gameserver/PCManager.h:45:162: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   45 |         void transportAllCreatures(ZoneID_t ZoneID, ZoneCoord_t ZoneX = 0xffff, ZoneCoord_t ZoneY = 0xffff, Race_t race=defaultRaceValue, Turn_t delay=10) const throw (Error);
+      |                                                                                                                                                                  ^~~~~
+../../../../src/server/gameserver/Zone.h:129:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  129 |         void init() throw(Error);
+      |                     ^~~~~
+../../../../src/server/gameserver/Zone.h:130:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  130 |         void load(bool bOutput=false) throw(Error);
+      |                                       ^~~~~
+../../../../src/server/gameserver/Zone.h:131:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  131 |         void reload(bool bOutput=false) throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Zone.h:132:25: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  132 |         void loadItem() throw(Error);
+      |                         ^~~~~
+../../../../src/server/gameserver/Zone.h:133:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  133 |         void loadTriggeredPortal() throw(Error);
+      |                                    ^~~~~
+../../../../src/server/gameserver/Zone.h:134:32: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  134 |         void initSpriteCount() throw(Error);
+      |                                ^~~~~
+../../../../src/server/gameserver/Zone.h:135:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  135 |         void save() throw(Error);
+      |                     ^~~~~
+../../../../src/server/gameserver/Zone.h:138:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  138 |         void pushPC(Creature* pCreature) throw(Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/Zone.h:139:84: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  139 |         void addPC(Creature* pCreature, ZoneCoord_t cx, ZoneCoord_t cy, Dir_t dir) throw(EmptyTileNotExistException, Error);
+      |                                                                                    ^~~~~
+../../../../src/server/gameserver/Zone.h:140:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  140 |         void addPC(Creature* pCreature) throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Zone.h:141:90: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  141 |         void addCreature(Creature* pCreature, ZoneCoord_t cx, ZoneCoord_t cy, Dir_t dir) throw(EmptyTileNotExistException, Error);
+      |                                                                                          ^~~~~
+../../../../src/server/gameserver/Zone.h:142:140: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  142 |         TPOINT addItem(Item* pItem, ZoneCoord_t cx, ZoneCoord_t cy, bool bAllowCreature=true, Turn_t decayTurn=0, ObjectID_t DropPetOID=0) throw(EmptyTileNotExistException, Error);
+      |                                                                                                                                            ^~~~~
+../../../../src/server/gameserver/Zone.h:143:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  143 |         Item* getItem(ObjectID_t id) const throw(Error);
+      |                                            ^~~~~
+../../../../src/server/gameserver/Zone.h:144:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  144 |         void addEffect(Effect* pEffect) throw(Error);
+      |                                         ^~~~~
+../../../../src/server/gameserver/Zone.h:145:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  145 |         void deleteEffect(ObjectID_t id) throw(Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/Zone.h:146:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  146 |         Effect* findEffect(Effect::EffectClass eid) throw(Error);
+      |                                                     ^~~~~
+../../../../src/server/gameserver/Zone.h:148:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  148 |         void pushLogoutPC(Creature* pCreature) throw(Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/Zone.h:151:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  151 |         void addEffect_LOCKING(Effect* pEffect) throw(Error);
+      |                                                 ^~~~~
+../../../../src/server/gameserver/Zone.h:152:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  152 |         void deleteEffect_LOCKING(ObjectID_t id) throw(Error);
+      |                                                  ^~~~~
+../../../../src/server/gameserver/Zone.h:155:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  155 |         void deleteQueuePC(Creature* pCreature) throw(NoSuchElementException, Error);
+      |                                                 ^~~~~
+../../../../src/server/gameserver/Zone.h:156:80: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  156 |         void deleteCreature(Creature* pCreature, ZoneCoord_t x, ZoneCoord_t y) throw(NoSuchElementException, Error);
+      |                                                                                ^~~~~
+../../../../src/server/gameserver/Zone.h:157:74: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  157 |         void deleteObject(Object* pObject, ZoneCoord_t x, ZoneCoord_t y) throw(NoSuchElementException, Error);
+      |                                                                          ^~~~~
+../../../../src/server/gameserver/Zone.h:158:72: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  158 |         void deleteItem(Object* pObject, ZoneCoord_t x, ZoneCoord_t y) throw(NoSuchElementException, Error);
+      |                                                                        ^~~~~
+../../../../src/server/gameserver/Zone.h:160:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  160 |         bool deleteNPC(Creature* pCreature) throw(Error);//NoSuchElementException, Error);
+      |                                             ^~~~~
+../../../../src/server/gameserver/Zone.h:161:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  161 |         void deleteNPCs(Race_t race) throw(Error);//NoSuchElementException, Error);
+      |                                      ^~~~~
+../../../../src/server/gameserver/Zone.h:162:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  162 |         void loadNPCs(Race_t race) throw(Error);//NoSuchElementException, Error);
+      |                                    ^~~~~
+../../../../src/server/gameserver/Zone.h:163:28: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  163 |         void sendNPCInfo() throw(Error);
+      |                            ^~~~~
+../../../../src/server/gameserver/Zone.h:165:27: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  165 |         void loadEffect() throw(Error);
+      |                           ^~~~~
+../../../../src/server/gameserver/Zone.h:169:85: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  169 |         void movePC(Creature* pCreature, ZoneCoord_t nx, ZoneCoord_t ny, Dir_t dir) throw(ProtocolException, Error);
+      |                                                                                     ^~~~~
+../../../../src/server/gameserver/Zone.h:170:91: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  170 |         void moveCreature(Creature* pCreature, ZoneCoord_t nx, ZoneCoord_t ny, Dir_t dir) throw(ProtocolException, Error);
+      |                                                                                           ^~~~~
+../../../../src/server/gameserver/Zone.h:173:86: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  173 |         void monsterScan(Monster* pMonster, ZoneCoord_t x, ZoneCoord_t y, Dir_t dir) throw(Error);
+      |                                                                                      ^~~~~
+../../../../src/server/gameserver/Zone.h:175:71: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  175 |         void broadcastPacket(Packet* pPacket, Creature* owner = NULL) throw(ProtocolException, Error);
+      |                                                                       ^~~~~
+../../../../src/server/gameserver/Zone.h:176:139: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  176 |         void broadcastPacket(ZoneCoord_t x, ZoneCoord_t y, Packet* pPacket, Creature* owner = NULL, bool Plus = false, Range_t Range = 0) throw(ProtocolException, Error);
+      |                                                                                                                                           ^~~~~
+../../../../src/server/gameserver/Zone.h:177:154: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  177 |         void broadcastPacket(ZoneCoord_t x, ZoneCoord_t y, Packet* pPacket, const list<Creature *> & creatureList, bool Plus = false, Range_t Range = 0) throw(ProtocolException, Error);
+      |                                                                                                                                                          ^~~~~
+../../../../src/server/gameserver/Zone.h:178:99: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  178 |         void broadcastDarkLightPacket(Packet* pPacket1, Packet* pPacket2, Creature* owner = NULL) throw(ProtocolException, Error);
+      |                                                                                                   ^~~~~
+../../../../src/server/gameserver/Zone.h:179:128: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  179 |         void broadcastSayPacket(ZoneCoord_t x, ZoneCoord_t y, Packet* pPacket, Creature* owner = NULL, bool isVampire = false) throw(ProtocolException, Error);
+      |                                                                                                                                ^~~~~
+../../../../src/server/gameserver/Zone.h:180:84: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  180 |         void broadcastLevelWarBonusPacket(Packet* pPacket, Creature* owner = NULL) throw(ProtocolException, Error);
+      |                                                                                    ^~~~~
+../../../../src/server/gameserver/Zone.h:181:187: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  181 |         list<Creature*> broadcastSkillPacket(ZoneCoord_t x1, ZoneCoord_t y1, ZoneCoord_t x2, ZoneCoord_t y2, Packet* pPacket, list<Creature*> creatureList, bool bConcernDarkness = true) throw(ProtocolException, Error);
+      |                                                                                                                                                                                           ^~~~~
+../../../../src/server/gameserver/Zone.h:184:77: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  184 |         void pushBroadcastPacket(Packet* pPacket, BroadcastFilter* pFilter) throw(Error);
+      |                                                                             ^~~~~
+../../../../src/server/gameserver/Zone.h:185:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  185 |         void flushBroadcastPacket() throw(Error);
+      |                                     ^~~~~
+../../../../src/server/gameserver/Zone.h:188:81: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  188 |         void scan(Creature* pPC, ZoneCoord_t x, ZoneCoord_t y, Packet* pPacket) throw(ProtocolException, Error);
+      |                                                                                 ^~~~~
+../../../../src/server/gameserver/Zone.h:191:76: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  191 |         void updateScan(Creature* pPC, Sight_t oldSight, Sight_t newSight) throw(ProtocolException, Error);
+      |                                                                            ^~~~~
+../../../../src/server/gameserver/Zone.h:194:101: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  194 |         list<Creature*>  getWatcherList(ZoneCoord_t, ZoneCoord_t, Creature* pTargetCreature = NULL) throw(Error);
+      |                                                                                                     ^~~~~
+../../../../src/server/gameserver/Zone.h:197:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  197 |         void scanPC(Creature* pCreature) throw(ProtocolException, Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/Zone.h:203:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  203 |         void updateMineScan(Creature* pCreature) throw(ProtocolException, Error);
+      |                                                  ^~~~~
+../../../../src/server/gameserver/Zone.h:215:155: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  215 |         void movePCBroadcast(Creature* pPC, ZoneCoord_t x1, ZoneCoord_t y1, ZoneCoord_t x2, ZoneCoord_t y2, bool bSendMove = true, bool bKnockback=false) throw(ProtocolException, Error);
+      |                                                                                                                                                           ^~~~~
+../../../../src/server/gameserver/Zone.h:218:167: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  218 |         void moveCreatureBroadcast(Creature* pCreature, ZoneCoord_t x1, ZoneCoord_t y1, ZoneCoord_t x2, ZoneCoord_t y2, bool bSendMove = true, bool bKnockback=false) throw(ProtocolException, Error);
+      |                                                                                                                                                                       ^~~~~
+../../../../src/server/gameserver/Zone.h:221:127: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  221 |         bool moveFastPC(Creature* pPC, ZoneCoord_t x1, ZoneCoord_t y1, ZoneCoord_t x2, ZoneCoord_t y2, SkillType_t skillType) throw(ProtocolException, Error);
+      |                                                                                                                               ^~~~~
+../../../../src/server/gameserver/Zone.h:222:136: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  222 |         bool moveFastMonster(Monster* pMonster, ZoneCoord_t x1, ZoneCoord_t y1, ZoneCoord_t x2, ZoneCoord_t y2, SkillType_t skillType) throw(ProtocolException, Error);
+      |                                                                                                                                        ^~~~~
+../../../../src/server/gameserver/Zone.h:232:26: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  232 |         void heartbeat() throw(Error);
+      |                          ^~~~~
+../../../../src/server/gameserver/Zone.h:237:97: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  237 |         Creature* getCreature(Creature::CreatureClass creatureClass, ObjectID_t objectID) const throw(NoSuchElementException, Error);
+      |                                                                                                 ^~~~~
+../../../../src/server/gameserver/Zone.h:241:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  241 |         void lock() throw(Error) { m_Mutex.lock(); }
+      |                     ^~~~~
+../../../../src/server/gameserver/Zone.h:242:23: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  242 |         void unlock() throw(Error) { m_Mutex.unlock(); }
+      |                       ^~~~~
+../../../../src/server/gameserver/Zone.h:250:66: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  250 |         const Tile & getTile(ZoneCoord_t x, ZoneCoord_t y) const throw(OutOfBoundException);
+      |                                                                  ^~~~~
+../../../../src/server/gameserver/Zone.h:251:54: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  251 |         Tile & getTile(ZoneCoord_t x, ZoneCoord_t y) throw(OutOfBoundException);
+      |                                                      ^~~~~
+../../../../src/server/gameserver/Zone.h:253:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  253 |         Sector* getSector(ZoneCoord_t x, ZoneCoord_t y) throw(OutOfBoundException);
+      |                                                         ^~~~~
+../../../../src/server/gameserver/Zone.h:266:66: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  266 |     ZoneLevel_t getZoneLevel(ZoneCoord_t x, ZoneCoord_t y) const throw(OutOfBoundException);
+      |                                                                  ^~~~~
+../../../../src/server/gameserver/Zone.h:283:34: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  283 |         void setNPCCount(uint n) throw(Error) { Assert(n <= maxNPCPerZone); m_NPCCount = n; }
+      |                                  ^~~~~
+../../../../src/server/gameserver/Zone.h:289:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  289 |         void setMonsterCount(uint n) throw(Error) { Assert(n <= maxMonsterPerZone); m_MonsterCount = n; }
+      |                                      ^~~~~
+../../../../src/server/gameserver/Zone.h:327:88: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  327 |         void deleteMotorcycle(ZoneCoord_t cx, ZoneCoord_t cy, Motorcycle* pMotorcycle) throw(Error);
+      |                                                                                        ^~~~~
+../../../../src/server/gameserver/Zone.h:329:100: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  329 |         void addItemDelayed(Item* pItem, ZoneCoord_t cx, ZoneCoord_t cy, bool bAllowCreature=true) throw(Error);
+      |                                                                                                    ^~~~~
+../../../../src/server/gameserver/Zone.h:330:77: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  330 |         void addItemToCorpseDelayed(Item* pItem, ObjectID_t corpseObjectID) throw(Error);
+      |                                                                             ^~~~~
+../../../../src/server/gameserver/Zone.h:331:79: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  331 |         void deleteItemDelayed(Object* pObject, ZoneCoord_t x, ZoneCoord_t y) throw(Error);
+      |                                                                               ^~~~~
+../../../../src/server/gameserver/Zone.h:332:112: error: redefinition of â€˜ZoneCoord_t yâ€™
+  332 |         void transportItem(ZoneCoord_t x, ZoneCoord_t y, Item* pItem, Zone* pZone, ZoneCoord_t cx, ZoneCoord_t y) throw(Error);
+      |                                                                                                    ~~~~~~~~~~~~^
+../../../../src/server/gameserver/Zone.h:332:55: note: â€˜ZoneCoord_t yâ€™ previously declared here
+  332 |         void transportItem(ZoneCoord_t x, ZoneCoord_t y, Item* pItem, Zone* pZone, ZoneCoord_t cx, ZoneCoord_t y) throw(Error);
+      |                                           ~~~~~~~~~~~~^
+../../../../src/server/gameserver/Zone.h:332:115: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  332 |         void transportItem(ZoneCoord_t x, ZoneCoord_t y, Item* pItem, Zone* pZone, ZoneCoord_t cx, ZoneCoord_t y) throw(Error);
+      |                                                                                                                   ^~~~~
+../../../../src/server/gameserver/Zone.h:333:95: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  333 |         void transportItemToCorpse(Item* pItem, Zone* pTargetZone, ObjectID_t corpseObjectID) throw(Error);
+      |                                                                                               ^~~~~
+../../../../src/server/gameserver/Zone.h:364:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  364 |         void    killAllMonsters() throw (Error);
+      |                                   ^~~~~
+../../../../src/server/gameserver/Zone.h:365:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  365 |         void    killAllMonsters_UNLOCK() throw (Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/Zone.h:367:30: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  367 |         void    killAllPCs() throw(Error);
+      |                              ^~~~~
+../../../../src/server/gameserver/Zone.h:424:43: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  424 |         bool addRelicItem(int relicIndex) throw(Error);
+      |                                           ^~~~~
+../../../../src/server/gameserver/Zone.h:425:32: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  425 |         bool deleteRelicItem() throw(Error);
+      |                                ^~~~~
+../../../../src/server/gameserver/Zone.h:431:40: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  431 |         void    remainRaceWarPlayers() throw(Error);
+      |                                        ^~~~~
+../../../../src/server/gameserver/Zone.h:433:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  433 |         void    remainPayPlayer() throw(Error);
+      |                                   ^~~~~
+../../../../src/server/gameserver/Zone.h:446:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  446 |         void    giveLevelWarContributePoint()   throw(Error);
+      |                                                 ^~~~~
+../../../../src/server/gameserver/Zone.h:447:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  447 |         void    giveHolyWarContributePoint()    throw(Error);
+      |                                                 ^~~~~
+../../../../src/server/gameserver/Zone.h:448:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  448 |         void    giveLevelWarReward() throw(Error);
+      |                                      ^~~~~
+../../../../src/server/gameserver/Zone.h:450:34: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  450 |         void    SendNewWarInfo() throw(Error);
+      |                                  ^~~~~
+In file included from ../../../../src/server/gameserver/Inventory.h:14,
+                 from ../../../../src/server/gameserver/NPC.h:16:
+../../../../src/server/gameserver/InventorySlot.h:21:26: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   21 |         ~InventorySlot() throw(Error);
+      |                          ^~~~~
+../../../../src/server/gameserver/InventorySlot.h:26:27: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   26 |         void deleteItem() throw(Error);
+      |                           ^~~~~
+../../../../src/server/gameserver/Inventory.h:73:78: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   73 |         virtual Item* addItemEx(CoordInven_t X, CoordInven_t Y, Item* pItem) throw(Error);
+      |                                                                              ^~~~~
+../../../../src/server/gameserver/Inventory.h:74:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   74 |         bool  addItem(Item* pItem) throw(InventoryFullException,Error);
+      |                                    ^~~~~
+../../../../src/server/gameserver/Inventory.h:75:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   75 |         bool  addItem(Item* pItem, TPOINT& pt) throw(InventoryFullException,Error);
+      |                                                ^~~~~
+../../../../src/server/gameserver/Inventory.h:86:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   86 |         void  deleteItem(ObjectID_t ObjectID) throw(Error);
+      |                                               ^~~~~
+../../../../src/server/gameserver/Inventory.h:87:66: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   87 |         virtual void  deleteItem(CoordInven_t X, CoordInven_t Y) throw(Error);
+      |                                                                  ^~~~~
+../../../../src/server/gameserver/Inventory.h:93:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   93 |         Item* getItemWithItemID(ItemID_t itemID) throw(Error);
+      |                                                  ^~~~~
+../../../../src/server/gameserver/Inventory.h:94:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   94 |         Item* getBeltWithItemID(ItemID_t itemID) throw(Error);
+      |                                                  ^~~~~
+../../../../src/server/gameserver/Inventory.h:95:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   95 |         Item* getItemWithObjectID(ObjectID_t objectID) throw(Error);
+      |                                                        ^~~~~
+../../../../src/server/gameserver/Inventory.h:133:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  133 |         bool hasEnoughStar(const XMAS_STAR& star) throw (Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/Inventory.h:134:50: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  134 |         void decreaseStar(const XMAS_STAR& star) throw (Error);
+      |                                                  ^~~~~
+../../../../src/server/gameserver/Inventory.h:135:34: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  135 |         bool hasRedGiftBox(void) throw (Error);
+      |                                  ^~~~~
+../../../../src/server/gameserver/Inventory.h:136:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  136 |         bool hasGreenGiftBox(void) throw (Error);
+      |                                    ^~~~~
+../../../../src/server/gameserver/Inventory.h:151:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  151 |         void clearQuestItem(list<Item*>& iList) throw(Error);
+      |                                                 ^~~~~
+In file included from ../../../../src/Core/Gpackets/GCMonsterKillQuestInfo.h:13,
+                 from ../../../../src/server/gameserver/PlayerCreature.h:21,
+                 from ../../../../src/server/gameserver/couple/PartnerWaitingManager.h:8,
+                 from ../../../../src/server/gameserver/NPC.h:19:
+../../../../src/Core/Gpackets/GCSelectQuestID.h:39:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   39 |         void read(SocketInputStream & iStream) throw(ProtocolException, Error);
+      |                                                ^~~~~
+../../../../src/Core/Gpackets/GCSelectQuestID.h:40:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   40 |         void write(SocketOutputStream & oStream) const throw(ProtocolException, Error);
+      |                                                        ^~~~~
+../../../../src/Core/Gpackets/GCSelectQuestID.h:41:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   41 |         void execute(Player* pPlayer) throw(ProtocolException, Error);
+      |                                       ^~~~~
+../../../../src/Core/Gpackets/GCSelectQuestID.h:79:72: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   79 |         static void execute(GCSelectQuestID* pPacket, Player* pPlayer) throw(ProtocolException, Error);
+      |                                                                        ^~~~~
+../../../../src/Core/Gpackets/GCMonsterKillQuestInfo.h:36:48: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   36 |         void read(SocketInputStream & iStream) throw(ProtocolException, Error);
+      |                                                ^~~~~
+../../../../src/Core/Gpackets/GCMonsterKillQuestInfo.h:37:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   37 |         void write(SocketOutputStream & oStream) const throw(ProtocolException, Error);
+      |                                                        ^~~~~
+../../../../src/Core/Gpackets/GCMonsterKillQuestInfo.h:38:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   38 |         void execute(Player* pPlayer) throw(ProtocolException, Error);
+      |                                       ^~~~~
+../../../../src/Core/Gpackets/GCMonsterKillQuestInfo.h:77:79: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   77 |         static void execute(GCMonsterKillQuestInfo* pPacket, Player* pPlayer) throw(ProtocolException, Error);
+      |                                                                               ^~~~~
+In file included from ../../../../src/server/gameserver/PlayerCreature.h:22:
+../../../../src/server/gameserver/OptionInfo.h:368:59: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  368 |         void addOptionType(uint level, OptionType_t type) throw(DuplicatedException, Error);
+      |                                                           ^~~~~
+../../../../src/server/gameserver/OptionInfo.h:441:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  441 |         OptionInfo* getOptionInfo(OptionType_t OptionType) throw(NoSuchElementException, Error);
+      |                                                            ^~~~~
+../../../../src/server/gameserver/OptionInfo.h:442:59: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  442 |         OptionInfo* getOptionInfo(const string& nickname) throw(NoSuchElementException, Error);
+      |                                                           ^~~~~
+../../../../src/server/gameserver/OptionInfo.h:443:60: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  443 |         OptionType_t getOptionType(const string& nickname) throw(NoSuchElementException, Error);
+      |                                                            ^~~~~
+../../../../src/server/gameserver/OptionInfo.h:444:69: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  444 |         string getOptionName(const list<OptionType_t>& optionTypes) throw(NoSuchElementException, Error);
+      |                                                                     ^~~~~
+../../../../src/server/gameserver/OptionInfo.h:448:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  448 |         void addOptionInfo(OptionInfo* pOptionInfo) throw(DuplicatedException, Error);
+      |                                                     ^~~~~
+../../../../src/server/gameserver/OptionInfo.h:451:94: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  451 |         void addGambleOption(Item::ItemClass itemClass, uint level, OptionType_t optionType) throw(DuplicatedException, Error);
+      |                                                                                              ^~~~~
+In file included from ../../../../src/Core/PCItemInfo.h:17,
+                 from ../../../../src/Core/GearSlotInfo.h:14,
+                 from ../../../../src/Core/GearInfo.h:14,
+                 from ../../../../src/server/gameserver/PlayerCreature.h:24:
+../../../../src/Core/SubItemInfo.h:32:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   32 |         void read (SocketInputStream & iStream) throw (ProtocolException, Error);
+      |                                                 ^~~~~
+../../../../src/Core/SubItemInfo.h:35:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   35 |         void write (SocketOutputStream & oStream) const throw (ProtocolException, Error);
+      |                                                         ^~~~~
+../../../../src/Core/PCItemInfo.h:32:41: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   32 |   void read(SocketInputStream &iStream) throw(ProtocolException, Error);
+      |                                         ^~~~~
+../../../../src/Core/PCItemInfo.h:33:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   33 |   void write(SocketOutputStream &oStream) const throw(ProtocolException, Error);
+      |                                                 ^~~~~
+../../../../src/Core/GearSlotInfo.h:23:49: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   23 |         void read (SocketInputStream & iStream) throw (ProtocolException, Error);
+      |                                                 ^~~~~
+../../../../src/Core/GearSlotInfo.h:24:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   24 |         void write (SocketOutputStream & oStream) const throw (ProtocolException, Error);
+      |                                                         ^~~~~
+../../../../src/Core/GearInfo.h:28:45: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   28 |     void read (SocketInputStream & iStream) throw (ProtocolException, Error);
+      |                                             ^~~~~
+../../../../src/Core/GearInfo.h:29:53: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   29 |     void write (SocketOutputStream & oStream) const throw (ProtocolException, Error);
+      |                                                     ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:117:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  117 |         virtual bool load() throw (InvalidProtocolException, Error);
+      |                             ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:118:59: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  118 |         virtual void tinysave(const string & field) const throw (Error) = 0;
+      |                                                           ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:138:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  138 |         bool wasteIfTimeLimitExpired(Item* pItem) throw (Error);
+      |                                                   ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:139:43: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  139 |         virtual void checkItemTimeLimit() throw (Error) = 0;
+      |                                           ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:140:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  140 |         void sendTimeLimitItemInfo() throw(Error);
+      |                                      ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:141:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  141 |         void addTimeLimitItem(Item* pItem, DWORD time) throw(Error);
+      |                                                        ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:142:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  142 |         void sellItem( Item* pItem ) throw(Error);
+      |                                      ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:143:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  143 |         void deleteItemByMorph( Item* pItem ) throw(Error);
+      |                                               ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:144:61: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  144 |         void updateItemTimeLimit( Item* pItem, DWORD time ) throw(Error);
+      |                                                             ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:145:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  145 |         virtual void updateEventItemTime( DWORD time ) throw(Error) = 0;
+      |                                                        ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:146:34: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  146 |         void loadTimeLimitItem() throw(Error);
+      |                                  ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:147:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  147 |         DWORD           getLimitTime(Item* pItem) throw(Error); // 20080913
+      |                                                   ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:153:26: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  153 |         void loadGoods() throw(Error);
+      |                          ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:160:62: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  160 |         void                    sendCurrentQuestInfo() const throw(Error);
+      |                                                              ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:173:51: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  173 |         virtual Item* getExtraInventorySlotItem() throw(Error) { return m_pExtraInventorySlot->getItem(); }
+      |                                                   ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:174:57: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  174 |         virtual void deleteItemFromExtraInventorySlot() throw(Error) { m_pExtraInventorySlot->deleteItem(); }
+      |                                                         ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:175:63: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  175 |         virtual void addItemToExtraInventorySlot(Item* pItem) throw(Error) { m_pExtraInventorySlot->addItem(pItem); }
+      |                                                               ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:178:33: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  178 |         virtual void loadItem() throw (InvalidProtocolException, Error);
+      |                                 ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:337:43: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  337 |         void addEnemy(const string& Name) throw(Error);
+      |                                           ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:338:46: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  338 |         void deleteEnemy(const string& Name) throw(NoSuchElementException, Error);
+      |                                              ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:402:38: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  402 |         bool isBillingPlayAvaiable() throw(Error);
+      |                                      ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:403:42: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  403 |         virtual bool isPayPlayAvaiable() throw(Error);
+      |                                          ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:404:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  404 |         virtual bool canPlayFree() throw(Error);
+      |                                    ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:775:43: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  775 |         virtual void  wearItem(int iPart) throw(Error) = 0;
+      |                                           ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:776:56: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  776 |         virtual void  wearItem(int iPart, Item* pItem) throw(Error) = 0;
+      |                                                        ^~~~~
+../../../../src/server/gameserver/PlayerCreature.h:777:36: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  777 |         virtual int hasTaoZhuang() throw(Error) = 0;
+      |                                    ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:26:123: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   26 |         static PartnerWaitInfo* getPartnerWaitInfo(PlayerCreature* pWaitingPC, string RequestedPCName, WaitType waitType) throw(Error);
+      |                                                                                                                           ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:29:82: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   29 |         virtual uint                    waitPartner( PlayerCreature* pTargetPC ) throw(Error) = 0;
+      |                                                                                  ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:30:78: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   30 |         virtual uint                    acceptPartner( PlayerCreature* pPC ) throw(Error) = 0;
+      |                                                                              ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:31:55: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   31 |         virtual void                    timeExpired() throw(Error) = 0;
+      |                                                       ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:76:94: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   76 |         uint            waitForPartner( PlayerCreature* pWaitingPC, string RequestedPCName ) throw(Error);
+      |                                                                                              ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:77:74: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   77 |         bool            stopWaitForPartner( PlayerCreature* pWaitingPC ) throw(Error);
+      |                                                                          ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:78:71: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   78 |         uint            acceptPartner( PlayerCreature* pRequestedPC ) throw(Error);
+      |                                                                       ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:79:74: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   79 |         bool            isWaitForPartner( PlayerCreature* pRequestedPC ) throw(Error);
+      |                                                                          ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:80:75: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   80 |         PlayerCreature* getWaitingPartner( PlayerCreature* pRequestedPC ) throw(Error);
+      |                                                                           ^~~~~
+../../../../src/server/gameserver/couple/PartnerWaitingManager.h:83:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   83 |         void            heartbeat() throw(Error);
+      |                                     ^~~~~
+../../../../src/server/gameserver/NPC.h:70:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   70 |         virtual void registerObject() throw(Error);
+      |                                       ^~~~~
+../../../../src/server/gameserver/NPC.h:72:29: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   72 |         virtual bool load() throw(Error);
+      |                             ^~~~~
+../../../../src/server/gameserver/NPC.h:73:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   73 |         virtual void save() const throw(Error) { throw UnsupportedError(__PRETTY_FUNCTION__); }
+      |                                   ^~~~~
+../../../../src/server/gameserver/NPC.h:80:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   80 |         void init() throw(Error);
+      |                     ^~~~~
+../../../../src/server/gameserver/NPC.h:81:46: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   81 |         void act(const Timeval& currentTime) throw(Error);
+      |                                              ^~~~~
+../../../../src/server/gameserver/PCFinder.h:35:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   35 |         void addCreature(Creature* pCreature) throw(DuplicatedException, Error);
+      |                                               ^~~~~
+../../../../src/server/gameserver/PCFinder.h:54:31: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   54 |         void addNPC(NPC *npc) throw(DuplicatedException, Error);
+      |                               ^~~~~
+../../../../src/server/gameserver/PCFinder.h:67:47: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   67 |         IP_t getIP(const string & name) const throw(NoSuchElementException, Error);
+      |                                               ^~~~~
+../../../../src/server/gameserver/PCFinder.h:74:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   74 |         void lock() throw(Error) { m_Mutex.lock(); }
+      |                     ^~~~~
+../../../../src/server/gameserver/PCFinder.h:75:23: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   75 |         void unlock() throw(Error) { m_Mutex.unlock(); }
+      |                       ^~~~~
+In file included from ../../../../src/server/gameserver/LogDef.h:4,
+                 from LGKickCharacterHandler.cpp:18:
+../../../../src/server/gameserver/VariableManager.h:615:27: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  615 |         VariableManager() throw(Error);
+      |                           ^~~~~
+../../../../src/server/gameserver/VariableManager.h:616:24: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  616 |     ~VariableManager() throw(Error);
+      |                        ^~~~~
+../../../../src/server/gameserver/VariableManager.h:619:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  619 |         void init() throw(Error);
+      |                     ^~~~~
+../../../../src/server/gameserver/VariableManager.h:620:21: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  620 |         void load() throw(Error);
+      |                     ^~~~~
+In file included from LGKickCharacterHandler.cpp:20:
+../../../../src/Core/Gpackets/GLKickVerify.h:31:37: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   31 |     void read(Datagram & iDatagram) throw(ProtocolException, Error);
+      |                                     ^~~~~
+../../../../src/Core/Gpackets/GLKickVerify.h:34:44: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   34 |     void write(Datagram & oDatagram) const throw(ProtocolException, Error);
+      |                                            ^~~~~
+../../../../src/Core/Gpackets/GLKickVerify.h:37:39: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   37 |         void execute(Player* pPlayer) throw(ProtocolException, Error);
+      |                                       ^~~~~
+../../../../src/Core/Gpackets/GLKickVerify.h:122:52: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+  122 |         static void execute(GLKickVerify* pPacket) throw(ProtocolException, Error);
+      |                                                    ^~~~~
+LGKickCharacterHandler.cpp:33:10: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]
+   33 |          throw ( ProtocolException , Error )
+      |          ^~~~~
+make: *** [Makefile:48: LGKickCharacterHandler.o] Error 1

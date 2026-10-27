@@ -1,0 +1,73 @@
+//////////////////////////////////////////////////////////////////////
+// 
+// Filename    : GCFriendSuggestToAdd.cpp 
+// Written By  : 
+// Description : 
+// 
+//////////////////////////////////////////////////////////////////////
+
+// include files
+#include "GCFriendSuggestToAdd.h"
+
+
+GCFriendSuggestToAdd::GCFriendSuggestToAdd()
+{
+	m_PCName.SetMaxLength(20);
+}
+
+//////////////////////////////////////////////////////////////////////
+// Datagram 객체로부터 데이타를 읽어서 패킷을 초기화한다.
+//////////////////////////////////////////////////////////////////////
+void GCFriendSuggestToAdd::read ( SocketInputStream & iStream ) 
+	 throw ( ProtocolException , Error )
+{
+	__BEGIN_TRY
+	
+	m_PCName.read(iStream);
+	
+	__END_CATCH
+}
+
+		    
+//////////////////////////////////////////////////////////////////////
+// Datagram 객체로 패킷의 바이너리 이미지를 보낸다.
+//////////////////////////////////////////////////////////////////////
+void GCFriendSuggestToAdd::write ( SocketOutputStream & oStream ) const 
+     throw ( ProtocolException , Error )
+{
+	__BEGIN_TRY
+
+	m_PCName.write(oStream);
+	
+	__END_CATCH
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// execute packet's handler
+//////////////////////////////////////////////////////////////////////
+void GCFriendSuggestToAdd::execute ( Player * pPlayer ) 
+	 throw ( ProtocolException , Error )
+{
+	__BEGIN_TRY
+		
+	GCFriendSuggestToAddHandler::execute(this, pPlayer);
+		
+	__END_CATCH
+}
+
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+string GCFriendSuggestToAdd::toString () const
+    throw ()
+{
+	StringStream msg;
+
+	msg << "GCFriendSuggestToAdd ("
+		<< "PCName:" << m_PCName.GetString()
+		<< " )";
+
+	return msg.toString();
+}
+

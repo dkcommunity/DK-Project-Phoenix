@@ -1,0 +1,277 @@
+AcidEruption.cpp:		bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_ACID_ERUPTION);
+AcidEruption.cpp:		ZoneCoord_t targetX = pEnemy->getX();
+AcidEruption.cpp:		ZoneCoord_t targetY = pEnemy->getY();
+AcidEruption.cpp:			pEnemy->addEffect(pEffectAcidEruption);
+AcidEruption.cpp:			pEnemy->setFlag( pEffectAcidEruption->getEffectClass() );
+AcidEruption.cpp:			gcAddEffect.setObjectID(pEnemy->getObjectID());
+AcidEruption.cpp:			_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+AcidEruption.cpp:			_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+AcidEruption.cpp:			if (pEnemy->isPC())
+AcidEruption.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+AttackArms.cpp:					ToHitBonus  = computeArmsWeaponToHitBonus(pWeapon, myX, myY, pEnemy->getX(), pEnemy->getY());
+AttackArms.cpp:					DamageBonus = computeArmsWeaponDamageBonus(pWeapon, myX, myY, pEnemy->getX(), pEnemy->getY());
+AttackArms.cpp:					bool bInvokerCheck   = (pEnemy->getObjectID() == pSlayer->getObjectID()) ? true : false;
+AttackArms.cpp:						ObjectID_t targetObjectID = pEnemy->getObjectID();
+AttackArms.cpp:			if (pEnemy->isPC()) 
+AttackArms.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+AttackArms.cpp:			else if (pEnemy->isMonster())
+AttackArms.cpp:			ZoneCoord_t targetX = pEnemy->getX();
+AttackArms.cpp:			ZoneCoord_t targetY = pEnemy->getY();
+AttackArms.cpp:			_GCAttackArmsOK4.setTargetObjectID (pEnemy->getObjectID());
+AttackArms.cpp:			_GCAttackArmsOK5.setTargetObjectID (pEnemy->getObjectID());
+AttackMelee.cpp:			_GCAttackMeleeOK3.setTargetObjectID (pEnemy->getObjectID());
+AttackMelee.cpp:			if (pEnemy->isPC()) 
+AttackMelee.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+AttackMelee.cpp:			else if (pEnemy->isMonster())
+BloodDrain.cpp:		|| pEnemy->isDead() || pEnemy->isFlag(Effect::EFFECT_CLASS_COMA))
+BloodDrain.cpp:	bool bEffectBloodDrain = pEnemy->isFlag(Effect::EFFECT_CLASS_BLOOD_DRAIN);
+BloodDrain.cpp:	bool bEffected = pEnemy->isFlag(Effect::EFFECT_CLASS_IMMUNE_TO_BLOOD_DRAIN);
+BloodDrain.cpp:		if (pEnemy->isSlayer())
+BloodDrain.cpp:				pEnemy->addEffect(pEffectBloodDrain);
+BloodDrain.cpp:				pEffectBloodDrain->create(pEnemy->getName());
+BloodDrain.cpp:				pEnemy->setFlag(Effect::EFFECT_CLASS_BLOOD_DRAIN);
+BloodDrain.cpp:			log(LOG_BLOODDRAINED, pEnemy->getName(), "게임 내의 몬스터");
+BloodDrain.cpp://		else if ( pEnemy->isOusters() && !isMaster )
+BloodDrain.cpp://			pEnemy->addEffect(pEffectBloodDrain);
+BloodDrain.cpp://			pEffectBloodDrain->create(pEnemy->getName());
+BloodDrain.cpp://			pEnemy->setFlag(Effect::EFFECT_CLASS_BLOOD_DRAIN);
+BloodDrain.cpp://			Sight_t oldSight = pEnemy->getSight();
+BloodDrain.cpp://			Sight_t newSight = pEnemy->getEffectedSight();
+BloodDrain.cpp://				pEnemy->setSight(newSight);
+BloodDrain.cpp://				pZone->updateScan(pEnemy, oldSight, pEnemy->getSight());
+BloodDrain.cpp://				_GCBloodDrainOK2.addShortData(MODIFY_VISION, pEnemy->getSight());
+BloodDrain.cpp://				pEnemy->getPlayer()->sendPacket(&gcChangeDarkLight);
+BloodDrain.cpp:		_GCBloodDrainOK3.setTargetObjectID (pEnemy->getObjectID());
+BloodDrain.cpp:			pEnemy->setFlag(Effect::EFFECT_CLASS_BLOOD_DRAIN);
+BloodDrain.cpp:		if (pEnemy != NULL && pEnemy->isPC()) 
+BloodDrain.cpp:			Player* pTargetPlayer = pEnemy->getPlayer();
+BloodDrain.cpp:		if (pEnemy->isSlayer()) 
+BloodDrain.cpp:		else if (pEnemy->isVampire()) 
+BloodDrain.cpp:		else if (pEnemy->isOusters()) 
+BloodDrain.cpp:		else if (pEnemy->isMonster())
+BloodDrain.cpp:			pEnemy->addEffect(pEffect);
+BloodDrain.cpp:			pEnemy->setFlag(Effect::EFFECT_CLASS_DECREASE_HP);
+BloodySnake.cpp:	execute(pMonster, pEnemy->getX(), pEnemy->getY());
+BloodySpear.cpp:		int X = pEnemy->getX();
+BloodySpear.cpp:		int Y = pEnemy->getY();
+BloodySpear.cpp:		Zone* pZone = pEnemy->getZone();
+BloodyWall.cpp:	execute(pMonster, pEnemy->getX(), pEnemy->getY());
+BloodyZenith.cpp:		ZoneCoord_t targetX = pEnemy->getX();
+BloodyZenith.cpp:		ZoneCoord_t targetY = pEnemy->getY();
+BloodyZenith.cpp:			_GCSkillToObjectOK5.setTargetObjectID( pEnemy->getObjectID() );
+BloodyZenith.cpp:			if ( pEnemy->isPC() )
+BloodyZenith.cpp:				pEnemy->getPlayer()->sendPacket( &_GCSkillToObjectOK2 );
+BloodyZenith.cpp:			pZone->broadcastSkillPacket( pMonster->getX(), pMonster->getY(), pEnemy->getX(), pEnemy->getY(), &_GCSkillToObjectOK5, cList );
+Brandish.cpp:		//	bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_IMMUNE_TO_CURSE);
+Brandish.cpp:		ZoneCoord_t targetX = pEnemy->getX();
+Brandish.cpp:		ZoneCoord_t targetY = pEnemy->getY();
+Brandish.cpp:		pEffect->setUserObjectID(pEnemy->getObjectID());
+Brandish.cpp:		pEnemy->setFlag(Effect::EFFECT_CLASS_BLEEDING);
+Brandish.cpp:		pEnemy->addEffect(pEffect);
+Brandish.cpp:		gcAddEffect.setObjectID(pEnemy->getObjectID());
+DarkBluePoison.cpp:		bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_DARKBLUE_POISON);
+DarkBluePoison.cpp:		ZoneCoord_t targetX = pEnemy->getX();
+DarkBluePoison.cpp:		ZoneCoord_t targetY = pEnemy->getY();
+DarkBluePoison.cpp:			pEnemy->addEffect(pEffectDarkBluePoison);
+DarkBluePoison.cpp:			pEnemy->setFlag(Effect::EFFECT_CLASS_DARKBLUE_POISON);
+DarkBluePoison.cpp:			gcAddEffect.setObjectID(pEnemy->getObjectID());
+DarkBluePoison.cpp:			_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+DarkBluePoison.cpp:			_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+DarkBluePoison.cpp:			if (pEnemy->isPC())
+DarkBluePoison.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+Darkness.cpp:	execute(pMonster, pEnemy->getX(), pEnemy->getY());
+Death.cpp:	bool bHitRoll    = HitRoll::isSuccessCurse(pSkillInfo->getLevel()/2, pEnemy->getResist(MAGIC_DOMAIN_CURSE));
+Death.cpp:	bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_DEATH)
+Death.cpp:						|| pEnemy->isFlag(Effect::EFFECT_CLASS_IMMUNE_TO_CURSE);
+Death.cpp:	ZoneCoord_t targetX = pEnemy->getX();
+Death.cpp:	ZoneCoord_t targetY = pEnemy->getY();
+Death.cpp:		Resist_t resist = pEnemy->getResist( MAGIC_DOMAIN_CURSE );
+Death.cpp:		pEnemy->setFlag(Effect::EFFECT_CLASS_DEATH);
+Death.cpp:		pEnemy->addEffect(pEffect);
+Death.cpp:		if (pEnemy->isSlayer())
+Death.cpp:		else if (pEnemy->isVampire())
+Death.cpp:		else if (pEnemy->isOusters())
+Death.cpp:		else if (pEnemy->isMonster())
+Death.cpp:		_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+Death.cpp:		_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+Death.cpp:		if (pEnemy->isPC()) 
+Death.cpp:			Player* pTargetPlayer = pEnemy->getPlayer();
+Death.cpp:		else if (pEnemy->isMonster())
+Death.cpp:		gcAddEffect.setObjectID(pEnemy->getObjectID());
+Doom.cpp:	bool bHitRoll    = HitRoll::isSuccessCurse(pSkillInfo->getLevel()/2, pEnemy->getResist(MAGIC_DOMAIN_CURSE));
+Doom.cpp:	bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_DOOM)
+Doom.cpp:						|| pEnemy->isFlag(Effect::EFFECT_CLASS_IMMUNE_TO_CURSE);
+Doom.cpp:	ZoneCoord_t targetX = pEnemy->getX();
+Doom.cpp:	ZoneCoord_t targetY = pEnemy->getY();
+Doom.cpp:		pEnemy->setFlag(Effect::EFFECT_CLASS_DOOM);
+Doom.cpp:		pEnemy->addEffect(pEffect);
+Doom.cpp:		if (pEnemy->isSlayer())
+Doom.cpp:		else if (pEnemy->isVampire())
+Doom.cpp:		else if (pEnemy->isOusters())
+Doom.cpp:		else if (pEnemy->isMonster())
+Doom.cpp:		_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+Doom.cpp:		_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+Doom.cpp:		if (pEnemy->isPC()) 
+Doom.cpp:			Player* pTargetPlayer = pEnemy->getPlayer();
+Doom.cpp:		else if (pEnemy->isMonster())
+Doom.cpp:		gcAddEffect.setObjectID(pEnemy->getObjectID());
+FeebleVirus.cpp:		bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_FEEBLE_VIRUS);
+FeebleVirus.cpp:		ZoneCoord_t targetX = pEnemy->getX();
+FeebleVirus.cpp:		ZoneCoord_t targetY = pEnemy->getY();
+FeebleVirus.cpp:			pEnemy->addEffect(pEffectFeebleVirus);
+FeebleVirus.cpp:			pEnemy->setFlag(Effect::EFFECT_CLASS_FEEBLE_VIRUS);
+FeebleVirus.cpp:			gcAddEffect.setObjectID(pEnemy->getObjectID());
+FeebleVirus.cpp:			_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+FeebleVirus.cpp:			_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+FeebleVirus.cpp:			if (pEnemy->isPC())
+FeebleVirus.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+GrayDarkness.cpp:	execute(pMonster, pEnemy->getX(), pEnemy->getY());
+GreenPoison.cpp:	execute(pMonster, pEnemy->getX(), pEnemy->getY());
+GreenStalker.cpp:		bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_GREEN_STALKER);
+GreenStalker.cpp:		ZoneCoord_t targetX = pEnemy->getX();
+GreenStalker.cpp:		ZoneCoord_t targetY = pEnemy->getY();
+GreenStalker.cpp:			pEnemy->addEffect(pEffectGreenStalker);
+GreenStalker.cpp:			pEnemy->setFlag(Effect::EFFECT_CLASS_GREEN_STALKER);
+GreenStalker.cpp:			gcAddEffect.setObjectID(pEnemy->getObjectID());
+GreenStalker.cpp:			_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+GreenStalker.cpp:			_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+GreenStalker.cpp:			if (pEnemy->isPC())
+GreenStalker.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+Hallucination.cpp:	bool bHitRoll    = HitRoll::isSuccessCurse(pSkillInfo->getLevel()/2, pEnemy->getResist(MAGIC_DOMAIN_CURSE));
+Hallucination.cpp:	bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_HALLUCINATION)
+Hallucination.cpp:						|| pEnemy->isFlag(Effect::EFFECT_CLASS_IMMUNE_TO_HALLUCINATION);
+Hallucination.cpp:	ZoneCoord_t targetX = pEnemy->getX();
+Hallucination.cpp:	ZoneCoord_t targetY = pEnemy->getY();
+Hallucination.cpp:		pEnemy->setFlag(Effect::EFFECT_CLASS_HALLUCINATION);
+Hallucination.cpp:		pEnemy->addEffect(pEffect);
+Hallucination.cpp:		_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+Hallucination.cpp:		_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+Hallucination.cpp:		if (pEnemy->isPC()) 
+Hallucination.cpp:			Player* pTargetPlayer = pEnemy->getPlayer();
+Hallucination.cpp:		else if (pEnemy->isMonster())
+Hallucination.cpp:		gcAddEffect.setObjectID(pEnemy->getObjectID());
+HeadShot.cpp:					ToHitBonus  = computeArmsWeaponToHitBonus(pWeapon, myX, myY, pEnemy->getX(), pEnemy->getY());
+HeadShot.cpp:					DamageBonus = computeArmsWeaponDamageBonus(pWeapon, myX, myY, pEnemy->getX(), pEnemy->getY());
+HeadShot.cpp:					bool bInvokerCheck   = (pEnemy->getObjectID() == pSlayer->getObjectID()) ? true : false;
+HeadShot.cpp:						ObjectID_t targetObjectID = pEnemy->getObjectID();
+HeadShot.cpp:						if (!pEnemy->isSlayer())
+HeadShot.cpp:							if ( maxEnemyLevel < pEnemy->getLevel() ) maxEnemyLevel = pEnemy->getLevel();
+JabbingVein.cpp:			|| pEnemy->isNPC()) 
+JabbingVein.cpp:			ObjectID_t TargetObjectID = pEnemy->getObjectID();
+JabbingVein.cpp:			if ( !pEnemy->isFlag(Effect::EFFECT_CLASS_JABBING_VEIN) && rand()%100 <= output.Range )
+JabbingVein.cpp:				pEnemy->addEffect( pEffect );
+JabbingVein.cpp:				pEnemy->setFlag( pEffect->getEffectClass() );
+JabbingVein.cpp:				gcAddEffect.setObjectID( pEnemy->getObjectID() );
+JabbingVein.cpp:				pZone->broadcastPacket( pEnemy->getX(), pEnemy->getY(), &gcAddEffect );
+JabbingVein.cpp:			if (pEnemy->isPC()) 
+JabbingVein.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+JabbingVein.cpp:			else if (pEnemy->isMonster())
+JabbingVein.cpp:			ZoneCoord_t targetX = pEnemy->getX();
+JabbingVein.cpp:			ZoneCoord_t targetY = pEnemy->getY();
+Paralyze.cpp:	bool bHitRoll    = HitRoll::isSuccessCurse(pSkillInfo->getLevel()/2, pEnemy->getResist(MAGIC_DOMAIN_CURSE));
+Paralyze.cpp:	bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_PARALYZE) 
+Paralyze.cpp:						|| pEnemy->isFlag(Effect::EFFECT_CLASS_IMMUNE_TO_PARALYZE)
+Paralyze.cpp:						|| pEnemy->isFlag(Effect::EFFECT_CLASS_NO_DAMAGE);
+Paralyze.cpp:	ZoneCoord_t  targetX = pEnemy->getX();
+Paralyze.cpp:	ZoneCoord_t  targetY = pEnemy->getY();
+Paralyze.cpp:		Resist_t resist = pEnemy->getResist( MAGIC_DOMAIN_CURSE );
+Paralyze.cpp:		pEnemy->addEffect(pEffectParalyze);
+Paralyze.cpp:		pEnemy->setFlag(Effect::EFFECT_CLASS_PARALYZE);
+Paralyze.cpp:		if (pEnemy->isSlayer()) 
+Paralyze.cpp:		else if (pEnemy->isVampire()) 
+Paralyze.cpp:		else if (pEnemy->isOusters()) 
+Paralyze.cpp:		else if (pEnemy->isMonster())
+Paralyze.cpp:		gcAddEffect.setObjectID(pEnemy->getObjectID());
+Paralyze.cpp:		_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+Paralyze.cpp:		_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+Paralyze.cpp:		if (pEnemy->isPC())
+Paralyze.cpp:			Player* pTargetPlayer = pEnemy->getPlayer();
+Parasite.cpp:	if( !pEnemy->isFlag(Effect::EFFECT_CLASS_PARASITE) )
+Parasite.cpp:		pEnemy->setFlag(Effect::EFFECT_CLASS_PARASITE);
+Parasite.cpp:		pEnemy->addEffect(pEffect);
+Parasite.cpp:		pZone->broadcastPacket(pEnemy->getX(), pEnemy->getY(), &gcAddEffect); 
+QuickFire.cpp:			|| pEnemy->isNPC()) 
+QuickFire.cpp:			ObjectID_t TargetObjectID = pEnemy->getObjectID();
+QuickFire.cpp:			if (pEnemy->isPC()) 
+QuickFire.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+QuickFire.cpp:			else if (pEnemy->isMonster())
+QuickFire.cpp:			ZoneCoord_t targetX = pEnemy->getX();
+QuickFire.cpp:			ZoneCoord_t targetY = pEnemy->getY();
+Seduction.cpp:	bool bHitRoll    = HitRoll::isSuccessCurse(pSkillInfo->getLevel()/2, pEnemy->getResist(MAGIC_DOMAIN_CURSE));
+Seduction.cpp:	bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_SEDUCTION)
+Seduction.cpp:						|| pEnemy->isFlag(Effect::EFFECT_CLASS_IMMUNE_TO_CURSE);
+Seduction.cpp:	ZoneCoord_t targetX = pEnemy->getX();
+Seduction.cpp:	ZoneCoord_t targetY = pEnemy->getY();
+Seduction.cpp:		pEnemy->setFlag(Effect::EFFECT_CLASS_SEDUCTION);
+Seduction.cpp:		pEnemy->addEffect(pEffect);
+Seduction.cpp:		if (pEnemy->isSlayer())
+Seduction.cpp:		else if (pEnemy->isVampire())
+Seduction.cpp:		else if (pEnemy->isOusters())
+Seduction.cpp:		else if (pEnemy->isMonster())
+Seduction.cpp:		_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+Seduction.cpp:		_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+Seduction.cpp:		if (pEnemy->isPC()) 
+Seduction.cpp:			Player* pTargetPlayer = pEnemy->getPlayer();
+Seduction.cpp:		else if (pEnemy->isMonster())
+Seduction.cpp:		gcAddEffect.setObjectID(pEnemy->getObjectID());
+SimpleMeleeSkill.cpp:			_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+SimpleMeleeSkill.cpp:			if (pEnemy->isPC()) 
+SimpleMeleeSkill.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+SimpleMeleeSkill.cpp:			else if (pEnemy->isMonster())
+SimpleMeleeSkill.cpp:			cList = pZone->broadcastSkillPacket(pMonster->getX(), pMonster->getY(), pEnemy->getX(), pEnemy->getY(), &_GCSkillToObjectOK5, cList);
+SimpleMissileSkill.cpp:		Coord_t targetX = pEnemy->getX();
+SimpleMissileSkill.cpp:		Coord_t targetY = pEnemy->getY();
+SimpleMissileSkill.cpp:			_GCSkillToObjectOK4.setTargetObjectID(pEnemy->getObjectID());
+SimpleMissileSkill.cpp:			_GCSkillToObjectOK5.setTargetObjectID(pEnemy->getObjectID());
+SimpleMissileSkill.cpp:			if (pEnemy->isPC()) 
+SimpleMissileSkill.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+SimpleMissileSkill.cpp:			else if (pEnemy->isMonster())
+SimpleTileMissileSkill.cpp://						cout << pMonster->getName() << " checks enemy " << pEnemy->getName() << endl;
+SimpleTileMissileSkill.cpp:							bool bRaceCheck      = !pEnemy->isNPC(); //pEnemy->isSlayer() || pEnemy->isVampire();
+SimpleTileMissileSkill.cpp:								ObjectID_t targetObjectID = pEnemy->getObjectID();
+SimpleTileMissileSkill.cpp:				if (pEnemy->isPC())
+SimpleTileMissileSkill.cpp:					if (pEnemy->isSlayer())
+SimpleTileMissileSkill.cpp:					else if (pEnemy->isVampire())
+SimpleTileMissileSkill.cpp:					else if (pEnemy->isOusters())
+SimpleTileMissileSkill.cpp:					pEnemy->getPlayer()->sendPacket(&_GCSkillToTileOK2);
+SimpleTileMissileSkill.cpp:				else if (pEnemy->isMonster())
+SkillHandler.cpp:	execute(pMonster, pEnemy->getX(), pEnemy->getY());
+SkillUtil.cpp:	if (!pEnemy->isDead()) return;
+SkillUtil.cpp:	if (pEnemy->isNPC()) return;
+SkillUtil.cpp:	if (pCreature->isSlayer() && pEnemy->isSlayer()) return;
+SkillUtil.cpp:	if (pCreature->isVampire() && pEnemy->isVampire()) return;
+SkillUtil.cpp:	if (pCreature->isOusters() && pEnemy->isOusters()) return;
+SkillUtil.cpp:		if (pEnemy->isMonster()) 
+SkillUtil.cpp:		else if (pEnemy->isVampire()) 
+SkillUtil.cpp:		else if (pEnemy->isOusters()) 
+SkillUtil.cpp:		if (pEnemy->isMonster()) 
+SkillUtil.cpp:		else if (pEnemy->isSlayer()) 
+SkillUtil.cpp:		else if (pEnemy->isOusters()) 
+SkillUtil.cpp:		if (pEnemy->isMonster()) 
+SkillUtil.cpp:		else if (pEnemy->isSlayer()) 
+SkillUtil.cpp:		else if (pEnemy->isVampire()) 
+Trident.cpp:			|| pEnemy->isNPC()) 
+Trident.cpp:			ObjectID_t TargetObjectID = pEnemy->getObjectID();
+Trident.cpp:			if (pEnemy->isPC()) 
+Trident.cpp:				Player* pTargetPlayer = pEnemy->getPlayer();
+Trident.cpp:			else if (pEnemy->isMonster())
+Trident.cpp:			ZoneCoord_t targetX = pEnemy->getX();
+Trident.cpp:			ZoneCoord_t targetY = pEnemy->getY();
+WideBloodDrain.cpp:	if ( pEnemy->isDead() || pEnemy->isFlag(Effect::EFFECT_CLASS_COMA))
+WideBloodDrain.cpp:	bool bEffected   = pEnemy->isFlag(Effect::EFFECT_CLASS_BLOOD_DRAIN);
+WideBloodDrain.cpp:	bool bImmune = pEnemy->isFlag(Effect::EFFECT_CLASS_IMMUNE_TO_BLOOD_DRAIN);
+WideBloodDrain.cpp:		if ( pEnemy->isSlayer() && !bEffected )
+WideBloodDrain.cpp:			pEnemy->addEffect(pEffectBloodDrain);
+WideBloodDrain.cpp:			pEffectBloodDrain->create(pEnemy->getName());
+WideBloodDrain.cpp:			pEnemy->setFlag(Effect::EFFECT_CLASS_BLOOD_DRAIN);
+WideBloodDrain.cpp:		_GCBloodDrainOK3.setTargetObjectID (pEnemy->getObjectID());
+WideBloodDrain.cpp:		pEnemy->setFlag(Effect::EFFECT_CLASS_BLOOD_DRAIN);
+WideBloodDrain.cpp:		if (pEnemy != NULL && pEnemy->isPC()) 
+WideBloodDrain.cpp:			Player* pTargetPlayer = pEnemy->getPlayer();
+WideBloodDrain.cpp:		if (pEnemy->isSlayer()) 
+WideBloodDrain.cpp:		else if (pEnemy->isOusters()) 
+WideBloodDrain.cpp:		else if (pEnemy->isMonster())
+WideBloodDrain.cpp:			pEnemy->addEffect(pEffect);
+WideBloodDrain.cpp:			pEnemy->setFlag(Effect::EFFECT_CLASS_DECREASE_HP);
+WideBloodDrain.cpp:		return pEnemy->getObjectID();
+YellowPoison.cpp:	execute(pMonster, pEnemy->getX(), pEnemy->getY());

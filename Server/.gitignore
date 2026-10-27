@@ -1,0 +1,47 @@
+# Requested exclusions
+/graphify-out/
+/lib/
+/sql/
+/tools/teleport/
+/tools/gdr/
+/tools/discordbot/
+/tools/dklunox_home/
+/tools/dklunoxdiscordAI/
+
+# Graphify indexes can also be generated below source subdirectories
+**/graphify-out/
+
+# Compiler outputs and server runtime directories
+*.o
+*.a
+*.so
+*.out
+*.core
+/bin/
+/log/
+/temp/
+.gameplayer_layout.stamp
+
+# GNU GLOBAL / ctags indexes
+GTAGS
+GRTAGS
+GSYMS
+GPATH
+tags
+
+# Python local artifacts
+__pycache__/
+*.py[cod]
+
+# Local environment and private credentials
+.env
+**/.env
+**/.env.local
+*.private.pem
+*_private_key.pem
+
+# Editor and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

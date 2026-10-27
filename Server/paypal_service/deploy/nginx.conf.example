@@ -1,0 +1,61 @@
+# Phoenix PayPal Cash servisi — nginx reverse proxy örneği.
+#
+# Kurulum:
+#   1) Bu dosyayı /etc/nginx/sites-available/paypal_service olarak kopyala,
+#      server_name ve sertifika yollarındaki domain'i değiştir.
+#   2) ln -s /etc/nginx/sites-available/paypal_service /etc/nginx/sites-enabled/
+#   3) Aşağıdaki limit_req_zone satırı server {} bloğunda ÇALIŞMAZ; http {} bloğuna
+#      taşınmalıdır — örn. /etc/nginx/conf.d/paypal_ratelimit.conf dosyasına koy:
+#
+#      limit_req_zone $binary_remote_addr zone=paypal_webhook:10m rate=10r/s;
+#
+#   4) TLS: sudo certbot --nginx -d pay.example.duckdns.org
+#      (Domain yoksa: duckdns.org'dan ücretsiz subdomain al, VPS IP'sine
+#       89.252.164.244 A kaydı olarak yönlendir. PayPal webhook HTTPS şart.)
+#   5) nginx -t && systemctl reload nginx
+
+server {
+    listen 443 ssl;
+    server_name pay.example.duckdns.org;
+
+    # certbot'un yönettiği sertifika yolları (certbot --nginx otomatik doldurur)
+    ssl_certificate     /etc/letsencrypt/live/pay.example.duckdns.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/pay.example.duckdns.org/privkey.pem;
+
+    # Oyuncuya dönük sayfalar (paket seçimi, return/cancel)
+    location /pay/ {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
+    # PayPal webhook — sıkı profil: body limiti + rate limit.
+    # Tasarım §5-6: 64 KB body üst sınırı (uygulama tarafında da ayrıca var).
+    location = /paypal/webhook {
+        limit_req zone=paypal_webhook burst=20 nodelay;
+        client_max_body_size 64k;
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # systemd/nginx sağlık kontrolü
+    location = /health {
+        proxy_pass http://127.0.0.1:8000;
+    }
+
+    # Kök ve diğer yollar kapalı
+    location / {
+        return 404;
+    }
+}
+
+# HTTP -> HTTPS yönlendirme
+server {
+    listen 80;
+    server_name pay.example.duckdns.org;
+    return 301 https://$host$request_uri;
+}
