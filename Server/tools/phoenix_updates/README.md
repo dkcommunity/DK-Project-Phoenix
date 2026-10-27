@@ -1,21 +1,21 @@
 # Project Phoenix Update Endpoint
 
-Bu klasor, yeni `Updater.exe` icin server tarafinda gereken statik update endpoint'ini kurmak ve release publish etmek icin kullanilir.
+This directory contains the tools for setting up the static update endpoint required by the new `Updater.exe` and publishing client releases.
 
-## Mimari
+## Architecture
 
-- Client `Updater.exe` su URL'leri okur:
+- The client `Updater.exe` reads these URLs:
   - `https://<host>/updates/manifest.json`
   - `https://<host>/updates/manifest.sig`
-  - veya client `data/info/updateclient.inf` icindeki `ManifestUrl` / `PhoenixManifestUrl`.
-- Web server sadece statik dosya sunar.
-- Oyun `LoginServer` hala DB `ClientVersion.Version` ile client surumunu karsilastirir.
-- Release publish edildikten sonra `ClientVersion.Version` manifest `version` degeriyle ayni olmalidir.
-- `manifest.sig`, `manifest.json` ham byte iceriginin ECDSA P-256 / SHA-256 imzasidir.
+  - Or the `ManifestUrl` / `PhoenixManifestUrl` values in the client's `data/info/updateclient.inf`.
+- The web server only serves static files.
+- The game `LoginServer` still compares the client version against the database value `ClientVersion.Version`.
+- After publishing a release, `ClientVersion.Version` must match the manifest's `version` value.
+- `manifest.sig` is an ECDSA P-256 / SHA-256 signature of the raw bytes of `manifest.json`.
 
-## Kurulum
+## Installation
 
-Sunucuda:
+On the server:
 
 ```bash
 cd /home/phoenix/phoenix/ServerSRC/tools/phoenix_updates
@@ -23,7 +23,7 @@ chmod +x install_update_endpoint.sh publish_update_release.sh
 sudo ./install_update_endpoint.sh --server-name 89.252.164.244 --web-root /var/www/phoenix-updates
 ```
 
-HTTPS sertifikasi hazirsa:
+If an HTTPS certificate is ready:
 
 ```bash
 sudo ./install_update_endpoint.sh \
@@ -33,24 +33,24 @@ sudo ./install_update_endpoint.sh \
   --ssl-key /etc/letsencrypt/live/patch.project-phoenix.example/privkey.pem
 ```
 
-Bu islem:
+This command:
 
-- `/var/www/phoenix-updates` olusturur.
-- Nginx icin `/updates/` location config'i yazar.
-- Cert/key verilirse ayni endpoint'i HTTPS uzerinden de sunar.
-- `GET` ve `HEAD` disindaki methodlari reddeder.
-- Dotfile erisimini kapatir.
-- Nginx config test edip reload eder.
+- Creates `/var/www/phoenix-updates`.
+- Writes an Nginx `location` configuration for `/updates/`.
+- Serves the same endpoint over HTTPS if a certificate and key are provided.
+- Rejects methods other than `GET` and `HEAD`.
+- Disables access to dotfiles.
+- Tests the Nginx configuration and reloads Nginx.
 
-PayPal ile ayni VPS'te `certbot --nginx --redirect` kullanildiysa HTTP blogu IP host icin `return 404` basabilir. Python GUI (`http://VPS_IP/updates`) ve `Updater.exe` (`updateclient.inf` `HttpUrl`) o zaman 404 alir. Kanonik duzen: `phoenix-updates.conf.example` (DuckDNS HTTP->HTTPS, IP HTTP `/updates/` GET/HEAD, HTTPS'te hem `/updates/` hem PayPal). `install_update_endpoint.sh` PayPal/Certbot isaretli siteyi `--force` olmadan ezmez.
+If `certbot --nginx --redirect` has been used on the same VPS as PayPal, the HTTP block may return `404` for the IP host. In that case, the Python GUI (`http://VPS_IP/updates`) and `Updater.exe` (`HttpUrl` in `updateclient.inf`) will receive a 404. The canonical setup is `phoenix-updates.conf.example` (DuckDNS HTTP-to-HTTPS, IP HTTP `/updates/` GET/HEAD, and both `/updates/` and PayPal over HTTPS). Without `--force`, `install_update_endpoint.sh` will not overwrite a site marked as managed by PayPal/Certbot.
 
-Canli manifest URL (GUI varsayilan): `https://dklunox.duckdns.org/updates`. IP sozlesmesi: `http://169.58.161.68/updates`.
+Live manifest URL (GUI default): `https://dklunox.duckdns.org/updates`. IP endpoint: `http://169.58.161.68/updates`.
 
-HTTPS `https://dklunox.duckdns.org/` landing sayfasi `/var/www/dklunox-home/` (kaynak: `ServerSRC/tools/dklunox_home/index.html`). `location = /` ve `location /` statik dosya; `/updates/`, `/pay/`, `/health`, `/paypal/` golgelenmez. `sites-enabled/default` acik kalir.
+The HTTPS landing page at `https://dklunox.duckdns.org/` is served from `/var/www/dklunox-home/` (source: `ServerSRC/tools/dklunox_home/index.html`). `location = /` and `location /` serve static files; `/updates/`, `/pay/`, `/health`, and `/paypal/` are not shadowed. `sites-enabled/default` remains enabled.
 
-## Publish
+## Publishing
 
-Windows tarafinda manifest uret:
+Generate the manifest on Windows:
 
 ```powershell
 python "F:\Project Phoenix\tools\phoenix_updater\generate_manifest.py" `
@@ -61,43 +61,43 @@ python "F:\Project Phoenix\tools\phoenix_updater\generate_manifest.py" `
   --private-key "F:\Project Phoenix\tools\phoenix_updater\phoenix_manifest_private_key.pem"
 ```
 
-Private key lokal kalmalidir. Public key `Updater.exe` icine gomuludur.
+Keep the private key local. The public key is embedded in `Updater.exe`.
 
-`update_publish` klasorunu sunucuya gonder:
+Upload the `update_publish` directory to the server:
 
 ```bash
 rsync -avz "F:/Project Phoenix/update_publish/" root@89.252.164.244:/home/phoenix/update_publish/
 ```
 
-Sunucuda publish et:
+Publish the release on the server:
 
 ```bash
 cd /home/phoenix/phoenix/ServerSRC/tools/phoenix_updates
 sudo ./publish_update_release.sh
 ```
 
-Varsayilanlar:
+Defaults:
 
 - Source: `/home/phoenix/update_publish`
 - Web root: `/var/www/phoenix-updates`
-- Version: `/home/phoenix/update_publish/manifest.json` icindeki `version`
+- Version: the `version` value in `/home/phoenix/update_publish/manifest.json`
 
-Publish cumulative calisir:
+Publishing is cumulative:
 
-- `/var/www/phoenix-updates` aktif patch havuzudur.
-- Eski patch dosyalari silinmez ve `.previous` klasorune tasinmaz.
-- Script once aktif web root'u staging klasorune kopyalar.
-- Sonra `/home/phoenix/update_publish` icindeki yeni release dosyalarini bunun ustune yazar.
-- `manifest.json` icindeki her `files/...` kaydi staging icinde mevcut mu, size/hash dogru mu diye kontrol edilir.
-- Kontrol basariliysa staging aktif `/var/www/phoenix-updates` olur.
+- `/var/www/phoenix-updates` is the active patch pool.
+- Old patch files are not deleted or moved into a `.previous` directory.
+- The script first copies the active web root into a staging directory.
+- It then overlays the new release files from `/home/phoenix/update_publish`.
+- It verifies that every `files/...` entry in `manifest.json` exists in staging and has the expected size and hash.
+- If validation succeeds, staging becomes the active `/var/www/phoenix-updates`.
 
-Bu yuzden Windows tarafinda uretilen `manifest.json`, sadece bugun secilen dosyalari degil updater ile yonetilen tum guncel patch dosyalarini icermelidir. Patch Manifest GUI bunu mevcut signed live manifest'i okuyup yeni secilen dosyalari onun ustune merge ederek yapar. Output paketindeki `files/` klasoru sadece yeni secilen/degisken dosyalari tasir; eski dosyalar VPS'teki aktif patch havuzundan korunur.
+Therefore, the `manifest.json` generated on Windows must include all current patch files managed by the updater, not only the files selected today. The Patch Manifest GUI does this by reading the current signed live manifest and merging the newly selected files into it. The output package's `files/` directory contains only newly selected or changed files; older files are preserved from the active patch pool on the VPS.
 
-## Bos release / full client zip dagitimi
+## Empty release / full-client ZIP distribution
 
-Bazen patch yayinlanmayacak, bunun yerine oyunculara manuel full client zip verilecek. Bu durumda eski cumulative patch havuzu risklidir: oyuncu yeni full client'i `Updater.exe` uzerinden acinca eski manifestte kalan patch dosyalarini tekrar indirip yeni dosyalarin ustune yazabilir.
+Sometimes no patch will be published, and players will instead receive a full client ZIP manually. In this case, the old cumulative patch pool can be dangerous: when a player launches the new full client through `Updater.exe`, files remaining in the old manifest may be downloaded again and overwrite the new files.
 
-Bu durumda imzali bos manifest uret:
+Generate a signed empty manifest:
 
 ```powershell
 python "F:\Project Phoenix\tools\phoenix_updater\generate_manifest.py" `
@@ -108,23 +108,23 @@ python "F:\Project Phoenix\tools\phoenix_updater\generate_manifest.py" `
   --private-key "F:\Project Phoenix\tools\phoenix_updater\phoenix_manifest_private_key.pem"
 ```
 
-`update_publish` klasorunu sunucuya gonder ve sunucuda bos release moduyla publish et:
+Upload the `update_publish` directory to the server, then publish in empty-release mode:
 
 ```bash
 cd /home/phoenix/phoenix/ServerSRC/tools/phoenix_updates
 sudo ./publish_update_release.sh --empty-release
 ```
 
-`--empty-release` modu cumulative calismaz:
+The `--empty-release` mode is not cumulative:
 
-- Aktif `/var/www/phoenix-updates` patch havuzunu eski dosyalari korumadan degistirir.
-- `manifest.json` icindeki `files` listesi bos olmak zorundadir.
-- Source icinde `files/` altinda patch dosyasi varsa publish fail olur.
-- Updater manifesti dogrular, indirilecek dosya bulmaz ve client'i baslatir.
+- It replaces the active `/var/www/phoenix-updates` patch pool without preserving old files.
+- The `files` list in `manifest.json` must be empty.
+- Publishing fails if there are patch files under `files/` in the source.
+- The updater verifies the manifest, finds no files to download, and starts the client.
 
-Bu mod kullanildiginda uzun sure oyuna girmeyen oyuncular patch zinciriyle guncellenmez; onlara yeni full client zip verilmesi gerekir.
+Players who have not launched the game for a long time will not be updated through the patch chain when this mode is used; they must receive the new full-client ZIP.
 
-Farkli klasor veya version override gerekiyorsa:
+To override the source directory or version:
 
 ```bash
 sudo ./publish_update_release.sh \
@@ -133,7 +133,7 @@ sudo ./publish_update_release.sh \
   --version 370
 ```
 
-DB version degerini ayni islemde guncellemek icin:
+To update the database version in the same operation:
 
 ```bash
 export MYSQL_PWD='DB_PASSWORD'
@@ -145,7 +145,7 @@ sudo -E ./publish_update_release.sh \
 unset MYSQL_PWD
 ```
 
-## Kontrol
+## Verification
 
 ```bash
 curl -I http://127.0.0.1/updates/manifest.json
@@ -154,9 +154,9 @@ curl http://127.0.0.1/updates/manifest.json | head
 mysql -u elcastle -p DARKEDEN -e "SELECT Version FROM ClientVersion;"
 ```
 
-## Guvenlik Notlari
+## Security notes
 
-- Bu endpoint upload kabul etmez; sadece statik dosya sunar.
-- `manifest.json`, `manifest.sig` ve dosyalar publish oncesi local olarak uretilir.
-- Production icin domain + HTTPS kullanilmasi onerilir.
-- Updater default olarak manifest imzasini zorunlu tutar. Gecici test icin `--optional-signature` veya `RequireManifestSignature : 0` kullanilabilir, production icin kullanilmaz.
+- This endpoint does not accept uploads; it only serves static files.
+- `manifest.json`, `manifest.sig`, and the patch files are generated locally before publishing.
+- Using a domain with HTTPS is recommended for production.
+- By default, the updater requires a valid manifest signature. `--optional-signature` or `RequireManifestSignature : 0` may be used for temporary testing, but not in production.
