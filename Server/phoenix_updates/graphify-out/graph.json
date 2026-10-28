@@ -1,0 +1,410 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "install_update_endpoint.sh",
+      "file_type": "code",
+      "source_file": "install_update_endpoint.sh",
+      "source_location": "L1",
+      "id": "install_update_endpoint_sh",
+      "community": 4,
+      "norm_label": "install_update_endpoint.sh"
+    },
+    {
+      "label": "publish_update_release.sh",
+      "file_type": "code",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L1",
+      "id": "publish_update_release_sh",
+      "community": 5,
+      "norm_label": "publish_update_release.sh"
+    },
+    {
+      "label": "copy_tree_contents()",
+      "file_type": "code",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L15",
+      "id": "phoenix_updates_publish_update_release_copy_tree_contents",
+      "community": 5,
+      "norm_label": "copy_tree_contents()"
+    },
+    {
+      "label": "read_manifest_version()",
+      "file_type": "code",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L27",
+      "id": "phoenix_updates_publish_update_release_read_manifest_version",
+      "community": 5,
+      "norm_label": "read_manifest_version()"
+    },
+    {
+      "label": "validate_staged_manifest()",
+      "file_type": "code",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L59",
+      "id": "phoenix_updates_publish_update_release_validate_staged_manifest",
+      "community": 5,
+      "norm_label": "validate_staged_manifest()"
+    },
+    {
+      "label": "cleanup_publish_swap()",
+      "file_type": "code",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L257",
+      "id": "phoenix_updates_publish_update_release_cleanup_publish_swap",
+      "community": 5,
+      "norm_label": "cleanup_publish_swap()"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "readme_md",
+      "community": 1,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "Project Phoenix Update Endpoint",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "phoenix_updates_readme_project_phoenix_update_endpoint",
+      "community": 1,
+      "norm_label": "project phoenix update endpoint"
+    },
+    {
+      "label": "Mimari",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "id": "phoenix_updates_readme_mimari",
+      "community": 1,
+      "norm_label": "mimari"
+    },
+    {
+      "label": "Kurulum",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L16",
+      "id": "phoenix_updates_readme_kurulum",
+      "community": 2,
+      "norm_label": "kurulum"
+    },
+    {
+      "label": "code:bash (cd /home/phoenix/phoenix/ServerSRC/tools/phoenix_updates)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L20",
+      "id": "phoenix_updates_readme_codeblock_1",
+      "community": 2,
+      "norm_label": "code:bash (cd /home/phoenix/phoenix/serversrc/tools/phoenix_updates)"
+    },
+    {
+      "label": "code:bash (sudo ./install_update_endpoint.sh \\)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L28",
+      "id": "phoenix_updates_readme_codeblock_2",
+      "community": 2,
+      "norm_label": "code:bash (sudo ./install_update_endpoint.sh \\)"
+    },
+    {
+      "label": "Publish",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L45",
+      "id": "phoenix_updates_readme_publish",
+      "community": 0,
+      "norm_label": "publish"
+    },
+    {
+      "label": "code:powershell (python \"F:\\Project Phoenix\\tools\\phoenix_updater\\generate_ma)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L49",
+      "id": "phoenix_updates_readme_codeblock_3",
+      "community": 0,
+      "norm_label": "code:powershell (python \"f:\\project phoenix\\tools\\phoenix_updater\\generate_ma)"
+    },
+    {
+      "label": "code:bash (rsync -avz \"F:/Project Phoenix/update_publish/\" root@89.252.)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L62",
+      "id": "phoenix_updates_readme_codeblock_4",
+      "community": 0,
+      "norm_label": "code:bash (rsync -avz \"f:/project phoenix/update_publish/\" root@89.252.)"
+    },
+    {
+      "label": "code:bash (cd /home/phoenix/phoenix/ServerSRC/tools/phoenix_updates)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L68",
+      "id": "phoenix_updates_readme_codeblock_5",
+      "community": 0,
+      "norm_label": "code:bash (cd /home/phoenix/phoenix/serversrc/tools/phoenix_updates)"
+    },
+    {
+      "label": "code:bash (sudo ./publish_update_release.sh \\)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L92",
+      "id": "phoenix_updates_readme_codeblock_6",
+      "community": 3,
+      "norm_label": "code:bash (sudo ./publish_update_release.sh \\)"
+    },
+    {
+      "label": "code:bash (export MYSQL_PWD='DB_PASSWORD')",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L101",
+      "id": "phoenix_updates_readme_codeblock_7",
+      "community": 3,
+      "norm_label": "code:bash (export mysql_pwd='db_password')"
+    },
+    {
+      "label": "Kontrol",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L111",
+      "id": "phoenix_updates_readme_kontrol",
+      "community": 3,
+      "norm_label": "kontrol"
+    },
+    {
+      "label": "code:bash (curl -I http://127.0.0.1/updates/manifest.json)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L113",
+      "id": "phoenix_updates_readme_codeblock_8",
+      "community": 3,
+      "norm_label": "code:bash (curl -i http://127.0.0.1/updates/manifest.json)"
+    },
+    {
+      "label": "Guvenlik Notlari",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L120",
+      "id": "phoenix_updates_readme_guvenlik_notlari",
+      "community": 1,
+      "norm_label": "guvenlik notlari"
+    }
+  ],
+  "links": [
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "publish_update_release_sh",
+      "target": "phoenix_updates_publish_update_release_copy_tree_contents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "publish_update_release_sh",
+      "target": "phoenix_updates_publish_update_release_read_manifest_version"
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "publish_update_release_sh",
+      "target": "phoenix_updates_publish_update_release_validate_staged_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_update_release.sh",
+      "source_location": "L257",
+      "weight": 1.0,
+      "source": "publish_update_release_sh",
+      "target": "phoenix_updates_publish_update_release_cleanup_publish_swap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_md",
+      "target": "phoenix_updates_readme_project_phoenix_update_endpoint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_project_phoenix_update_endpoint",
+      "target": "phoenix_updates_readme_mimari"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_project_phoenix_update_endpoint",
+      "target": "phoenix_updates_readme_kurulum"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_project_phoenix_update_endpoint",
+      "target": "phoenix_updates_readme_publish"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_project_phoenix_update_endpoint",
+      "target": "phoenix_updates_readme_kontrol"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L79",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_project_phoenix_update_endpoint",
+      "target": "phoenix_updates_readme_guvenlik_notlari"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_kurulum",
+      "target": "phoenix_updates_readme_codeblock_1"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_kurulum",
+      "target": "phoenix_updates_readme_codeblock_2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_publish",
+      "target": "phoenix_updates_readme_codeblock_2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_publish",
+      "target": "phoenix_updates_readme_codeblock_3"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L51",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_publish",
+      "target": "phoenix_updates_readme_codeblock_4"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_publish",
+      "target": "phoenix_updates_readme_codeblock_5"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L75",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_publish",
+      "target": "phoenix_updates_readme_codeblock_6"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L90",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_publish",
+      "target": "phoenix_updates_readme_codeblock_7"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L73",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_kontrol",
+      "target": "phoenix_updates_readme_codeblock_6"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L90",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_kontrol",
+      "target": "phoenix_updates_readme_codeblock_7"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "phoenix_updates_readme_kontrol",
+      "target": "phoenix_updates_readme_codeblock_8"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "47e11eac379970adf0d5817a57b473073268685b"
+}
