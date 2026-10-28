@@ -1,5 +1,5 @@
-HttpUrl : 169.58.161.68
-HttpUrl2 : 169.58.161.68
+HttpUrl : 192.168.1.5
+HttpUrl2 : 192.168.1.5
 DataDir : RealServer
 GuildDataDir : mainServer
 UpdateTempDir : Update
