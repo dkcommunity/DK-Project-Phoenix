@@ -31,7 +31,7 @@
 
 ```mermaid
 flowchart LR
-    A["Legacy client<br/>circa 2000"] --> B["Modern C++17 codebase"]
+    A["Legacy client<br/>about 2000"] --> B["Modern C++17 codebase"]
     B --> C["Visual Studio 2022<br/>CMake + vcpkg"]
     B --> D["D3D9 compatibility"]
     B --> E["D3D11 backend<br/>runtime-selectable"]
