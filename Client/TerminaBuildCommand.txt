@@ -1,0 +1,1 @@
+powershell -NoProfile -ExecutionPolicy Bypass -File "F:\Project Phoenix\scripts\dc-build.ps1" Client
