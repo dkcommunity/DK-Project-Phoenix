@@ -79,7 +79,7 @@ If your distribution installs these dependencies elsewhere, adjust the relevant 
 ### 1. Clone the repository and enter the server directory
 
 ```bash
-git clone --branch dkcommunity-build-input-ignore-audit \
+git clone --branch main \
   https://github.com/dkcommunity/DK-Project-Phoenix.git
 cd DK-Project-Phoenix/Server
 ```
@@ -112,7 +112,7 @@ Use the Makefiles' `cleanall` target only when you intend to remove all generate
 
 The default C++ build does **not** install or start the adjacent service tools.
 
-- **Phoenix update endpoint:** `tools/phoenix_updates/README.md` documents the Nginx static update endpoint and release publishing scripts. Production deployments should use HTTPS and protect the manifest signing private key.
+- **Phoenix update endpoint:** [`phoenix_updates/README.md`](phoenix_updates/README.md) documents the Nginx static update endpoint and release publishing scripts. The active web root is `/var/www/phoenix-updates/`; production deployments should use HTTPS and protect the manifest signing private key.
 - **PayPal service:** `paypal_service/requirements.txt` lists its Python dependencies. Configure its environment locally from `.env.example`; do not commit real credentials.
 
 ## 📁 Repository layout
@@ -121,6 +121,7 @@ The default C++ build does **not** install or start the adjacent service tools.
 Server/
 ├── data/                       # Server-side data and quest definitions
 ├── paypal_service/             # Optional Python payment service
+├── phoenix_updates/            # Nginx endpoint and release publishing tools
 ├── src/
 │   ├── Core/                   # Shared server and packet libraries
 │   └── server/
@@ -129,8 +130,8 @@ Server/
 │       ├── sharedserver/
 │       └── updateserver/
 ├── tools/
-│   ├── phoenix_updates/        # Update endpoint and publish tooling
 │   └── security/               # Supporting security utilities
+├── update_publish/             # Signed release package input (keep signing key out)
 ├── README.md
 └── .gitignore
 ```
