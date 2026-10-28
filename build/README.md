@@ -1,23 +1,23 @@
-# Visual Studio ile Client derleme
+# Building the Client with Visual Studio
 
-Bu kılavuz, DK Project Phoenix Client kaynaklarını Visual Studio 2022 veya daha yeni bir sürümle başka bir Windows bilgisayarında derlemek içindir.
+This guide explains how to build the DK Project Phoenix Client source on another Windows computer using Visual Studio 2022 or later.
 
-> **Önemli:** `F:\Project Phoenix\build` içindeki `.sln`, `.vcxproj`, CMake cache dosyaları ve ara çıktılar mevcut bilgisayara ait yollar içerir. Bunlar taşınabilir proje girdileri değildir. Kaynak kod ve taşınabilir CMake/vcpkg tanımları ana depodaki [`Client/`](https://github.com/dkcommunity/DK-Project-Phoenix/tree/main/Client) klasöründedir. Her bilgisayarda CMake derleme klasörünü yeniden oluşturun.
+> **Important:** The `.sln`, `.vcxproj`, CMake cache files, and intermediate outputs under `F:\Project Phoenix\build` contain paths tied to the original development machine. They are not portable project inputs. The source code and portable CMake/vcpkg configuration are in the [`Client/`](https://github.com/dkcommunity/DK-Project-Phoenix/tree/main/Client) directory of the main repository. Generate a fresh build directory on each computer.
 
-## Gereksinimler
+## Requirements
 
-- Windows 10 veya 11
-- Visual Studio 2022 veya daha yeni sürüm; **Desktop development with C++** iş yükü
-- MSVC C++ derleyicisi ve Windows 10/11 SDK
-- CMake 3.20 veya daha yeni sürüm
+- Windows 10 or 11
+- Visual Studio 2022 or later with the **Desktop development with C++** workload
+- MSVC C++ build tools and the Windows 10/11 SDK
+- CMake 3.20 or later
 - Git
 - vcpkg
 
-Proje Win32/x86 hedefler ve bağımlılıklarını `Client/vcpkg.json` manifestinden kurar.
+The project targets Win32/x86 and installs its dependencies from the `Client/vcpkg.json` manifest.
 
-## Kaynağı ve bağımlılıkları hazırlama
+## Prepare the source and dependencies
 
-PowerShell'de kaynak depoyu klonlayın:
+Clone the source repository in PowerShell:
 
 ```powershell
 git clone https://github.com/dkcommunity/DK-Project-Phoenix.git C:\src\DK-Project-Phoenix
@@ -25,7 +25,7 @@ Set-Location C:\src\DK-Project-Phoenix\Client
 $clientDir = (Get-Location).Path
 ```
 
-vcpkg mevcut değilse kurup bu PowerShell oturumu için tanımlayın:
+If vcpkg is not already installed, install it and configure it for the current PowerShell session:
 
 ```powershell
 git clone https://github.com/microsoft/vcpkg.git C:\src\vcpkg
@@ -35,18 +35,18 @@ $env:VCPKG_ROOT = 'C:\src\vcpkg'
 Set-Location $clientDir
 ```
 
-vcpkg zaten kuruluysa `VCPKG_ROOT` değişkenini mevcut kurulum dizininize ayarlayın.
+If vcpkg is already installed, set `VCPKG_ROOT` to its existing installation directory instead.
 
-Projenin SoLoud kaynak kodunu beklediği konuma sabit sürüm etiketiyle indirin:
+Clone the SoLoud source at the version expected by the project:
 
 ```powershell
 git clone https://github.com/jarikomppa/soloud.git .\thirdparty\soloud
 git -C .\thirdparty\soloud checkout RELEASE_20200207
 ```
 
-## Visual Studio çözümünü oluşturma ve derleme
+## Generate the Visual Studio solution and build
 
-Aşağıdaki örnek, Visual Studio 2022 için Win32 çözümünü oluşturur. CMake, vcpkg manifestindeki paketleri yapılandırma sırasında kurar:
+The following example generates a Win32 solution for Visual Studio 2022. During configuration, CMake uses the vcpkg manifest to install the declared packages:
 
 ```powershell
 cmake -S . -B build `
@@ -58,16 +58,16 @@ cmake -S . -B build `
 cmake --build build --config Release --target Client --parallel
 ```
 
-Visual Studio'da `Client` klasörünü **Open > Folder** ile açarak CMake projesini kullanabilir veya oluşturulan `build\DarkEdenLegacyModern.sln` çözümünü açabilirsiniz. Daha yeni Visual Studio sürümlerinde, kurulu sürümün desteklediği CMake jeneratörünü seçin; örneğin ilgili `Visual Studio <sürüm> <yıl>` jeneratörü.
+In Visual Studio, open the `Client` folder with **Open > Folder** to use it as a CMake project, or open the generated `build\DarkEdenLegacyModern.sln` solution. For newer Visual Studio releases, select the CMake generator supported by your installed version, such as the corresponding `Visual Studio <version> <year>` generator.
 
-Çalıştırılabilir dosya ve çalışma zamanı DLL'leri CMake yapılandırmasına göre `Client\GameData` altına yazılır.
+The executable and runtime DLLs are written to `Client\GameData` according to the CMake configuration.
 
-## Bilinen eksik bağımlılık: DirectX 7 SDK
+## Known missing dependency: DirectX 7 SDK
 
-Bu kaynak ağacında `Client\thirdparty\dx7sdk` bulunmuyor. CMake yapılandırması bu SDK yokken uyarı verir; ancak eski DirectX 7 başlıklarına veya kütüphanelerine ihtiyaç duyan kaynaklar derlemede hata verebilir. Bu özel depoya SDK eklenmemiştir; derlemenin tamamlanması için lisanslı ve uyumlu SDK dosyalarının ayrı olarak edinilip beklenen konuma yerleştirilmesi gerekebilir.
+The source tree does not include `Client\thirdparty\dx7sdk`. CMake warns when this SDK is missing, but source files that require legacy DirectX 7 headers or libraries may fail to compile. The SDK is not included in this repository; a licensed, compatible copy may need to be obtained separately and placed in the expected location.
 
-Bu nedenle yukarıdaki adımlar taşınabilir CMake/vcpkg kurulumunu sağlar, fakat eksik DirectX 7 dosyaları temin edilmeden temiz derlemenin başarılı olduğu garanti edilmez.
+Therefore, these steps provide a portable CMake/vcpkg setup, but a successful clean build is not guaranteed until the required DirectX 7 files are available.
 
-## `build` klasöründen yüklenmeyenler
+## Files not included from the `build` directory
 
-`F:\Project Phoenix\build` içindeki CMake önbelleği, Visual Studio çözüm/proje çıktıları, `.vs`, `CMakeFiles`, `vcpkg_installed`, nesne dosyaları, derleme günlükleri ve önceden derlenmiş ikililer yerel makineye veya belirli bir derleme yapılandırmasına bağlıdır. Bunları başka bilgisayarda derleme girdisi olarak kullanmayın; her bilgisayarda kaynaklardan yeniden oluşturun.
+The CMake cache, generated Visual Studio solution/project files, `.vs`, `CMakeFiles`, `vcpkg_installed`, object files, build logs, and previously compiled binaries under `F:\Project Phoenix\build` are tied to the local machine or a particular build configuration. Do not use them as build inputs on another computer; regenerate them from the source on each machine.
