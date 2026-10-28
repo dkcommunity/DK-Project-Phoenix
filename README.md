@@ -55,6 +55,7 @@ DK-Project-Phoenix/
 
 ## 🚀 Getting started
 
+- Download the **playable client** (including its GameData) from [Google Drive](https://drive.google.com/file/d/12waxWsWLtK38BYFbh2J91khhecdX8o4B/view?usp=sharing).
 - To build the **Client**, start with the [Windows build guide](Client/README.md).
 - To build the **Server**, start with the [Linux build guide](Server/README.md).
 - Review the **Database** scripts and configure them for your own environment before use.
