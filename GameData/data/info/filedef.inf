@@ -1,0 +1,363 @@
+# Directories
+DIR_PROFILE							 : UserSet
+
+# IndexTable
+FILE_INDEXTABLE						 : Data\\Image\\IndexTable
+
+# Sprite
+FILE_JPG_SOFTON_CI					: Data\\Image\\SoftonCI.jps
+FILE_SPRITE_ETC						 : Data\\Image\\Etc.spk
+FILE_SPRITEINDEX_ETC				 : Data\\Image\\Etc.spki
+
+FILE_SPRITE_OUSTERS_FIN				 : Data\\Image\\OustersFin.spk
+FILE_SPRITEINDEX_OUSTERS_FIN		 : Data\\Image\\OustersFin.spki
+
+FILE_ISPRITE_CREATURE				 : Data\\Image\\Creature.ispk
+FILE_ISPRITEINDEX_CREATURE			 : Data\\Image\\Creature.ispki
+
+FILE_ISPRITE_CREATURE2				 : Data\\Image\\Creature2.ispk
+FILE_ISPRITEINDEX_CREATURE2			 : Data\\Image\\Creature2.ispki
+
+FILE_ISPRITE_ADDON_MAN					 : Data\\Image\\AddonMan.ispk
+FILE_ISPRITEINDEX_ADDON_MAN				 : Data\\Image\\AddonMan.ispki
+FILE_SSPRITE_ADDON_MAN					 : Data\\Image\\AddonMan.sspk
+FILE_SSPRITEINDEX_ADDON_MAN				 : Data\\Image\\AddonMan.sspki
+
+FILE_ISPRITE_ADDON_WOMAN				 : Data\\Image\\AddonWoman.ispk
+FILE_ISPRITEINDEX_ADDON_WOMAN				 : Data\\Image\\AddonWoman.ispki
+FILE_SSPRITE_ADDON_WOMAN				 : Data\\Image\\AddonWoman.sspk
+FILE_SSPRITEINDEX_ADDON_WOMAN				 : Data\\Image\\AddonWoman.sspki
+
+FILE_ISPRITE_OUSTERS				 : Data\\Image\\Ousters.ispk
+FILE_ISPRITEINDEX_OUSTERS			 : Data\\Image\\Ousters.ispki
+FILE_SSPRITE_OUSTERS				 : Data\\Image\\Ousters.sspk
+FILE_SSPRITEINDEX_OUSTERS			 : Data\\Image\\Ousters.sspki
+
+FILE_ISPRITE_VAMPIRE				 : Data\\Image\\Vampire.ispk
+FILE_ISPRITEINDEX_VAMPIRE			 : Data\\Image\\Vampire.ispki
+FILE_SSPRITE_VAMPIRE				 : Data\\Image\\Vampire.sspk
+FILE_SSPRITEINDEX_VAMPIRE			 : Data\\Image\\Vampire.sspki
+
+FILE_ISPRITE_ITEMTILE				 : Data\\Image\\ItemTile.ispk
+FILE_ISPRITEINDEX_ITEMTILE			 : Data\\Image\\ItemTile.ispki
+FILE_ISPRITE_ITEMDROP				 : Data\\Image\\ItemDrop.ispk
+FILE_ISPRITEINDEX_ITEMDROP			 : Data\\Image\\ItemDrop.ispki
+FILE_SPRITE_ITEMBROKEN				 : Data\\Image\\ItemBroken.spk
+FILE_SPRITEINDEX_ITEMBROKEN			 : Data\\Image\\ItemBroken.spki
+FILE_SPRITE_ITEMREAL				 : Data\\Image\\ItemReal.spk
+FILE_SPRITEINDEX_ITEMREAL			 : Data\\Image\\ItemReal.spki
+FILE_ASPRITE_ALPHAEFFECT			 : Data\\Image\\Effect.aspk
+FILE_ASPRITEINDEX_ALPHAEFFECT		 : Data\\Image\\Effect.aspki
+FILE_SPRITE_SCREENEFFECT			 : Data\\Image\\EffectScreen.spk
+FILE_SPRITEINDEX_SCREENEFFECT		 : Data\\Image\\EffectScreen.spki
+FILE_SPRITE_NORMALEFFECT			 : Data\\Image\\Effect.spk
+FILE_SPRITEINDEX_NORMALEFFECT		 : Data\\Image\\Effect.spki
+FILE_SSPRITE_SHADOWEFFECT			 : Data\\Image\\Effect.sspk
+FILE_SSPRITEINDEX_SHADOWEFFECT		 : Data\\Image\\Effect.sspki
+FILE_SPRITE_WEATHER					 : Data\\Image\\Weather.spk
+FILE_SPRITE_WEATHER_FULLSCREEN			: Data\\Image\\WeatherFullScreen.spk
+
+FILE_PALETTE_SCREENEFFECT			 : Data\\Image\\EffectScreen.ppk
+FILE_PALETTE_ALPHAEFFECT			 : Data\\Image\\Effect.ppk
+
+FILE_SPRITE_TILE					 : Data\\Image\\Tile.spk
+FILE_SPRITEINDEX_TILE				 : Data\\Image\\Tile.spki
+FILE_SPRITE_IMAGEOBJECT				 : Data\\Image\\ImageObject.spk
+FILE_SPRITEINDEX_IMAGEOBJECT		 : Data\\Image\\ImageObject.spki
+FILE_SPRITE_INTERACTIONOBJECT		 : Data\\Image\\InteractionObject.spk
+FILE_SPRITEINDEX_INTERACTIONOBJECT	 : Data\\Image\\InteractionObject.spki
+
+FILE_SSPRITE_IMAGEOBJECT			 : Data\\Image\\ImageObject.sspk
+FILE_SSPRITEINDEX_IMAGEOBJECT		 : Data\\Image\\ImageObject.sspki
+FILE_SSPRITE_INTERACTIONOBJECT		 : Data\\Image\\InteractionObject.sspk
+FILE_SSPRITEINDEX_INTERACTIONOBJECT	 : Data\\Image\\InteractionObject.sspki
+
+FILE_SSPRITE_CREATURE				 : Data\\Image\\Creature.sspk
+FILE_SSPRITEINDEX_CREATURE			 : Data\\Image\\Creature.sspki
+
+FILE_SSPRITE_CREATURE2				 : Data\\Image\\Creature2.sspk
+FILE_SSPRITEINDEX_CREATURE2			 : Data\\Image\\Creature2.sspki
+
+FILE_SPRITE_UI						 : Data\\Image\\UI.spk
+FILE_SPRITEINDEX_UI					 : Data\\Image\\UI.spki
+
+FILE_SPRITE_ITEM_DESCRIPTION		 : Data\\UI\\Spk\\ItemDescription.spk
+FILE_SPRITEINDEX_ITEM_DESCRIPTION	 : Data\\UI\\Spk\\ItemDescription.spki
+
+FILE_SPRITE_MINIMAP					 : Data\\UI\\Spk\\Minimap.spk
+FILE_SPRITEINDEX_MINIMAP			 : Data\\UI\\Spk\\Minimap.spki
+
+FILE_SPRITE_SKILLICON				 : Data\\UI\\Spk\\SkillIcon.spk
+FILE_SPRITEINDEX_SKILLICON			 : Data\\UI\\Spk\\SkillIcon.spki
+FILE_SPRITE_SKILLMINI				 : Data\\UI\\Spk\\SkillMini.spk
+FILE_SPRITEINDEX_SKILLMINI			 : Data\\UI\\Spk\\SkillMini.spki
+
+FILE_SPRITE_GUILD					 : Data\\Image\\Guild.spk
+FILE_SPRITEINDEX_GUILD				 : Data\\Image\\Guild.spki
+
+FILE_SPRITE_GUILD_MARK				 : Data\\Image\\GuildMark.spk
+FILE_SPRITEINDEX_GUILD_MARK			 : Data\\Image\\GuildMark.spki
+FILE_SPRITE_ORIGIN_MARK				 : Data\\Image\\OriginMark.spk
+FILE_SPRITE_LEVEL_MARK_PET			 : Data\\Image\\LevelMarkPet.spk
+FILE_SPRITEINDEX_LEVEL_MARK_PET			 : Data\\Image\\LevelMarkPet.spki
+
+FILE_SPRITE_MONSTER_LEVEL_MARK_PET			 : Data\\UI\\Spk\\monsterlevel.spk
+FILE_SPRITEINDEX_MONSTER_LEVEL_MARK_PET			 : Data\\UI\\Spk\\monsterlevel.spki
+
+FILE_SPRITE_GRADE_MARK_SLAYER		 : Data\\Image\\GradeMarkSlayer.spk
+FILE_SPRITEINDEX_GRADE_MARK_SLAYER	 : Data\\Image\\GradeMarkSlayer.spki
+FILE_SPRITE_GRADE_MARK_VAMPIRE		 : Data\\Image\\GradeMarkVampire.spk
+FILE_SPRITEINDEX_GRADE_MARK_VAMPIRE	 : Data\\Image\\GradeMarkVampire.spki
+FILE_SPRITE_GRADE_MARK_OUSTERS		 : Data\\Image\\GradeMarkOusters.spk
+FILE_SPRITEINDEX_GRADE_MARK_OUSTERS	 : Data\\Image\\GradeMarkOusters.spki
+
+FILE_SPRITE_NPCFACE					 : Data\\UI\\Spk\\NPCFace.spk
+FILE_SPRITEINDEX_NPCFACE			 : Data\\UI\\Spk\\NPCFace.spki
+
+FILE_SPRITE_ADVANCEMENT_QUEST		 : Data\\Image\\AdvancementQuestEnding.spk
+FILE_SPRITEINDEX_ADVANCEMENT_QUEST	 : Data\\Image\\AdvancementQuestEnding.spki
+
+# Frame
+FILE_CFRAME_CREATURE				 : Data\\Image\\Creature.cfpk
+FILE_CFRAMEINDEX_CREATURE			 : Data\\Image\\Creature.cfpki
+FILE_CFRAME_CREATURE_SHADOW			 : Data\\Image\\CreatureShadow.cfpk
+FILE_CFRAMEINDEX_CREATURE_SHADOW	 : Data\\Image\\CreatureShadow.cfpki
+
+FILE_CFRAME_ADDON_MAN				 : Data\\Image\\AddonMan.cfpk
+FILE_CFRAMEINDEX_ADDON_MAN			 : Data\\Image\\AddonMan.cfpki
+FILE_CFRAME_ADDON_MAN_SHADOW			 : Data\\Image\\AddonManShadow.cfpk
+FILE_CFRAMEINDEX_ADDON_MAN_SHADOW		 : Data\\Image\\AddonManShadow.cfpki
+
+FILE_CFRAME_ADDON_WOMAN				 : Data\\Image\\AddonWoman.cfpk
+FILE_CFRAMEINDEX_ADDON_WOMAN			 : Data\\Image\\AddonWoman.cfpki
+FILE_CFRAME_ADDON_WOMAN_SHADOW			 : Data\\Image\\AddonWomanShadow.cfpk
+FILE_CFRAMEINDEX_ADDON_WOMAN_SHADOW		 : Data\\Image\\AddonWomanShadow.cfpki
+
+FILE_CFRAME_OUSTERS					 : Data\\Image\\Ousters.cfpk
+FILE_CFRAMEINDEX_OUSTERS			 : Data\\Image\\Ousters.cfpki
+FILE_CFRAME_OUSTERS_SHADOW			 : Data\\Image\\OustersShadow.cfpk
+FILE_CFRAMEINDEX_OUSTERS_SHADOW		 : Data\\Image\\OustersShadow.cfpki
+
+FILE_CFRAME_VAMPIRE				 : Data\\Image\\Vampire.cfpk
+FILE_CFRAMEINDEX_VAMPIRE			 : Data\\Image\\Vampire.cfpki
+FILE_CFRAME_VAMPIRE_SHADOW			 : Data\\Image\\VampireShadow.cfpk
+FILE_CFRAMEINDEX_VAMPIRE_SHADOW			 : Data\\Image\\VampireShadow.cfpki
+
+#FILE_CFRAME_CREATURE2				 : Data\\Image\\Creature2.cfpk
+#FILE_CFRAMEINDEX_CREATURE2			 : Data\\Image\\Creature2.cfpki
+#FILE_CFRAME_ADDON2					 : Data\\Image\\Addon2.cfpk
+#FILE_CFRAMEINDEX_ADDON2				 : Data\\Image\\Addon2.cfpki
+#FILE_CFRAME_CREATURE_SHADOW2		 : Data\\Image\\CreatureShadow2.cfpk
+#FILE_CFRAMEINDEX_CREATURE_SHADOW2	 : Data\\Image\\CreatureShadow2.cfpki
+#FILE_CFRAME_ADDON_SHADOW2			 : Data\\Image\\AddonShadow2.cfpk
+#FILE_CFRAMEINDEX_ADDON_SHADOW2		 : Data\\Image\\AddonShadow2.cfpki
+
+FILE_AFRAME_ANIMATIONOBJECT			 : Data\\Image\\AnimationObject.afpk
+FILE_AFRAMEINDEX_ANIMATIONOBJECT	 : Data\\Image\\AnimationObject.afpki
+FILE_AFRAME_ANIMATIONOBJECT_SHADOW			 : Data\\Image\\AnimationObjectShadow.afpk
+FILE_AFRAMEINDEX_ANIMATIONOBJECT_SHADOW		 : Data\\Image\\AnimationObjectShadow.afpki
+FILE_AFRAME_INTERACTIONOBJECT		 : Data\\Image\\InteractionObject.afpk
+FILE_AFRAMEINDEX_INTERACTIONOBJECT	 : Data\\Image\\InteractionObject.afpki
+FILE_IFRAME_ITEMTILE				 : Data\\Image\\ItemTile.ifpk
+FILE_IFRAMEINDEX_ITEMTILE			 : Data\\Image\\ItemTile.ifpki
+FILE_AFRAME_ITEMDROP				 : Data\\Image\\ItemDrop.afpk
+FILE_AFRAMEINDEX_ITEMDROP			 : Data\\Image\\ItemDrop.afpki
+FILE_AFRAME_ITEMBROKEN				 : Data\\Image\\ItemBroken.afpk
+FILE_AFRAMEINDEX_ITEMBROKEN			 : Data\\Image\\ItemBroken.afpki
+FILE_EFRAME_ALPHAEFFECT				 : Data\\Image\\Effect.efpk
+FILE_EFRAMEINDEX_ALPHAEFFECT		 : Data\\Image\\Effect.efpki
+FILE_EFRAME_SCREENEFFECT			 : Data\\Image\\EffectScreen.efpk
+FILE_EFRAMEINDEX_SCREENEFFECT		 : Data\\Image\\EffectScreen.efpki
+FILE_EFRAME_NORMALEFFECT			 : Data\\Image\\NormalEffect.efpk
+FILE_EFRAMEINDEX_NORMALEFFECT		 : Data\\Image\\NormalEffect.efpki
+FILE_EFRAME_SHADOWEFFECT			 : Data\\Image\\ShadowEffect.efpk
+FILE_EFRAMEINDEX_SHADOWEFFECT		 : Data\\Image\\ShadowEffect.efpki
+
+# Filter
+FILE_FILTER_IMAGEOBJECT				: Data\\Image\\ImageObject.ft
+FILE_FILTER_LIGHT2D				: Data\\Image\\Light2D.ftp
+FILE_FILTER_LIGHT3D				: Data\\Image\\Light3D.ftp
+
+# Infomation File
+FILE_INFO_VERSION				: Data\\Info\\Version.inf
+FILE_INFO_APPENDPATCH				: Data\\Info\\AppendPatch.inf
+FILE_INFO_CLIENTCONFIG				: Data\\Info\\ClientConfig.inf
+FILE_INFO_USEROPTION				: UserSet\\UserOption.set
+FILE_INFO_ACTION				: Data\\Info\\Action.inf
+FILE_INFO_SKILL					: Data\\Info\\Skill.inf
+FILE_INFO_USINGCOLORSET				: Data\\Info\\UsingColorSet.inf
+FILE_INFO_SOUND					: Data\\Info\\Sound.inf
+FILE_INFO_MUSIC					: Data\\Info\\Music.inf
+FILE_INFO_ZONE					: Data\\Info\\Zone.inf
+FILE_INFO_ITEM					: Data\\Info\\Item.inf
+FILE_INFO_ITEMOPTION				: Data\\Info\\ItemOption.inf
+FILE_INFO_INTERACTIONOBJECT			: Data\\Info\\InteractionObject.inf
+FILE_INFO_CREATURE				: Data\\Info\\Creature.inf
+FILE_INFO_CREATURESPRITE_MAPPER			: Data\\Info\\CreatureSpriteMapper.inf
+FILE_INFO_CREATURESPRITE			: Data\\Info\\CreatureSprite.inf
+#FILE_INFO_ADDONSPRITE				: Data\\Info\\AddonSprite.inf
+FILE_INFO_EFFECTSPRITETYPE			: Data\\Info\\EffectSpriteType.inf
+FILE_INFO_ACTIONEFFECTSPRITETYPE		: Data\\Info\\ActionEffectSpriteType.inf
+FILE_INFO_EFFECTSTATUS				: Data\\Info\\EffectStatus.inf
+FILE_INFO_GAMECLIENT				: Data\\Info\\GameClient.inf
+FILE_INFO_GAMECLIENT2				: Data\\Info\\GameClient2.inf
+FILE_INFO_NETMARBLE				: Data\\Info\\Netmarble.inf
+FILE_INFO_SKILLMANAGER				: Data\\Info\\SkillManager.inf
+FILE_INFO_NPC					: Data\\Info\\NPC.inf
+FILE_INFO_SHOPTEMPLATE				: Data\\Info\\ShopTemplate.inf
+FILE_INFO_STRING				: Data\\Info\\String.inf
+FILE_INFO_HELP					: Data\\Info\\Help.inf
+FILE_INFO_CHAT					: Data\\Info\\Chat.inf
+FILE_INFO_CHAT_2				: Data\\Info\\Chat2.inf
+FILE_INFO_SMART_HELP				: Data\\Info\\SHelp.inf
+FILE_INFO_SMART_HELP_STRING			: Data\\Info\\SHelpString.inf
+FILE_INFO_LEVEL_NAME				: Data\\Info\\LevelName.inf
+FILE_INFO_MONSTER_NAME				: Data\\Info\\MonsterName.inf
+FILE_INFO_GUILD					: Data\\Info\\Guild.inf
+FILE_INFO_GUILD_INFO_MAPPER			: Data\\Info\\GuildMapper.inf
+FILE_INFO_PLAYER_INFO				: Data\\Info\\Player.inf
+FILE_INFO_FAME_LIMIT				: Data\\Info\\FameLimit.inf
+FILE_INFO_MONSTER_KILL_QUEST			: Data\\Info\\QuestInfo.inf
+FILE_INFO_HORN					: Data\\Info\\Horn.inf
+FILE_INFO_NICKNAME_STRING			: Data\\Info\\Nickname.inf
+FILE_INFO_POWERJJANG_STRING			: Data\\Info\\PowerjjangItem.inf
+FILE_INFO_RESOLUTION				: Data\\Info\\Resolution.inf
+FILE_INFO_CRASH_REPORT				: Data\\Info\\CrashReport.inf
+
+INF_SLAYER_PORTAL				: Data\\Info\\SlayerPortal.inf
+
+#server info file
+FILE_INFO_STR_EXP						 : Data\\Info\\STRExp.inf
+FILE_INFO_DEX_EXP						 : Data\\Info\\DEXExp.inf
+FILE_INFO_INT_EXP						 : Data\\Info\\INTExp.inf
+FILE_INFO_VAMPIRE_EXP					 : Data\\Info\\VampireExp.inf
+FILE_INFO_OUSTERS_EXP					 : Data\\Info\\OustersExp.inf
+FILE_INFO_SLAYER_RANK_EXP				 : Data\\Info\\SlayerRankExp.inf
+FILE_INFO_VAMPIRE_RANK_EXP				 : Data\\Info\\VampireRankExp.inf
+FILE_INFO_OUSTERS_RANK_EXP				 : Data\\Info\\OustersRankExp.inf
+FILE_INFO_SKILL_DOMAIN_EXP				 : Data\\Info\\DomainExp.inf
+FILE_INFO_SKILL_INFO					 : Data\\Info\\SkillInfo.inf
+FILE_INFO_NPC_SCRIPT_INFO				 : Data\\Info\\NPCScript.inf
+FILE_INFO_RANK_BONUS					 : Data\\Info\\RankBonus.inf
+FILE_PET_EXP_INFO 					 : Data\\Info\\PetExp.inf
+FILE_ADVANCE_EXP_INFO 					 : Data\\Info\\AdvancementClassExp.inf
+FILE_INFO_GPS 						 : Data\\Info\\Gps.inf
+
+#File Path
+PATH_MAP							 : Data\\Map\\
+PATH_MUSIC							 : Data\\Music\\
+PATH_SOUND							 : Data\\Sound\\
+PATH_SCREENSHOT						 : ScreenShot\\DarkEden
+
+FILE_INFO_DATA : Data\\Info\\infodata.rpk
+FILE_FILTER_INFO : Filter.inf
+FILE_LANGUAGE_INFO : Language.inf
+FILE_REGEN_TOWER_INFO : RegenTowerPosition.inf
+FILE_INFO_SERVERINFO : Data\\Info\\ServerInfo.inf
+FILE_UPDATE_PERSNALSHOPTIME : UpdatePersnaltime.inf
+
+#Advancement Class
+FILE_ISPRITE_ADVANCEMENT_CLASS_OUSTERS : Data\\Image\\ACOusters.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_OUSTERS : Data\\Image\\ACOustersShadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_OUSTERS : Data\\Image\\ACOusters.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_OUSTERS_SHADOW : Data\\Image\\ACOustersShadow.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_VAMPIRE_MAN : Data\\Image\\ACVampireMan.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_VAMPIRE_MAN : Data\\Image\\ACVampireManShadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_MAN : Data\\Image\\ACVampireMan.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_MAN_SHADOW : Data\\Image\\ACVampireManShadow.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_VAMPIRE_WOMAN : Data\\Image\\ACVampireWoman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_VAMPIRE_WOMAN : Data\\Image\\ACVampireWomanShadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_WOMAN : Data\\Image\\ACVampireWoman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_SHADOW : Data\\Image\\ACVampireWomanShadow.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_SLAYER_MAN : Data\\Image\\ACSlayerMan.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_SLAYER_MAN : Data\\Image\\ACSlayerManShadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_MAN : Data\\Image\\ACSlayerMan.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_MAN_SHADOW : Data\\Image\\ACSlayerManShadow.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_SLAYER_WOMAN : Data\\Image\\ACSlayerWoman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_SLAYER_WOMAN : Data\\Image\\ACSlayerWomanShadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_WOMAN : Data\\Image\\ACSlayerWoman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_WOMAN_SHADOW : Data\\Image\\ACSlayerWomanShadow.cfpk
+
+#Advancement Class 171
+#VAMPIRE
+FILE_ISPRITE_ADVANCEMENT_CLASS_VAMPIRE_MAN_171 : Data\\Image\\advancedvampireman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_VAMPIRE_MAN_171 : Data\\Image\\advancedvampiremanshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_MAN_171 : Data\\Image\\advancedvampireman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_MAN_SHADOW_171 : Data\\Image\\advancedvampiremanshadow.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_171 : Data\\Image\\advancedvampirewoman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_171 : Data\\Image\\advancedvampirewomanshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_171 : Data\\Image\\advancedvampirewoman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_SHADOW_171 : Data\\Image\\advancedvampirewomanshadow.cfpk
+#SLAYER
+FILE_ISPRITE_ADVANCEMENT_CLASS_SLAYER_MAN_171 : Data\\Image\\advancedslayerman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_SLAYER_MAN_171 : Data\\Image\\advancedslayermanshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_MAN_171 : Data\\Image\\advancedslayerman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_MAN_SHADOW_171 : Data\\Image\\advancedslayermanshadow.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_SLAYER_WOMAN_171 : Data\\Image\\advancedslayerwoman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_SLAYER_WOMAN_171 : Data\\Image\\advancedslayerwomanshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_WOMAN_171 : Data\\Image\\advancedslayerwoman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_WOMAN_SHADOW_171 : Data\\Image\\advancedslayerwomanshadow.cfpk
+#OUSTERS
+FILE_ISPRITE_ADVANCEMENT_CLASS_OUSTERS_171 : Data\\Image\\advancedousters.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_OUSTERS_171 : Data\\Image\\advancedoustersshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_OUSTERS_171 : Data\\Image\\advancedousters.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_OUSTERS_SHADOW_171 : Data\\Image\\advancedoustersshadow.cfpk
+#Advancement Class 201 18
+#OUSTERS
+FILE_ISPRITE_ADVANCEMENT_CLASS_OUSTERS_201 : Data\\Image\\secondadvancedousters.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_OUSTERS_201 : Data\\Image\\secondadvancedoustersshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_OUSTERS_201 : Data\\Image\\secondadvancedousters.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_OUSTERS_SHADOW_201 : Data\\Image\\secondadvancedoustersshadow.cfpk
+#VAMPIRE
+FILE_ISPRITE_ADVANCEMENT_CLASS_VAMPIRE_MAN_201 : Data\\Image\\secondadvancedvampireman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_VAMPIRE_MAN_201 : Data\\Image\\secondadvancedvampiremanshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_MAN_201 : Data\\Image\\secondadvancedvampireman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_MAN_SHADOW_201 : Data\\Image\\secondadvancedvampiremanshadow.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_201 : Data\\Image\\secondadvancedvampirewoman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_201 : Data\\Image\\secondadvancedvampirewomanshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_201 : Data\\Image\\secondadvancedvampirewoman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_SHADOW_201 : Data\\Image\\secondadvancedvampirewomanshadow.cfpk
+#SLAYER
+FILE_ISPRITE_ADVANCEMENT_CLASS_SLAYER_MAN_201 : Data\\Image\\secondadvancedslayerman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_SLAYER_MAN_201 : Data\\Image\\secondadvancedslayermanshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_MAN_201 : Data\\Image\\secondadvancedslayerman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_MAN_SHADOW_201 : Data\\Image\\secondadvancedslayermanshadow.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_SLAYER_WOMAN_201 : Data\\Image\\secondadvancedslayerwoman.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_SLAYER_WOMAN_201 : Data\\Image\\secondadvancedslayerwomanshadow.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_WOMAN_201 : Data\\Image\\secondadvancedslayerwoman.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_WOMAN_SHADOW_201 : Data\\Image\\secondadvancedslayerwomanshadow.cfpk
+
+#Advancement Class 231 18
+#OUSTERS
+FILE_ISPRITE_ADVANCEMENT_CLASS_OUSTERS_231 : Data\\Image\\secondadvancedousters2.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_OUSTERS_231 : Data\\Image\\secondadvancedoustersshadow2.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_OUSTERS_231 : Data\\Image\\secondadvancedousters2.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_OUSTERS_SHADOW_231 : Data\\Image\\secondadvancedoustersshadow2.cfpk
+#VAMPIRE
+FILE_ISPRITE_ADVANCEMENT_CLASS_VAMPIRE_MAN_231 : Data\\Image\\secondadvancedvampireman2.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_VAMPIRE_MAN_231 : Data\\Image\\secondadvancedvampiremanshadow2.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_MAN_231 : Data\\Image\\secondadvancedvampireman2.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_MAN_SHADOW_231 : Data\\Image\\secondadvancedvampiremanshadow2.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_231 : Data\\Image\\secondadvancedvampirewoman2.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_231 : Data\\Image\\secondadvancedvampirewomanshadow2.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_231 : Data\\Image\\secondadvancedvampirewoman2.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_VAMPIRE_WOMAN_SHADOW_231 : Data\\Image\\secondadvancedvampirewomanshadow2.cfpk
+#SLAYER
+FILE_ISPRITE_ADVANCEMENT_CLASS_SLAYER_MAN_231 : Data\\Image\\secondadvancedslayerman2.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_SLAYER_MAN_231 : Data\\Image\\secondadvancedslayermanshadow2.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_MAN_231 : Data\\Image\\secondadvancedslayerman2.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_MAN_SHADOW_231 : Data\\Image\\secondadvancedslayermanshadow2.cfpk
+
+FILE_ISPRITE_ADVANCEMENT_CLASS_SLAYER_WOMAN_231 : Data\\Image\\secondadvancedslayerwoman2.ispk
+FILE_SSPRITE_ADVANCEMENT_CLASS_SLAYER_WOMAN_231 : Data\\Image\\secondadvancedslayerwomanshadow2.sspk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_WOMAN_231 : Data\\Image\\secondadvancedslayerwoman2.cfpk
+FILE_CFRAME_ADVANCEMENT_CLASS_SLAYER_WOMAN_SHADOW_231 : Data\\Image\\secondadvancedslayerwomanshadow2.cfpk

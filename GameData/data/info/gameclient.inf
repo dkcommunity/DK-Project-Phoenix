@@ -1,0 +1,20 @@
+MaxLoginServerAddress : 1
+#### VPS Sunucu IP ####
+#LoginServerAddress : 169.58.161.68
+#LoginServerAddress1 : 169.58.161.68
+#### VPS Sunucu IP ####
+#
+#### Test Sunucu IP ####
+#LoginServerAddress : 192.168.1.6
+#LoginServerAddress1 : 192.168.1.6
+#### Test Sunucu IP ####
+#
+#### Laptop Sunucu IP ####
+LoginServerAddress : 192.168.1.5
+LoginServerAddress1 : 192.168.1.5
+#### Laptop Sunucu IP ####
+#
+LoginServerPortNum : 1
+LoginServerPort : 9999
+LoginServerCheckPort : 9999
+LoginServerBasePort : 9999

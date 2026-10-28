@@ -1,0 +1,8 @@
+HttpUrl : 169.58.161.68
+HttpUrl2 : 169.58.161.68
+DataDir : RealServer
+GuildDataDir : mainServer
+UpdateTempDir : Update
+UpdateStatusFile : UpdateStatus.inf
+FileListFile : FileList.inf
+RecentFileListFile : RecentFileList.inf

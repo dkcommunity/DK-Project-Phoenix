@@ -1,0 +1,20 @@
+# BugTrap
+AppName: DarkedenReal
+#SupportURL: http://www.darkeden.com/customerCenter/reportCenter/
+
+# I went ahead and set it up on Manager Jin's computer lol
+SupportServerURL: 123.215.22.241
+SupportServerPort: 9110
+
+# Do not press Enter after Intro 1 and 2.
+# Dialog Message
+DialogMessageIntro1: An error occurred while the game was running, causing Dark Eden to close unexpectedly.
+DialogMessageIntro2: To help us resolve issues quickly, you can send error reports and your computer specifications to the Dark Eden development team. No other data from your personal computer will be shared. If you agree to share this information, please click the "Submit Bug" button.
+
+# Option Flags
+DetailedMode: 1
+EditMail: 0
+AttachReport: 0
+ListProcesses: 0
+ShowAdvanceDVI: 0
+ScreenCapture: 1

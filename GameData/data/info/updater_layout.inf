@@ -1,0 +1,15 @@
+WindowWidth: 510
+WindowHeight: 330
+BackgroundImage: data\updater\phoenix_updater_bg.png
+DragRect: 0,0,510,48
+StatusRect: 130,260,276,20
+ProgressRect: 129,257,278,28
+PlayButtonRect: 183,293,145,24
+CloseButtonRect: 490,8,14,14
+DefaultResolutionX: 1280
+DefaultResolutionY: 960
+DefaultFullScreen: 0
+ProgressFillColor: 192,82,22
+ProgressBackColor: 7,7,5
+StatusTextColor: 230,180,96
+PlayTextColor: 255,149,32
