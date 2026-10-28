@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C3501A69-41BE-3264-A00C-C36126C23B0B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <VcpkgEnabled>false</VcpkgEnabled>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>Win32</Platform>
+    <ProjectName>vs_ui_lib</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="do_not_import_user.props" Condition="exists('do_not_import_user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">F:\Project Phoenix\build\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vs_ui_lib.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vs_ui_lib</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">F:\Project Phoenix\build\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vs_ui_lib.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vs_ui_lib</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">F:\Project Phoenix\build\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">vs_ui_lib.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">vs_ui_lib</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">F:\Project Phoenix\build\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">vs_ui_lib.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">vs_ui_lib</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "F:/Project Phoenix/build/vcpkg_installed/x86-windows/include" /FS</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <ConformanceMode>false</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4566;4091;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UndefinePreprocessorDefinitions>TF-8</UndefinePreprocessorDefinitions>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_LIB;_MBCS;NO_GAMEGUARD;NO_DPK;__DESIGNED_CHS;__WORK__;__WINDOWS__;__WIN32__;__GAME_CLIENT__;__MOVE_ZONE_UI__;OUTPUT_DEBUG;_STLP_USE_STATIC_LIB;_CRT_SECURE_NO_WARNINGS;register=;_ALLOW_KEYWORD_MACROS=1;_STATIC_UI;PHOENIX_RENDER_BACKEND_D3D9=1;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_LIB;_MBCS;NO_GAMEGUARD;NO_DPK;__DESIGNED_CHS;__WORK__;__WINDOWS__;__WIN32__;__GAME_CLIENT__;__MOVE_ZONE_UI__;OUTPUT_DEBUG;_STLP_USE_STATIC_LIB;_CRT_SECURE_NO_WARNINGS;register=;_ALLOW_KEYWORD_MACROS=1;_STATIC_UI;PHOENIX_RENDER_BACKEND_D3D9=1;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;F:\Project Phoenix\build\vcpkg_installed\x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;F:\Project Phoenix\build\vcpkg_installed\x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "F:/Project Phoenix/build/vcpkg_installed/x86-windows/include" /FS</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ConformanceMode>false</ConformanceMode>
+      <DisableSpecificWarnings>4566;4091;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UndefinePreprocessorDefinitions>TF-8</UndefinePreprocessorDefinitions>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_LIB;_MBCS;NO_GAMEGUARD;NO_DPK;__DESIGNED_CHS;__WORK__;__WINDOWS__;__WIN32__;__GAME_CLIENT__;__MOVE_ZONE_UI__;OUTPUT_DEBUG;_STLP_USE_STATIC_LIB;_CRT_SECURE_NO_WARNINGS;register=;_ALLOW_KEYWORD_MACROS=1;_STATIC_UI;PHOENIX_RENDER_BACKEND_D3D9=1;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_LIB;_MBCS;NO_GAMEGUARD;NO_DPK;__DESIGNED_CHS;__WORK__;__WINDOWS__;__WIN32__;__GAME_CLIENT__;__MOVE_ZONE_UI__;OUTPUT_DEBUG;_STLP_USE_STATIC_LIB;_CRT_SECURE_NO_WARNINGS;register=;_ALLOW_KEYWORD_MACROS=1;_STATIC_UI;PHOENIX_RENDER_BACKEND_D3D9=1;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;F:\Project Phoenix\build\vcpkg_installed\x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;F:\Project Phoenix\build\vcpkg_installed\x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "F:/Project Phoenix/build/vcpkg_installed/x86-windows/include" /FS</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ConformanceMode>false</ConformanceMode>
+      <DisableSpecificWarnings>4566;4091;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UndefinePreprocessorDefinitions>TF-8</UndefinePreprocessorDefinitions>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_LIB;_MBCS;NO_GAMEGUARD;NO_DPK;__DESIGNED_CHS;__WORK__;__WINDOWS__;__WIN32__;__GAME_CLIENT__;__MOVE_ZONE_UI__;OUTPUT_DEBUG;_STLP_USE_STATIC_LIB;_CRT_SECURE_NO_WARNINGS;register=;_ALLOW_KEYWORD_MACROS=1;_STATIC_UI;PHOENIX_RENDER_BACKEND_D3D9=1;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_LIB;_MBCS;NO_GAMEGUARD;NO_DPK;__DESIGNED_CHS;__WORK__;__WINDOWS__;__WIN32__;__GAME_CLIENT__;__MOVE_ZONE_UI__;OUTPUT_DEBUG;_STLP_USE_STATIC_LIB;_CRT_SECURE_NO_WARNINGS;register=;_ALLOW_KEYWORD_MACROS=1;_STATIC_UI;PHOENIX_RENDER_BACKEND_D3D9=1;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;F:\Project Phoenix\build\vcpkg_installed\x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;F:\Project Phoenix\build\vcpkg_installed\x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "F:/Project Phoenix/build/vcpkg_installed/x86-windows/include" /FS</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ConformanceMode>false</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4566;4091;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UndefinePreprocessorDefinitions>TF-8</UndefinePreprocessorDefinitions>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_LIB;_MBCS;NO_GAMEGUARD;NO_DPK;__DESIGNED_CHS;__WORK__;__WINDOWS__;__WIN32__;__GAME_CLIENT__;__MOVE_ZONE_UI__;OUTPUT_DEBUG;_STLP_USE_STATIC_LIB;_CRT_SECURE_NO_WARNINGS;register=;_ALLOW_KEYWORD_MACROS=1;_STATIC_UI;PHOENIX_RENDER_BACKEND_D3D9=1;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_LIB;_MBCS;NO_GAMEGUARD;NO_DPK;__DESIGNED_CHS;__WORK__;__WINDOWS__;__WIN32__;__GAME_CLIENT__;__MOVE_ZONE_UI__;OUTPUT_DEBUG;_STLP_USE_STATIC_LIB;_CRT_SECURE_NO_WARNINGS;register=;_ALLOW_KEYWORD_MACROS=1;_STATIC_UI;PHOENIX_RENDER_BACKEND_D3D9=1;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;F:\Project Phoenix\build\vcpkg_installed\x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Project Phoenix\thirdparty\dx7sdk\INCLUDE;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\hangul;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\sxml;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\virtualfilesystem;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\imm;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\dxlib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\widget;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\NEW - VS_UI\src\header;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\RarLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\frameLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\lib\ui;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\Packet;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\lib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\project\client\D3DLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\..\..\..\..\Designed_Common\Project\client\spriteLib;F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib;F:\Project Phoenix\build\vcpkg_installed\x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\Project Phoenix\Designed_Chs\Project\NEW - VS_UI\lib\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule F:/Project Phoenix/Designed_Chs/Project/NEW - VS_UI/lib/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SF:/Project Phoenix" "-BF:/Project Phoenix/build" --check-stamp-file "F:/Project Phoenix/build/Designed_Chs/Project/NEW - VS_UI/lib/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">F:\Project Phoenix\build\Designed_Chs\Project\NEW - VS_UI\lib\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule F:/Project Phoenix/Designed_Chs/Project/NEW - VS_UI/lib/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SF:/Project Phoenix" "-BF:/Project Phoenix/build" --check-stamp-file "F:/Project Phoenix/build/Designed_Chs/Project/NEW - VS_UI/lib/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">F:\Project Phoenix\build\Designed_Chs\Project\NEW - VS_UI\lib\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule F:/Project Phoenix/Designed_Chs/Project/NEW - VS_UI/lib/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SF:/Project Phoenix" "-BF:/Project Phoenix/build" --check-stamp-file "F:/Project Phoenix/build/Designed_Chs/Project/NEW - VS_UI/lib/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">F:\Project Phoenix\build\Designed_Chs\Project\NEW - VS_UI\lib\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule F:/Project Phoenix/Designed_Chs/Project/NEW - VS_UI/lib/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SF:/Project Phoenix" "-BF:/Project Phoenix/build" --check-stamp-file "F:/Project Phoenix/build/Designed_Chs/Project/NEW - VS_UI/lib/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">F:\Project Phoenix\build\Designed_Chs\Project\NEW - VS_UI\lib\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\lib\AcceleratorDef.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\AcceleratorManager.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\AtlTypes\atltypes.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\hangul\Ci.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\Imm\CImmDisabled.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\lib\Client_PCH.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\hangul\FL2.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\KeyAccelerator.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\mother.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\OperatorCategory.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\pi_core.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\SkinManager.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\SXml\SXml.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\u_button.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\U_edit.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\u_scrollbar.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\u_window.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\Vs_ui.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Base.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_BBS.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Control.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_DESC.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Description.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Descriptor.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Dialog.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_ELEVATOR.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Exception.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Exchange.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_ExtraDialog.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Friend_System.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Game.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_GameCommon.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_GameOusters.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_GameSlayer.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_GameVampire.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_GlobalResource.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_GPS.CPP" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Helper.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_INDOUN_NPC_DIALOG.CPP" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Item.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Message.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_mouse_pointer.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_NewTitle.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_NewTitleInterfaceConfig.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Operator.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_OptionRenewal.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_PetMixingForge.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_PetStorage.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_PremiumGiveItem.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_progress.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Shop.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_skill_tree.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_SKILL_VIEW.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Storage.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_TaxRate.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_TIMECOUNT.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Title.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_TITLE_SHOWCHAR.CPP" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_Tutorial.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_ui_result_receiver.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_UserGrade.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_util.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_WebBrowser.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_widget.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_WorldMap.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\VS_UI_GameCommon2.cpp" />
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\TickTimer.cpp" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\AcceleratorDef.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\AcceleratorManager.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\hangul\Ci.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\lib\Client_PCH.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\hangul\Fl2.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\KeyAccelerator.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\mother.h" />
+    <None Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\PI.H">
+    </None>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\pi_core.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\SimpleDataList.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\SkinManager.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\u_button.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\U_edit.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\u_scrollbar.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\u_window.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\widget\unicorn.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Base.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_bbs.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Control.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_DESC.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Description.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_descriptor.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Dialog.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_ELEVATOR.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Exchange.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_ExtraDialog.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_filepath.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Friend_System.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Game.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_GameCommon.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_GameCommon2.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_GameOusters.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_GameSlayer.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_GameVampire.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_GlobalResource.h" />
+    <None Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_GPS.H">
+    </None>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Helper.h" />
+    <None Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_INDOUN_NPC_DIALOG.H">
+    </None>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_item.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Message.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_mouse_pointer.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Newtitle.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_NewTitleInterfaceConfig.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Operator.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_OptionRenewal.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_PetMixingForge.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_PetStorage.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_PremiumGiveItem.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_progress.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Shop.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_skill_tree.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_SKILL_VIEW.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Storage.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_TaxRate.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_TIMECOUNT.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_title.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_Tutorial.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_ui_result_receiver.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_UIMessage.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_UserGrade.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_util.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_WebBrowser.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\NEW - VS_UI\src\header\VS_UI_widget.h" />
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\Client\TickTimer.h" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="F:\Project Phoenix\build\ZERO_CHECK.vcxproj">
+      <Project>{C99EA0D3-EC69-3312-98B4-B8DD57CB87E6}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

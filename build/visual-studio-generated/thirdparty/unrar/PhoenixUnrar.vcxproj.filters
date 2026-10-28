@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="F:\Project Phoenix\build\thirdparty\unrar\CMakeFiles\PhoenixUnrar.dir\cmake_pch.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\archive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\arcread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\blake2s.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\cmddata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\consio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\crc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\crypt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\dll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\encname.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\errhnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\extinfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\extract.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\filcreat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\filefn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\filestr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\find.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\getbits.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\hash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\headers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\isnt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\largepage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\match.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\motw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\options.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\pathfn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\qopen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\rarvm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\rawread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\rdwrfn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\rijndael.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\rs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\rs16.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\scantree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\secpassword.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\sha1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\sha256.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\smallfn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\strfn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\strlist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\threadpool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\timefn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\ui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\unicode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\unpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\thirdparty\unrar\unrar\volume.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="F:\Project Phoenix\build\thirdparty\unrar\CMakeFiles\PhoenixUnrar.dir\Debug\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\build\thirdparty\unrar\CMakeFiles\PhoenixUnrar.dir\Release\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\build\thirdparty\unrar\CMakeFiles\PhoenixUnrar.dir\MinSizeRel\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\build\thirdparty\unrar\CMakeFiles\PhoenixUnrar.dir\RelWithDebInfo\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\Project Phoenix\thirdparty\unrar\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Precompile Header File">
+      <UniqueIdentifier>{63145317-6548-38D8-8C04-47EC2C507261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{76337143-0584-348D-925C-8CE6ADF062BE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
