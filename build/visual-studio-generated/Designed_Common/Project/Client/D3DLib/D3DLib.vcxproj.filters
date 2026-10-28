@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CD3DMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CD3DObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CD3DTextureEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CDirect3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CTexturePack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\d3dutil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CD3DMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CD3DObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CD3DTextureEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CDirect3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CTexturePack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\d3dutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\DX3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\Project Phoenix\Designed_Common\Project\Client\D3DLib\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{4D5E51B2-17FE-3851-886D-17BA4C0AC52F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{76337143-0584-348D-925C-8CE6ADF062BE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
