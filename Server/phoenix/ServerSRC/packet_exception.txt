@@ -1,0 +1,15 @@
+OutOfBoundException : 
+ SkillInfo* SkillInfoManager::getSkillInfo(SkillType_t) const
+
+OutOfBoundException : 
+ SkillInfo* SkillInfoManager::getSkillInfo(SkillType_t) const
+
+OutOfBoundException : 
+ SkillInfo* SkillInfoManager::getSkillInfo(SkillType_t) const
+
+OutOfBoundException : 
+ SkillInfo* SkillInfoManager::getSkillInfo(SkillType_t) const
+
+OutOfBoundException : 
+ SkillInfo* SkillInfoManager::getSkillInfo(SkillType_t) const
+

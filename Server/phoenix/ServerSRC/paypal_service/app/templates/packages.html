@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Phoenix — Charge Cash</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d0f14; color: #d8d8d8;
+    font-family: "Segoe UI", Arial, sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 36px 16px;
+  }
+  h1 { color: #d4af37; font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 8px; }
+  p.sub { color: #8a8f9a; font-size: .9rem; margin-bottom: 30px; text-align: center; max-width: 560px; }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px; width: 100%; max-width: 960px;
+  }
+  .card {
+    background: #161a22; border: 1px solid #2a2f3a; border-radius: 10px;
+    padding: 24px 18px; text-align: center;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: border-color .15s ease;
+  }
+  .card:hover { border-color: #d4af37; }
+  .pkg-name { font-size: 1rem; color: #e8e8e8; font-weight: 600; min-height: 2.4em; }
+  .pkg-cash { font-size: 1.7rem; color: #d4af37; font-weight: 700; }
+  .pkg-cash span { font-size: .8rem; color: #8a8f9a; font-weight: 400; letter-spacing: 1px; }
+  .pkg-price { font-size: 1.05rem; color: #b8bec9; }
+  form { margin-top: auto; }
+  button {
+    width: 100%; padding: 11px 0; background: #d4af37; color: #141414;
+    border: 0; border-radius: 6px; font-size: .95rem; font-weight: 700;
+    cursor: pointer;
+  }
+  button:hover { background: #e5c454; }
+  .empty { color: #8a8f9a; margin-top: 24px; }
+  footer { margin-top: 40px; font-size: .75rem; color: #5a606c; text-align: center; max-width: 560px; }
+</style>
+</head>
+<body>
+  <h1>CHARGE CASH</h1>
+  <p class="sub">Select a package below. You will be redirected to PayPal to complete the payment securely.</p>
+  <div class="grid">
+    {% for p in packages %}
+    <div class="card">
+      <div class="pkg-name">{{ p.Name }}</div>
+      <div class="pkg-cash">{{ p.CashAmount }} <span>CASH</span></div>
+      <div class="pkg-price">{{ p.AmountDollar }}.00 {{ p.Currency or currency }}</div>
+      <form method="post" action="/pay/create">
+        <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="package_id" value="{{ p.PackageID }}">
+        <button type="submit">Buy with PayPal</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% if not packages %}
+  <p class="empty">No packages are available right now. Please try again later.</p>
+  {% endif %}
+  <footer>Payments are processed by PayPal. Cash is credited to your account automatically after the payment is completed.</footer>
+</body>
+</html>

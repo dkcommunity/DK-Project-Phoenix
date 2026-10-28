@@ -1,0 +1,21 @@
+#!/bin/sh
+./loginserver -f ../conf/loginserver.conf &
+exit;
+sleep 1
+./loginserver -f ../conf/excel96-loginserver2.conf &
+sleep 1
+./loginserver -f ../conf/excel96-loginserver3.conf &
+sleep 1
+./loginserver -f ../conf/excel96-loginserver4.conf &
+sleep 1
+./loginserver -f ../conf/excel96-loginserver5.conf &
+sleep 1
+./loginserver -f ../conf/excel96-loginserver6.conf &
+sleep 1
+./loginserver -f ../conf/excel96-loginserver7.conf &
+sleep 1
+./loginserver -f ../conf/excel96-loginserver8.conf &
+sleep 1
+./loginserver -f ../conf/excel96-loginserver9.conf &
+sleep 1
+./loginserver -f ../conf/excel96-loginserver10.conf &

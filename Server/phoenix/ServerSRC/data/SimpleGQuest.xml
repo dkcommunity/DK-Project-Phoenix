@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuestList>
+	<Quest id="101">
+		<Title>Open Your Eyes to the Dark</Title>
+		<Script sender="Bricolacas">So. You want to taste that new power, do you? Heh… you are still far too weak. Step outside the castle like this and you will not last. I have no time to tutor you while war burns, but if you prove you have potential, I will teach you. The first basement here is within your reach. Clear out the vermin. I will call when the time comes.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level max="3" />
+		</Happen>
+		<CompleteMessage sender="Bricolacas" target="92">Mmm. The scent of blood on you is promising. I will pass a measure of power to you.</CompleteMessage>
+		<Complete>
+			<Level min="6" index="1">Reach level 6</Level>
+		</Complete>
+		<FailMessage sender="Bricolacas" target="92">What are you doing? Carry on like that and you will be nothing but prey for those human insects…</FailMessage>
+		<Fail>
+			<Time limit="30" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveVampireExp amount="100" />
+			<GiveMoney amount="10000" />
+		</Reward>
+	</Quest>
+	<Quest id="102">
+		<Title>Awakening as a Vampire</Title>
+		<Script sender="Rebecca">Young vampire! Why do you still refuse the call of blood?
+Does some leftover scrap of human morality still nag at you? You chose to abandon humanity, and yet you cling to it. Laughable. Those memories are worthless. Our strength is not a gift. It grows through blood, the root of life. If you want power, you must drink.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="3" max="5" />
+		</Happen>
+		<CompleteMessage sender="Rebecca" target="255">Growing used to the drain, are you? Keep it in mind in every fight. Collect what I left with Cacon in the village.</CompleteMessage>
+		<Complete>
+			<BloodDrain num="20" index="1">%sBlood drains: %d / 20</BloodDrain>
+		</Complete>
+		<FailMessage sender="Rebecca" target="255">You would refuse your fate? Fine… regret will not help you once you are ash. Hmm~</FailMessage>
+		<Fail>
+			<Time limit="15" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="SERUM" type="0" num="9" />
+			<GiveVampireExp amount="100" />
+		</Reward>
+	</Quest>
+	<Quest id="103">
+		<Title>Persuade Larva</Title>
+		<Script sender="Bricolacas">The Master is pleased with how you are growing into the clan. He trusts you will not disappoint him. Still, fools appear now and then — vampires who gained our power and cannot forget their human lives. Larva aids those fools, and that is why this keeps happening. I do not know why the Master will not cast him out. His magic is not to be ignored; if he stood with us, the clan would be stronger. Will you speak with him? Take my letter and try.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="10" max="14" />
+		</Happen>
+		<Complete>
+			<SayNPC name="Bricolacas" target="92" index="1">Receive a letter from Bricolacas</SayNPC>
+			<GiveQuestItem id="0" />
+			<SayNPC name="Larva" target="368" index="2">Deliver the letter to Larva.</SayNPC>
+			<Message index="3">You deliver Bricolacas's letter and try to persuade him, but Larva only shakes his head. He draws a letter of his own and tells you to take it back to Bricolacas.</Message>
+			<LoseQuestItem id="0" />
+			<GiveQuestItem id="1" />
+			<GiveVampireExp amount="200" />
+
+			<SayNPC name="Bricolacas" target="92" index="4">Deliver Larva's letter to Bricolacas.</SayNPC>
+			<Script sender="Bricolacas" target="92" index="5">I cannot fathom the nerve it takes to decide like that. One day it will draw the Master's wrath… Still, you did well. Keep serving Him faithfully.</Script>
+			<LoseQuestItem id="1" />
+			<GiveVampireExp amount="200" />
+		</Complete>
+		<FailMessage sender="Bricolacas" target="92">No need to push yourself so hard. It seems I overestimated you.</FailMessage>
+		<Fail>
+			<Killed num="1" index="1">Do not die while delivering the letter.</Killed>
+		</Fail>
+		<Reward>
+			<GiveItem class="VAMPIRE_WEAPON" type="1" option="STR+3" />
+			<GiveVampireExp amount="100" />
+		</Reward>
+	</Quest>
+	<Quest id="104">
+		<Title>An Obedient Beast</Title>
+		<Script sender="Cacon" target="220">Unlike humans — lowly things that only rebel — other beasts can be obedient. Not all of them are useful, of course. Wild dogs have always bred in Eslania. Tame them well and they become handy tools. Even humans use them. The first days are a bother, but they are worth it. They love meat. Do not forget to bring some.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="20" max="20" />
+		</Happen>
+		<CompleteMessage sender="Cacon" target="220">It will not look like much at first, but raise it steadily and it will come into its own. With luck it may even strengthen you. It might also carry a foul sickness. Show it to Capatini in Castle Limbo; he will examine it.</CompleteMessage>
+		<Complete>
+			<TamePet num="1" index="1">Tame a Junior Wolfarch and obtain a Wolf Dog.</TamePet>
+		</Complete>
+		<FailMessage sender="Cacon" target="220">Keh. Cannot even tame a mongrel… How do you expect to survive here?</FailMessage>
+		<Fail>
+			<Time limit="20" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="PET_FOOD" type="3" num="5" />
+			<GiveItem class="VAMPIRE_WEAPON" type="2" option="DAM+3" />
+		</Reward>
+	</Quest>
+	<Quest id="105" type="tutorial">
+		<Title>A Pact with the Demon</Title>
+		<HappenRegion zoneid="22" x="230" y="231"/>
+		<RewardMessage>Name: Lilith Jera
+Option: VIS+2
+Exp: 200
+Money: 10,000 Geld</RewardMessage>
+		<Script sender="Demon">So Lilith's power is returning, is it? Heh… my voice will sound strange to you. You are not yet worthy to look upon me. Defy me, and you will be nothing but a toy for the secret agents. I have no time to tutor you in this chaos, but if you prove you can become a warrior, Lilith's teaching will walk with you. There is a condition: you will bind yourself to me. First, go to Bricolacas in Castle Limbo, collect your gear and funds, and begin. A pact with me is never easy. I will call when the time comes. Eheheh…</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="4"/>
+		</Happen>
+		<CompleteMessage sender="Demon" target="1022">You would make a pact with me? Heh. Good. This is my gift to help a wretched thing like you through the quests. Lose it or let it be stolen, and your life is mine. My order is your blood. Do not forget my words.</CompleteMessage>
+		<Complete>
+			<SayNPC name="Bricolacas" target="92" index="1">Speak with Bricolacas.</SayNPC>
+		</Complete>
+		<FailMessage sender="Demon" target="1022">You pathetic weakling! I will hunt you and make your life a misery! Ahahaha!</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveVampireExp amount="200" />
+			<GiveMoney amount="10000" />
+			<GiveItem class="VAMPIRE_AMULET" type="15" option="VIS+2" limitedtime="2592000"/>
+		</Reward>
+	</Quest>
+	<Quest id="106" type="adventure">
+		<Title>Take the Dungeon</Title>
+		<HappenRegion zoneid="22" x="230" y="231"/>
+		<RewardMessage>(Random weapon by domain)
+Name: Lilith SAV Knuckle
+Option: STR+3 / INT+3</RewardMessage>
+		<Script sender="Demon">Our pact lets me give you orders anywhere, any time. You already signed it. There is no running. Speak of this to anyone and you die. First I will test whether you are the warrior Lilith foretold. This dungeon is crawling with trash. Take their heads as I command. Watch your jewels stain with blood. Miss that, and I will be disappointed. You belong to me now.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="7" />
+			<EnterZone ZoneID="1003" />
+		</Happen>
+		<CompleteMessage sender="Demon" target="1022">Better than I expected. Remember that I am always watching. This reward is my lash. Keep pleasing me.</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%sHunt Chief Dead Body: %d / 5 
+		    	<Target type="564" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Demon" target="1022">Do you need more pain, or do you simply need to die?</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<Random>
+	    		<GiveItem class="VAMPIRE_WEAPON" type="25" option="STR+3" limitedtime="2592000" />
+	    		<GiveItem class="VAMPIRE_WEAPON" type="25" option="INT+3" limitedtime="2592000" />
+			</Random>
+		</Reward>
+	</Quest>
+	<Quest id="107" type="charge">
+		<Title>Larva's Taste</Title>
+		<HappenRegion zoneid="23" x="130" y="86"/>
+		<RewardMessage>20 Bat Wings
+Starts quest 108</RewardMessage>
+		<Script sender="Demon">Here is your first order. Take this to Larva in southeast Limbo. His tastes are peculiar, but he will help a pure-blooded vampire endure what is coming. Your road of pain has only begun. No talk. Go to Larva and wait for my next command.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="11" />
+		</Happen>
+		<CompleteMessage sender="Larva" target="368">So you are Lilith's heir? And how did you come by that disgusting head? Few know I collect such things… Heh. You will not need it now, but keep it. You will want it later.</CompleteMessage>
+		<Complete>
+			<GiveQuestItem id="27" />
+			<SayNPC name="Larva" target="368" index="1">Speak with Larva.</SayNPC>
+			<LoseQuestItem id="27" />
+		</Complete>
+		<FailMessage sender="Demon" target="1022">Why are you back? What? You lost the bat head? What did you waste it on, you idiot?</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="VAMPIRE_ETC" type="1" num="20" limitedtime="2592000"/>
+			<StartOtherQuest id="108"/>
+       	</Reward>
+	</Quest>
+	<Quest id="108" type="charge">
+		<Title>A Distasteful Task</Title>
+		<HappenRegion zoneid="23" x="130" y="86"/>
+		<RewardMessage>Name: Lilith Slippery Robe
+Option: ATTR+2
+Lilith Plume Cloak
+Option: ATTR+2 (male / female)</RewardMessage>
+		<Script sender="Demon">Here is your task. Creatures have been souring my mood. I could crush them myself, but you are nothing. If you cannot even match them, you are not worth speaking to. They scout southeast Castle Limbo with eyes like ours, using cheap tricks. Go there and wipe the filth out. Be swift. Begin.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+			<Level min="11" />
+			<CompleteQuest id="107" />	
+		</Happen>
+		<CompleteMessage sender="Demon" target="1022">Crueler work is coming. Watch yourself… hahaha.</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%sHunt Chief Kid: %d / 5
+		              <Target type="567" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Demon" target="1022">Not even worth my disappointment. Get out of my sight or I will kill you.</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="VAMPIRE_COAT" type="26" option="ATTR+2" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="109" type="adventure">
+		<Title>Paint the Map in Blood</Title>
+		<HappenRegion zoneid="14" x="196" y="240"/>
+		<RewardMessage>Name: Lilith Anti-Sun Ring x2
+Option: RES+1</RewardMessage>
+		<Script sender="Demon">You handled the last task well. Larva liked my gift. Do not grow proud over one errand. You will die soon enough. Heh. This next one can kill you. You have hunted chiefs on a timer before, but there are always exceptions. A warrior of Lilith might claw back from hell itself. No one else leaves my hand alive. Temerie Holy Land lies in southwest Eslania. We have drunk deep there; now it is a battlefield. Take enemy heads, drink, hunt the chiefs, and come back in glory.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+		    <Level min="16" />
+	        <EnterZone ZoneID="14" />
+		</Happen>
+		<CompleteMessage sender="Demon" target="1022">Well done. Take this reward. I do not praise lightly. Wait in silence for my whisper. I am watching you, always. Hahaha!</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%sHunt Chief Alcan: %d / 5 
+		              <Target type="469" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Demon" target="1022">Still beneath what I want? Do you wish to taste the fire of hell?</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="VAMPIRE_RING" type="16" option="RES+1" limitedtime="2592000"/>
+			<GiveItem class="VAMPIRE_RING" type="16" option="RES+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="110" type="adventure">
+		<Title>The Demon's Call</Title>
+		<HappenRegion zoneid="33" x="206" y="190"/>
+		<RewardMessage>5 Cerberus Seals
+4 Hearts of Cabracam B1
+Starts quest 111 </RewardMessage>
+		<Script sender="Demon">You lived. That is one step toward Lilith's glory, but you are not enough. I will test you again. My sight caught Slayers moving. A fool vampire hid something important in a house near the Drobeta mill sewers, and the Slayers found it. I marked your map. Use the bat wings Larva gave you and get there first. Stay off the roaming beasts; the ground is still too dangerous for you. Move. Now.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+		    <Level min="21" />
+	        <EnterZone ZoneID="22" />
+		</Happen>
+		<CompleteMessage sender="Demon" target="1022">Well done. Take your next order at once.</CompleteMessage>
+		<Complete>
+			<TouchWayPoint zoneid="33" x="206" y="190" index="1">Search Drobeta SE at X=206, Y=190</TouchWayPoint>
+		</Complete>
+		<FailMessage sender="Demon" target="1022">I will not kill you for failing, but you look ridiculous. Come back like that again and I will end you.</FailMessage>
+		<Fail>
+			<Killed num="3" index="1">Do not die more than 3 times during the mission.</Killed>
+			<IllegalWarp index="2">Seals are forbidden</IllegalWarp>
+			<Time limit="20" index="3">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="5"/>
+			<GiveItem class="COMMON_QUEST_ITEM" type="12" num="4"/>
+			<StartOtherQuest id="111"/>
+       	</Reward>
+	</Quest>
+	<Quest id="111" type="charge">
+		<Title>Warrior of Darkness</Title>
+		<HappenRegion zoneid="22" x="219" y="230"/>
+		<RewardMessage>20 Cerberus Seals
+Exp: 3000
+Money: 50,000 Geld</RewardMessage>
+		<Script sender="Demon">You snatched it in time. Listen well. Take it to Menegroth B1 and kill Cabracam before the Slayers do. He holds something precious. Show this seal to Belegost northwest of Castle Limbo to enter. Use the heart I give you, join whoever is already there, and take the boss first. You will earn Osiris's token — too fine for you, but I will allow it. Claim the token and I will add a special reward. Now go to hell. You have one hour on B1.</Script>
+		<Happen replay="false">
+			<Race race="VAMPIRE" />
+		    <Level min="21" />
+			<CompleteQuest id="110" />	
+		</Happen>
+		<CompleteMessage sender="Demon" target="1022">Well done. Wiping that smug look off your face over one little job? Hahaha.</CompleteMessage>
+		<Complete>
+			<KillMonster num="1" sort="2" index="1">%sHunt Cabracam: %d / 1 
+		              <Target type="1021" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Demon" target="1022">I expected as much. Still, you suffered for it. Tend your wounds, you useless thing.</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="20"/>
+			<GiveVampireExp amount="3000" />
+			<GiveMoney amount="50000" />
+       	</Reward>
+	</Quest>
+
+	<Quest id="201">
+		<Title>Training to Survive</Title>
+		<Script sender="Kaiser">You are the new transfer? Headquarters must be desperate, sending a soldier with no training. Walk out of HQ like that and you are vampire meat. Fine. I will put you through hard training in the special yard. See Tanya for directions. Specialty training comes after.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level max="3" />
+		</Happen>
+		<CompleteMessage sender="Kaiser" target="17">You have been working. Good. Specialty training starts now. Fall in.</CompleteMessage>
+		<Complete>
+			<Level min="5" index="1">Reach level 5</Level>
+		</Complete>
+		<FailMessage sender="Terry" target="302">Another torture officer is born. Keep stumbling and Zack will make your life hell. If it gets too rough, you can always buy supplies from me. Hahaha.</FailMessage>
+		<Fail>
+			<Time limit="50" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="100" />
+			<GiveMoney amount="10000" />
+		</Reward>
+	</Quest>
+	<Quest id="202">
+		<Title>Training Never Ends</Title>
+		<Script sender="Zack">Listen, recruit. You can finally learn a skill. Used well, skills win fights and grow you fast. Show me. Raise any skill to the required level.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="5" max="5" />
+		</Happen>
+		<CompleteMessage sender="Zack" target="16">Better than I thought. You might actually be useful. Take your voucher to Nancy for supplies.</CompleteMessage>
+		<Complete>
+			<SkillLevel min="3" index="1">Raise a skill to level 3</SkillLevel>
+		</Complete>
+		<FailMessage sender="Zack" target="16">What are you doing? We are not fighting scarecrows. This is not a playground. Wake up!</FailMessage>
+		<Fail>
+			<Time limit="20" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveQuestItem id="2" />
+			<SayNPC name="Nancy" target="303" index="1">Take the supply voucher to Nancy and collect your kit</SayNPC>
+			<Message index="2">Supplies received.</Message>
+			<GiveDomainExp amount="100" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="1" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+			<GiveItem class="POTION" type="6" num="9" />
+		</Reward>
+	</Quest>
+	<Quest id="203">
+		<Title>Recover the Intel</Title>
+		<Script sender="Kaiser">Our scouts have been gathering intel on vampire holds. A trooper surveying a nest northwest of the Perona highway went silent. He is almost certainly dead, but his data must come back. The site is close to the enemy. His last signal was Eslania NW, 67, 58. Motorcycle noise will draw vampires. No bikes on this run.</Script>
+		<Happen>
+			<Race race="SLAYER" />
+			<Level min="15" max="19" />
+		</Happen>
+		<Complete>
+			<TouchWayPoint zoneid="12" x="58" y="48" type="636" dir="1" index="1">Recover the data disk</TouchWayPoint>
+			<Message sender="Kaiser" target="17" index="2">So they killed him. At least he did not rise as a vampire… If you have the data, withdraw and take it to Tanya.</Message>
+			<GiveQuestItem id="3" />
+			<GiveDomainExp amount="200" />
+			<SayNPC name="Tanya" target="26" index="3">Deliver the disk to Tanya</SayNPC>
+			<Message sender="Kaiser" target="17" index="2">Good. You made it back. Rest and kit up until the next order.</Message>
+			<LoseQuestItem id="3" />
+			<GiveDomainExp amount="200" />
+		</Complete>
+		<FailMessage sender="Kaiser" target="17">I was wrong to give a greenhorn an intel recovery. I will not punish you for the failure. Command, however, will punish me.</FailMessage>
+		<Fail>
+			<Killed num="1" index="1">Do not die during the mission.</Killed>
+			<RideMotorcycle index="2">Motorcycles are forbidden.</RideMotorcycle>
+		</Fail>
+		<Reward>
+			<GiveItem class="RING" type="2" option="STR+2" />
+		</Reward>
+	</Quest>
+	<Quest id="204">
+		<Title>War Dog Manual</Title>
+		<Script sender="Smith">Wild dogs in Eslania can be trained as war dogs. A war dog will help in the field. Your task is to raise one. Capture a wild dog first. They love meat. Do not forget it. That is all.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="20" max="20" />
+		</Happen>
+		<CompleteMessage sender="Smith" target="103">You caught one. Return to base for a fitness check. Terry will examine it.</CompleteMessage>
+		<Complete>
+			<TamePet num="1" index="1">Tame a wild dog.</TamePet>
+		</Complete>
+		<FailMessage sender="Smith" target="103">Cannot even catch a stray, and you expect to hunt vampires? How did you become an EVE trooper?</FailMessage>
+		<Fail>
+			<Time limit="20" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="PET_FOOD" type="3" num="5" />
+			<GiveItem class="HELM" type="4" option="HP+2" />
+		</Reward>
+	</Quest>
+	<Quest id="205" type="tutorial">
+		<Title>Secret Agent Selection</Title>
+		<HappenRegion zoneid="12" x="218" y="96"/>
+		 <RewardMessage>Name: Valkyrie Medium Belt
+Option: HP+2
+Exp: 200
+Money: 10,000 Ray</RewardMessage>
+		<Script sender="Secret Ops Commander">Congratulations. You have been chosen as an EVE secret agent. I train and command those agents. You will learn my name in time; not knowing it yet is safer for you. Pass the new trials and you will take darker work, and you will be a true Highlander. The war is urgent, but then you will understand why we trained you from the start. See Zack at Field HQ for gear and funds, and begin. Every mission goes through me. This is not recruit drill.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="4"/>
+		</Happen>
+		<CompleteMessage sender="Secret Ops Commander" target="1021">You are taking this seriously. Good. Do not slack before the next test.</CompleteMessage>
+		<Complete>
+			<SayNPC name="Zack" target="16" index="1">Speak with Zack.</SayNPC>
+		</Complete>
+		<FailMessage sender="Secret Ops Commander" target="1021">You would abandon a sacred duty?</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="200" />
+			<GiveMoney amount="10000" />
+			<GiveItem class="BELT" type="9" option="HP+2" limitedtime="2592000"/>
+		</Reward>
+	</Quest>
+	<Quest id="206" type="adventure">
+		<Title>First Trial</Title>
+		<HappenRegion zoneid="12" x="220" y="103"/>
+		<RewardMessage>(Valkyrie weapon by domain)
+Option: STR+3 / INT+3
+Bonus Exp: 400</RewardMessage>
+		<Script sender="Secret Ops Commander">Congratulations on becoming a full EVE agent. A system now lets me assign you work anywhere. It is a secure line between a special agent and the commander. Guard it. First order: enter the virtual yard and fight stronger foes. Hunt the chiefs I name before time runs out. You are still in training.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="7" />
+			<EnterZone ZoneID="12" />
+		</Happen>
+		<CompleteMessage sender="Secret Ops Commander" target="1021">Better than I expected. I am always watching. You may yet make a proper secret agent.</CompleteMessage>
+		<Complete>
+			<KillMonster num="10" sort="1" index="1">%sHunt Chief Dead Body: %d / 10
+		    	<Target type="564" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Secret Ops Commander" target="1021">Perhaps secret work does not suit you?</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="400" />
+            <OR>
+				<SlayerHighestSkillDomain domain="blade">
+	                <GiveItem class="BLADE" type="20" option="STR+3" limitedtime="2592000" />
+		        </SlayerHighestSkillDomain>
+
+	            <SlayerHighestSkillDomain domain="sword">
+	                <GiveItem class="SWORD" type="20" option="STR+3" limitedtime="2592000" />
+	            </SlayerHighestSkillDomain>
+
+	            <SlayerHighestSkillDomain domain="gun">
+	                <Random>
+	                    <GiveItem class="AR" type="20" option="DEX+3" limitedtime="2592000" />
+	                    <GiveItem class="SMG" type="18" option="DEX+3" limitedtime="2592000" />
+	                    <GiveItem class="SG" type="18" option="DEX+3" limitedtime="2592000" />
+	                    <GiveItem class="SR" type="20" option="DEX+3" limitedtime="2592000" />
+	                </Random>
+	            </SlayerHighestSkillDomain>
+
+	            <SlayerHighestSkillDomain domain="heal">
+	                <GiveItem class="CROSS" type="18" option="INT+3" limitedtime="2592000" />
+	            </SlayerHighestSkillDomain>
+
+	            <SlayerHighestSkillDomain domain="enchant">
+	                <GiveItem class="MACE" type="18" option="INT+3" limitedtime="2592000" />
+	            </SlayerHighestSkillDomain>
+            </OR>
+		</Reward>
+	</Quest>
+	<Quest id="207" type="charge">
+		<Title>Find Jack</Title>
+		<HappenRegion zoneid="12" x="160" y="168"/>
+		<RewardMessage>Name: Valkyrie Scorpion Key
+Starts quest 208</RewardMessage>
+		<Script sender="Secret Ops Commander">You passed. Training ends here. From now you work in secret. It will be hard, but the title of glory waits at the end. Your first special task: take this medal to Jack and request special gear. He will help you endure what comes. This is only the beginning. Go to Jack at Field HQ.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="11" />
+		</Happen>
+		<CompleteMessage sender="Jack" target="109">A finished agent, are you? If you completed the test, you brought what I asked for. Good. Take your reward.</CompleteMessage>
+		<Complete>
+			<GiveQuestItem id="29" />
+			<SayNPC name="Jack" target="109" index="1">Speak with Jack.</SayNPC>
+			<LoseQuestItem id="29" />
+		</Complete>
+		<FailMessage sender="Secret Ops Commander" target="1021">Why are you back? The medal is gone? Attempt the mission without Jack and you will come home a corpse.</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="KEY" type="17" limitedtime="2592000"/>
+			<StartOtherQuest id="208"/>
+       	</Reward>
+	</Quest>
+	<Quest id="208" type="charge">
+		<Title>A Harsh Mission</Title>
+		<HappenRegion zoneid="12" x="160" y="168"/>
+		<RewardMessage>Name: Valkyrie Battle Suit (M) / Valkyrie Leggings (M)
+Option: ATTR+1 / ATTR+1
+Name: Valkyrie Battle Suit (W) / Valkyrie Leggings (W)
+Option: ATTR+1 / ATTR+1 (male / female)
+Bonus Exp: 1000</RewardMessage>
+		<Script sender="Secret Ops Commander">Your task. Our specials have scouted Eslania faster than anyone since we were formed. An agent in northwest Eslania reports others watching the same ground. They are trained, and they use tricks. Go to their hunting grounds and wipe them out. Northwest Eslania. Use Jack's gift. Take the motorcycle and be faster than they are. Begin.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+			<Level min="11" />
+			<CompleteQuest id="207" />	
+		</Happen>
+		<CompleteMessage sender="Secret Ops Commander" target="1021">What comes next will not be easy. Watch yourself…</CompleteMessage>
+		<Complete>
+			<KillMonster num="10" sort="1" index="1">%sHunt Chief Kid: %d / 10 
+		              <Target type="567" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Secret Ops Commander" target="1021">Afraid? Or simply not able? Do not keep disappointing me.</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="1000" />
+			<GiveItem class="COAT" type="30" option="ATTR+1" limitedtime="2592000"/>
+			<GiveItem class="TROUSER" type="30" option="ATTR+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="209" type="adventure">
+		<Title>A Map of Glory</Title>
+		<HappenRegion zoneid="14" x="196" y="240"/>
+		<RewardMessage>Name: Valkyrie Aurous Ring x2
+Option: RES+1 / RES+1
+Bonus Exp: 2000</RewardMessage>
+		<Script sender="Secret Ops Commander">Well done. Jack says the last job was clean. Do not grow proud. Carelessness is death. This one may be dangerous. You have hunted chiefs on a clock, but exceptions happen, and a special agent must meet them. Two lives would not be enough, and still I trust you. Temerie Holy Land in southwest Eslania has cost us dearly. Enemies wait for your throat. It is a battlefield. Slip past their eyes, take the chiefs, and return in glory. If they learn who you are, die by your own hand before they take you.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+		    <Level min="16" />
+	        <EnterZone ZoneID="14" />
+		</Happen>
+		<CompleteMessage sender="Secret Ops Commander" target="1021">Well done. Stay alive until the next order.</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%sHunt Chief Alcan: %d / 5
+		              <Target type="469" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Secret Ops Commander" target="1021">Why did you not take your own life? Still short of what I need? I want you dead, but I will give you one chance. My patience has a limit.</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveDomainExp amount="2000" />
+			<GiveItem class="RING" type="16" option="RES+1" limitedtime="2592000"/>
+			<GiveItem class="RING" type="16" option="RES+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="210" type="adventure">
+		<Title>A Cryptic Order</Title>
+		<HappenRegion zoneid="33" x="206" y="190"/>
+		<RewardMessage>5 Cerberus Seals
+4 Hearts of Cabracam B1
+Starts quest 211</RewardMessage>
+		<Script sender="Secret Ops Commander">Briefing, soldier. If you have lived this far, you stand at the heart of the Valkyrie operation that will lead us toward heaven. The road is still long. This run will test your nerve. Stolen convoy goods have turned up in a house near the Drobeta mill sewers. Exact coordinates are unknown; ride to the mark on your GPS and search the area. Recover the materiel. I will give the next order then. Do not clear the district. It is still too hot for you.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+		    <Level min="21" />
+	        <EnterZone ZoneID="12" />
+		</Happen>
+		<CompleteMessage sender="Secret Ops Commander" target="1021">Well done. Take the next mission at once.</CompleteMessage>
+		<Complete>
+			<TouchWayPoint zoneid="33" x="206" y="190" index="1">Search Drobeta SE at X=206, Y=190</TouchWayPoint>
+		</Complete>
+		<FailMessage sender="Secret Ops Commander" target="1021">I will not court-martial you for failing, but I am disappointed. What went wrong?</FailMessage>
+		<Fail>
+			<Killed num="3" index="1">Do not die more than 3 times during the mission.</Killed>
+			<IllegalWarp index="2">Helicopters are forbidden.</IllegalWarp>
+			<Time limit="20" index="3">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="5"/>
+			<GiveItem class="COMMON_QUEST_ITEM" type="12" num="4"/>
+			<StartOtherQuest id="211"/>
+       	</Reward>
+	</Quest>
+	<Quest id="211" type="charge">
+		<Title>Into the Dark Below</Title>
+		<HappenRegion zoneid="12" x="49" y="179"/>
+		<RewardMessage>20 Cerberus Seals
+Exp: 3000
+Money: 50,000 Ray</RewardMessage>
+		<Script sender="Secret Ops Commander">Well done. You recovered it. This next run is urgent and deadly. Take the goods to Menegroth B1 and stop the boss. Cabracam has been tearing apart the agents we sent to check the vampires. Show the seal to Argonas west of Field HQ, enter, use the heart to call Cabracam, and kill him with the agents already inside. Hideous work, but you will earn Kali's token, and I permit you to keep it. Survive and I will add a special reward. You have one hour on B1. Come back alive.</Script>
+		<Happen replay="false">
+			<Race race="SLAYER" />
+		    <Level min="21" />
+			<CompleteQuest id="210" />	
+		</Happen>
+		<CompleteMessage sender="Secret Ops Commander" target="1021">Well done. Stay alive until the next order. </CompleteMessage>
+		<Complete>
+			<KillMonster num="1" sort="2" index="1">%sHunt Cabracam: %d / 1 
+		              <Target type="1021" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Secret Ops Commander" target="1021">I expected as much. This may still be too much for you. Get your wounds treated, and rest.</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="20"/>
+			<GiveDomainExp amount="3000" />
+			<GiveMoney amount="50000" />
+       	</Reward>
+	</Quest>
+
+	<Quest id="301">
+		<Title>Reclaim Your Strength</Title>
+		<Script sender="Manescu">May nature's glory walk with you. Welcome, comrade. The vampires' uprising tore you from a sweet sleep, and I still feel how weak you are. To face the destroyers beyond the village you must wake the power that slept with you. Carisas's ward still holds as far as Hanial Dungeon B1. Feeble things wander there. Use them to open your strength, little by little. Time is short. Reclaim your power now.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level max="3" />
+		</Happen>
+		<CompleteMessage sender="Manescu" target="655">I feel some of your power opening. Our strength grows. Lavinia in the village can help you.</CompleteMessage>
+		<Complete>
+			<Level min="6" index="1">Reach level 6</Level>
+		</Complete>
+		<FailMessage sender="Lavinia" target="653">Nature is never idle. You are part of it, and you must follow its law. Try harder…</FailMessage>
+		<Fail>
+			<Time limit="20" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveMoney amount="10000" />
+			<GiveOustersExp amount="100" />
+		</Reward>
+	</Quest>
+	<Quest id="302">
+		<Title>Spirit, the Source of Power</Title>
+		<Script sender="Lavinia">Forced lessons mean nothing to us. How you grow the gift nature gave you is your will alone. Do not forget that you need spirit to use it. Keep that well from running dry.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="3" max="5" />
+		</Happen>
+		<CompleteMessage sender="Lavinia" target="653">Never forget spirit drain if you mean to open your power. I asked Lipati to prepare something that may help you on the road.</CompleteMessage>
+		<Complete>
+			<BloodDrain num="20" index="1">%sSpirit drains: %d / 20</BloodDrain>
+		</Complete>
+		<FailMessage sender="Lavinia" target="653">Do not call spirit drain cruel or a chore. It is necessary to cleanse the vampires. If you refuse it, I will not force you.</FailMessage>
+		<Fail>
+			<Time limit="30" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveOustersExp amount="100" />
+			<GiveItem class="PUPA" type="1" num="9" />
+		</Reward>
+	</Quest>
+	<Quest id="303">
+		<Title>The Threat of a Poisoned Land</Title>
+		<Script sender="Sioram">Our clan has lived by kind nature after years of exile. Humans and vampires keep poisoning the Mother's earth. The human works next to our refuge could fall to vampires at any time. I believe you can look over that place. Sylph-power is unstable; seal it for this task.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="10" max="14" />
+		</Happen>
+		<CompleteMessage sender="Sioram" target="656">No great threat yet, which is a mercy. That destructive vampires still haunt the site is a grave worry. Watch it more closely.</CompleteMessage>
+		<Complete>
+			<TouchWayPoint zoneid="32" x="15" y="185" type="673" dir="2" index="1">Scout Drobeta NW (15, 185)</TouchWayPoint>
+		</Complete>
+		<FailMessage sender="Sioram" target="656">I feel your mind fraying. You cannot handle this as you are. Learn to govern yourself. To govern yourself, you must know yourself…</FailMessage>
+		<Fail>
+			<Killed num="1" index="1">Do not die during the mission.</Killed>
+			<RideMotorcycle index="2">Sylphs are forbidden</RideMotorcycle>
+		</Fail>
+		<Reward>
+			<GiveOustersExp amount="350" />
+			<GiveItem class="OUSTERS_COAT" type="1" option="STR+2" />
+		</Reward>
+	</Quest>
+	<Quest id="304">
+		<Title>Another Companion</Title>
+		<Script sender="Manescu">Unlike the invaders with their stained souls, lives that follow nature will lend us strength. Their numbers have fallen, but wild dogs still wait for allies. tame their hunger and they will serve you faithfully.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="20" max="20" />
+		</Happen>
+		<CompleteMessage sender="Manescu" target="655">They too follow nature. Raise their gifts and live beside them. Any who follow you will share Carisas's protection.</CompleteMessage>
+		<Complete>
+			<TamePet num="1" index="1">Tame a wild dog.</TamePet>
+		</Complete>
+		<FailMessage sender="Manescu" target="655">Nature is not ruled by force. Seek everything through power and you are no better than a vampire. Growing close to nature matters more than anything. You failed this time. Show me you can improve.</FailMessage>
+		<Fail>
+			<Time limit="30" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="PET_FOOD" type="3" num="5" />
+			<GiveItem class="OUSTERS_CIRCLET" type="4" option="HP+2" />
+		</Reward>
+	</Quest>
+	<Quest id="305" type="tutorial">
+		<Title>Wrath of Nature</Title>
+		<HappenRegion zoneid="81" x="173" y="83"/>
+		<RewardMessage>Name: Nature's Wave Armsband
+Option: HP+2
+Exp: 200
+Money: 10,000 Zad</RewardMessage>
+		<Script sender="Guardian of Nature">What are you doing? Can you not hear my cry? Unseen is not the same as gone. Listen to me. Refuse, and only ruin remains. The hour is desperate. Reach for nature's power yourself. Show that will, and the great force of nature will walk with you. There is a condition: travel with me and obey. Go to Lipati in the Ousters village, take your gear and funds, and begin. We must stop our people's end.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="4"/>
+		</Happen>
+		<CompleteMessage sender="Guardian of Nature" target="1023">You heard me. This gift will guide you through every quest to come. Do not lose it. It is my life, and my word is everyone's life. Do not forget.</CompleteMessage>
+		<Complete>
+			<SayNPC name="Lipati" target="654" index="1">Speak with Lipati.</SayNPC>
+		</Complete>
+		<FailMessage sender="Guardian of Nature" target="1023">You must not be this weak. The middle world is our only path, my kin…</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveOustersExp amount="200" />
+			<GiveMoney amount="10000" />
+			<GiveItem class="OUSTERS_ARMSBAND" type="15" option="HP+2" limitedtime="2592000"/>
+		</Reward>
+	</Quest>
+	<Quest id="306" type="adventure">
+		<Title>Like the Wind</Title>
+		<HappenRegion zoneid="81" x="173" y="83"/>
+		<RewardMessage>(Random weapon by domain)
+Name: Nature's Raetra Chakram
+Option: STR+3
+Name: Nature's Lacrima Wristlet
+Option: INT+3</RewardMessage>
+		<Script sender="Guardian of Nature">My voice startled you, I know. Our pact now lets me give you tasks anywhere. My power will aid you. Tell no one. The dungeon is full of wicked things. Cut them down as I say. Watch your map fill with blessing. You must check it. You and I walk together now.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="7" />
+			<EnterZone ZoneID="1311" />
+		</Happen>
+		<CompleteMessage sender="Guardian of Nature" target="1023">Better than I thought. I watch to keep you safe. This reward is my blessing. Strive harder still.</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%sHunt Chief Dead Body: %d / 5 
+		    	<Target type="564" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Guardian of Nature" target="1023">Do you not know what greater pain is? Would you live alone and watch our people erased?</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<Random>
+	    		<GiveItem class="OUSTERS_CHAKRAM" type="20" option="STR+3" limitedtime="2592000" />
+	    		<GiveItem class="OUSTERS_WRISTLET" type="60" option="INT+3" limitedtime="2592000" />
+	    		<GiveItem class="OUSTERS_WRISTLET" type="61" option="INT+3" limitedtime="2592000" />
+	    		<GiveItem class="OUSTERS_WRISTLET" type="62" option="INT+3" limitedtime="2592000" />
+			</Random>
+		</Reward>
+	</Quest>
+	<Quest id="307" type="charge">
+		<Title>Amata's Gift</Title>
+		<HappenRegion zoneid="81" x="173" y="83"/>
+		<RewardMessage>Name: Nature's Wave Armsband
+Option: HP+2
+Starts quest 308</RewardMessage>
+		<Script sender="Guardian of Nature">The work of reclaiming the middle world has begun. Nature's great power will lead you. Amata will help you endure what is coming. This is only the start. Take this to Amata in the Ousters village and receive your task.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="11" />
+		</Happen>
+		<CompleteMessage sender="Amata" target="657">Well done. As an Ousters warrior you will face harder pain still. You brought what I asked for? Good. Take your reward.</CompleteMessage>
+		<Complete>
+			<GiveQuestItem id="28" />
+			<SayNPC name="Amata" target="657" index="1">Speak with Amata.</SayNPC>
+			<LoseQuestItem id="28" />
+		</Complete>
+		<FailMessage sender="Guardian of Nature" target="1023">Why are you back? The spirit is gone? How could that happen…</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="OUSTERS_ARMSBAND" type="15" option="HP+2" limitedtime="2592000"/>
+			<StartOtherQuest id="308"/>
+       	</Reward>
+	</Quest>
+	<Quest id="308" type="charge">
+		<Title>Blade Wind</Title>
+		<HappenRegion zoneid="23" x="130" y="86"/>
+		 <RewardMessage>Nature's Sprite Coat
+Option: ATTR+1
+Nature's Sprite Boots
+Option: ATTR+1</RewardMessage>
+		<Script sender="Guardian of Nature">A dangerous task. Our spirits have been scouting this land. In northwest Castalo we found others watching the same ground, trained and using tricks. Go to southeast Castle Limbo, their hunting ground, and wipe them out. Use the gear you were given and be faster than they are. Begin.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+			<Level min="11" />
+			<CompleteQuest id="307" />	
+		</Happen>
+		<CompleteMessage sender="Guardian of Nature" target="1023">What comes next will not be easy. Watch yourself…</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%sHunt Chief Kid: %d / 5 
+		              <Target type="567" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Guardian of Nature" target="1023">Did I fail to see how short your strength still is? Please, find more power.</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="OUSTERS_COAT" type="15" option="ATTR+1" limitedtime="2592000"/>
+			<GiveItem class="OUSTERS_BOOTS" type="15" option="ATTR+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="309" type="adventure">
+		<Title>A Shining Insignia</Title>
+		<HappenRegion zoneid="14" x="196" y="240"/>
+		<RewardMessage>Name: Nature's Empos Ring x2
+Option: RES+1</RewardMessage>
+		<Script sender="Guardian of Nature">The last task was excellent. Amata told me so. Do not grow proud over one errand. The moment you ease your guard, death's shadow comes. This next work may be dangerous. You have hunted chiefs on a timer, and exceptions always come, but nature's power can keep you alive. I already trust you. Temerie Holy Land in southwest Eslania has cost us much. Enemies still wait for your life. It is a ruined, bloody field. Slip past their eyes with that bright speed, take the chiefs, and return. May nature's blessing stay with you…</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+		    <Level min="16" />
+	        <EnterZone ZoneID="14" />
+		</Happen>
+		<CompleteMessage sender="Guardian of Nature" target="1023">Well done. Take this reward. Wait quietly for my whisper until the next task. I watch over you, always.</CompleteMessage>
+		<Complete>
+			<KillMonster num="5" sort="1" index="1">%sHunt Chief Alcan: %d / 5
+		              <Target type="469" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Guardian of Nature" target="1023">Still short of what I need? Please, do not make me abandon our people.</FailMessage>
+		<Fail>
+			<Time limit="60" index="1">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="OUSTERS_RING" type="16" option="RES+1" limitedtime="2592000"/>
+			<GiveItem class="OUSTERS_RING" type="16" option="RES+1" limitedtime="2592000"/>
+       	</Reward>
+	</Quest>
+	<Quest id="310" type="adventure">
+		<Title>Storm Zone</Title>
+		<HappenRegion zoneid="33" x="206" y="190"/>
+        <RewardMessage>5 Cerberus Seals
+4 Hearts of Cabracam B1
+Starts quest 211</RewardMessage>
+		<Script sender="Guardian of Nature">If you have lived this far, you already stand at the heart of this Nature conquest that will lead our people to peace. The road is still long. I will look at your strength once more. The wind says lesser beings who ignore nature's law are fighting. Near a house by the Drobeta mill sewers, vampires and Slayers have gone to war over something precious. We must take it first. I marked your map, but you will need to search. Use a sylph; there is no time. Avoid the roaming beasts. That ground is still too dangerous for you.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+		    <Level min="21" />
+	        <EnterZone ZoneID="81" />
+		</Happen>
+		<CompleteMessage sender="Guardian of Nature" target="1023">Well done. Begin the next task at once.</CompleteMessage>
+		<Complete>
+			<TouchWayPoint zoneid="33" x="206" y="190" index="1">Search Drobeta SE at X=206, Y=190</TouchWayPoint>
+		</Complete>
+		<FailMessage sender="Guardian of Nature" target="1023">I will not despair over a failure, but I fear for our people's fate…</FailMessage>
+		<Fail>
+			<Killed num="3" index="1">Do not die more than 3 times during the mission.</Killed>
+			<IllegalWarp index="2">Earth Spirit Horns are forbidden</IllegalWarp>
+			<Time limit="20" index="3">%sTime left: %d min</Time>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="5"/>
+			<GiveItem class="COMMON_QUEST_ITEM" type="12" num="4"/>
+			<StartOtherQuest id="311"/>
+       	</Reward>
+	</Quest>
+	<Quest id="311" type="charge">
+		<Title>Turn Darkness to Light</Title>
+		<HappenRegion zoneid="81" x="192" y="111"/>
+        <RewardMessage>20 Cerberus Seals
+Exp: 3000
+Money: 50,000 Zad</RewardMessage>
+		<Script sender="Guardian of Nature">Your next task is deadly, and time is gone. Take what you recovered to Menegroth B1. Cabracam, the underground boss, is killing our kin. Show this seal to Ea east of the Ousters village to enter. Use the heart to summon Cabracam and slay him with those already holding the floor. Hideous work, but you will earn Lir's token, and it is yours. Return alive and I will add a special reward. I promise. You have one hour on B1. Come back living.</Script>
+		<Happen replay="false">
+			<Race race="OUSTERS" />
+		    <Level min="21" />
+			<CompleteQuest id="310" />	
+		</Happen>
+		<CompleteMessage sender="Guardian of Nature" target="1023">Well done. Peace until the next task.</CompleteMessage>
+		<Complete>
+			<KillMonster num="1" sort="2" index="1">%sHunt Cabracam: %d / 1 
+		              <Target type="1021" />
+			</KillMonster>
+		</Complete>
+		<FailMessage sender="Guardian of Nature" target="1023">I expected as much. This may still be too much. Get your wounds treated, and rest.</FailMessage>
+		<Fail>
+		</Fail>
+		<Reward>
+			<GiveItem class="COMMON_QUEST_ITEM" type="6" num="20"/>
+			<GiveOustersExp amount="3000" />
+			<GiveMoney amount="50000" />
+       	</Reward>
+	</Quest>
+</QuestList>

@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+httpx
+pymysql
+jinja2
+python-dotenv
+# Required for FastAPI Form(...) fields (multipart form parsing)
+python-multipart

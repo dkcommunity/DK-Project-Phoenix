@@ -1,0 +1,183 @@
+dofile("../script/zone/Tiffauges/Tiffauges1F_Restrict.lua")
+dofile("../script/zone/Tiffauges/Tiffauges1F_R_MonsterInfo.lua")
+dofile("../script/zone/Tiffauges/Tiffauges1F_Util.lua")
+
+MonsterList =
+{
+	{
+		SummonMonsterInfo = BalBerithInfo,
+		MaxMonsterCount = 50
+	},
+	{
+		SummonMonsterInfo = BerithInfo,
+		MaxMonsterCount = 25
+	},
+	{
+		SummonMonsterInfo = ValkyrjaInfo,
+		MaxMonsterCount = 40
+	}
+}
+
+MonsterCount = {}
+
+function OnInitializeVariables(ZoneCreateInfo)
+
+	ZoneCreateInfo.Name = "Tiffauges1F_R"
+	ZoneCreateInfo.TemplateZoneID = 1801
+
+	ZoneCreateInfo.StartPosX = 128
+	ZoneCreateInfo.StartPosY = 146
+
+	-- indivisual(개인), party(파티), lobby(로비, 로비에 들어간 후 참여)
+	ZoneCreateInfo.EntranceType = "indivisual"
+	ZoneCreateInfo.StaticZone = true
+	
+	--  아무도 없는 상태에서 최대 지속 시간 
+	ZoneCreateInfo.EmptyTimeOut = 30 -- 15 sec
+	
+end
+
+function OnInitialize()
+	
+	-- 이계 던전 생성
+	DEScriptZone:CreateInstanceDoungeon("Tiffauges/Tiffauges1F_O")
+	
+	-- 현세 던전 생성 설정
+	if GetRace() == "Slayer" then
+		DEScript:WriteIntegerOnWhiteBoard("Tiffauges.1F.EnterSlayer", 1)
+	end
+	if GetRace() == "Vampire" then
+		DEScript:WriteIntegerOnWhiteBoard("Tiffauges.1F.EnterVampire", 1)
+	end
+	if GetRace() == "Ousters" then
+		DEScript:WriteIntegerOnWhiteBoard("Tiffauges.1F.EnterOusters", 1)
+	end
+	
+	for index, MonsterInfo in pairs(MonsterList) do
+		AddMonsterInfo = MonsterInfo.SummonMonsterInfo
+		
+		RegenMonsters(AddMonsterInfo.MType)
+	end
+	
+	DEScriptZone:SetTimer(1, 1000 * 5, 1)
+	
+end
+
+function OnTerminate()
+	
+end
+
+function OnAttackCreature(AttackerCreature, DefenderCreature)
+	
+end
+
+function OnKillCreature(AttackerCreature, DeadCreature)
+
+	if DEScript:IsMonster(DeadCreature) then
+
+		if MonsterCount[DeadCreature.MType] ~= nil then
+			MonsterCount[DeadCreature.MType] = MonsterCount[DeadCreature.MType] - 1
+		end
+		
+		RegenMonsters(DeadCreature.MType)
+		
+	end	
+end
+
+function OnAddMonster(Monster)
+
+	EffectTranslucencyCreateInfo =
+	{
+		EffectCastCreature = nil,
+		
+		EffectClass = 586,
+		
+		NextTime = 0,
+		Deadline = 99999999
+	}
+
+	Monster._pCreature = Monster._pMonster
+	DEScriptZone:AddEffectToCreature(EffectTranslucencyCreateInfo, Monster)	
+	
+	if MonsterCount[Monster.MType] == nil then
+		MonsterCount[Monster.MType] = 1
+	else
+		MonsterCount[Monster.MType] = MonsterCount[Monster.MType] + 1
+	end 
+end
+
+function OnResurrectCreature(CreatureInfo, ZoneCoordInfo)
+	
+	ZoneCoordInfo.ZoneID = DEScriptZone:GetZoneID()
+	ZoneCoordInfo.X = 125
+	ZoneCoordInfo.Y = 136
+	
+	return true;
+	
+end
+
+function OnSay(CreatureInfo, Mesg)
+
+	if DEScript:IsGod(CreatureInfo) == false then
+		return true
+	end
+	 
+	if Mesg == "*go OtherWorld" then
+		OnWarpZone(CreatureInfo)
+		
+		return false
+	elseif Mesg == "*command GetWorldStat" then
+		OtherWorldOpenStat = DEScript:ReadIntegerOnWhiteBoard("Tiffauges.1F.OpenStat", 0)
+		
+		if OtherWorldOpenStat == 0 then
+			DEScriptZone:SendSystemMessage(CreatureInfo, 0, "과거가 닫혀 있습니다.")
+		else
+			DEScriptZone:SendSystemMessage(CreatureInfo, 0, "과거가 열려 있습니다.")
+		end
+	
+		return false
+	end
+	
+	return true
+end
+
+function OnTimer(TimerID)
+	if TimerID == 1 then
+		if DEScript:ReadIntegerOnWhiteBoard("Tiffauges.1F.Open", 0) == 1 then
+			DEScriptZone:KillTimer(1)
+				
+			OnTraverseCreature = NotifyWarpToWorld
+			DEScriptZone:TraverseCreature()
+			
+			DEScriptZone:SetTimer(2, 1000 * 15, 1)
+		end
+	end
+		
+	if TimerID == 2 then
+		DEScriptZone:KillTimer(2)
+	
+		OnTraverseCreature = OnWarpZone
+		DEScriptZone:TraverseCreature()
+		
+		-- 이계 이동 설정
+		if GetRace() == "Slayer" then
+			DEScript:WriteIntegerOnWhiteBoard("Tiffauges.1F.EnterSlayer", 2)
+		end
+		if GetRace() == "Vampire" then
+			DEScript:WriteIntegerOnWhiteBoard("Tiffauges.1F.EnterVampire", 2)
+		end
+		if GetRace() == "Ousters" then
+			DEScript:WriteIntegerOnWhiteBoard("Tiffauges.1F.EnterOusters", 2)
+		end
+		
+		DEScriptZone:SetTimer(1, 1000 * 5, 1)
+	end
+end
+
+function OnWarpZone(Creature)
+	--print("티포주 1F 현세->이계 이동중~~~~~")
+
+	-- 현세 -> 이계 이동시킴
+    WarpZoneID = DEScriptZone:CreateInstanceDoungeon("Tiffauges/Tiffauges1F_O")
+	DEScriptZone:TransportCreature(Creature, WarpZoneID, Creature.X, Creature.Y)
+end

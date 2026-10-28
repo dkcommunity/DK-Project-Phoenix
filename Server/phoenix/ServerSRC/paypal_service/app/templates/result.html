@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Phoenix — {{ title }}</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d0f14; color: #d8d8d8;
+    font-family: "Segoe UI", Arial, sans-serif;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .box {
+    background: #161a22; border: 1px solid #2a2f3a; border-radius: 10px;
+    padding: 36px 32px; max-width: 480px; width: 100%; text-align: center;
+  }
+  .box h1 { font-size: 1.3rem; letter-spacing: 1px; margin-bottom: 14px; }
+  .box p { color: #b8bec9; font-size: .95rem; line-height: 1.55; }
+  .success { border-color: #3f9d63; }
+  .success h1 { color: #5fce8a; }
+  .error { border-color: #a33; }
+  .error h1 { color: #e06c6c; }
+  .info { border-color: #d4af37; }
+  .info h1 { color: #d4af37; }
+</style>
+</head>
+<body>
+  <div class="box {{ state }}">
+    <h1>{{ title }}</h1>
+    <p>{{ message }}</p>
+  </div>
+</body>
+</html>

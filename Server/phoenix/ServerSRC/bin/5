@@ -1,0 +1,4 @@
+#! /bin/sh
+strip loginserver
+strip gameserver
+strip sharedserver

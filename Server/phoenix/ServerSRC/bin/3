@@ -1,0 +1,4 @@
+#!/bin/sh
+#./daemonctl ./gameserver -f ../conf/exceal96-gameserver.conf &
+
+./gameserver -f ../conf/gameserver.conf  &

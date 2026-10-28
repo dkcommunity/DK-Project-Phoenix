@@ -1,0 +1,39 @@
+# Phoenix boot starter for the existing game stack script.
+# F:\ master: ServerSRC/tools/phoenix-game-servers.service
+# Live script: /home/phoenix/phoenix/start-servers.sh
+#
+# Install (enable-only if login/shared/game already run):
+#   sudo cp phoenix-game-servers.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable phoenix-game-servers.service
+# Do NOT systemctl start / enable --now while the stack is live:
+# start-servers.sh with no args is CMD=all = kill_all then start
+# sharedserver, loginserver, gameserver (in that order) and wait for ready.
+#
+# Type=oneshot: the script nohup's the three binaries and exits.
+# RemainAfterExit=yes: unit stays active after the starter returns.
+# Restart=no: this unit is a boot starter; GS is not babysat here.
+# KillMode=process: a starter timeout/stop must not SIGTERM the nohup'd daemons.
+# ProtectHome is intentionally unset (script and binaries live under /home/phoenix).
+
+[Unit]
+Description=Phoenix start-servers.sh (shared + login + game)
+Documentation=file:///home/phoenix/phoenix/start-servers.sh
+After=mysql.service network-online.target
+Wants=mysql.service network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Restart=no
+User=phoenix
+Group=phoenix
+WorkingDirectory=/home/phoenix/phoenix
+ExecStart=/home/phoenix/phoenix/start-servers.sh
+TimeoutStartSec=360
+KillMode=process
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

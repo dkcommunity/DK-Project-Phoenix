@@ -1,0 +1,5 @@
+#!/bin/sh
+killall daemonctl
+killall loginserver 
+killall gameserver
+killall sharedserver

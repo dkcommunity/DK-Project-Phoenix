@@ -1,0 +1,4 @@
+#!/bin/sh
+rm -rf *.txt
+rm -rf *.log
+rm -rf core

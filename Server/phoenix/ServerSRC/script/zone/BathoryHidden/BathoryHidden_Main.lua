@@ -1,0 +1,699 @@
+dofile("../script/zone/BathoryHidden/BathoryHidden_MonsterInfo.lua")
+
+function OpenGate(BlockedPos)
+
+	for index, Element in ipairs(BlockedPos) do
+		DEScriptZone:ClearBlocked(Element[1],Element[2])
+		
+		if Element[3] ~= nil then
+			DEScriptZone:RemoveEffect(Element[3])
+		end
+	end
+end
+
+function CloseGate(BlockedPos)
+
+	EffectCreateInfo =
+	{
+		-- CastCreature = CastCreature,
+		EffectCastCreature = nil,
+		
+		EffectClass = 120,
+		
+		PosX = 0,
+		PosY = 0,
+		
+		NextTime = 0,
+		Deadline = 99999999
+	}
+
+	for index, Element in ipairs(BlockedPos) do
+		DEScriptZone:SetBlocked(Element[1],Element[2])
+		
+		EffectCreateInfo.PosX = Element[1]
+		EffectCreateInfo.PosY = Element[2]
+		
+		Element[3] = DEScriptZone:AddEffectToTile(EffectCreateInfo)
+	end
+ 	
+end
+
+function CheckMissionAllKill(DeadCreatureObjectID, MissionMonsterList)
+	for index, ObjectID in pairs(MissionMonsterList) do
+		if ObjectID == DeadCreatureObjectID then
+			table.remove(MissionMonsterList, index)
+		end
+	end
+	
+	if table.maxn(MissionMonsterList) == 0 then
+		return true
+	end
+	
+	return false
+end
+
+
+function InstallTrap(TrapBaseX, TrapBaseY, TrapNextTime, TrapDeadLine)
+	EffectCreateInfo =
+	{
+		EffectCastCreature = nil,
+		
+		EffectClass = 585,
+		
+		PosX = TrapBaseX,
+		PosY = TrapBaseY,
+		
+		NextTime = TrapNextTime,
+		Deadline = TrapDeadLine
+	}
+	
+	DEScriptZone:AddEffectToTile(EffectCreateInfo)
+
+end
+
+function SendRemainTime(Creature, remainTime, timerDesc)
+	if timerDesc == nil then
+		timerDesc = "히든 바토리 레어"
+	end
+	
+	DEScriptZone:SendSystemMessage(Creature, 7, timerDesc.." ["..remainTime.."]")
+end
+
+EffectShakeCreateInfo =
+{
+	EffectClass = 0,
+	Duration = 15 * 1000
+}
+
+EffectLightCreateInfo =
+{
+	EffectClass = 2,
+	Duration = 0
+}
+		
+function OnBroadcastEffectShakeToScreen(CreatureInfo)
+	DEScriptZone:AddEffectToScreen(EffectShakeCreateInfo, CreatureInfo)
+end
+
+function OnBroadcastEffectLightToScreen(CreatureInfo)
+	DEScriptZone:AddEffectToScreen(EffectLightCreateInfo, CreatureInfo)
+end
+
+function OnSendRemainTime100(CreatureInfo)
+	SendRemainTime(CreatureInfo, 10 * 100, "히든 바토리 레어 종료")	-- 100 초
+end
+
+function OnWarpToGetOut(Creature)
+
+	if DEScript:IsSlayer(Creature) then
+		WarpID = 12
+		WarpX = 209
+		WarpY = 104
+	elseif DEScript:IsVampire(Creature) then
+		WarpID = 1003
+		WarpX = 62
+		WarpY = 64
+	elseif DEScript:IsOusters(Creature) then
+		WarpID = 1311
+		WarpX = 24
+		WarpY = 73	
+	end
+	
+	DEScriptZone:TransportCreature(Creature, 
+		WarpID, 
+		WarpX + math.random(-7, 7), 
+		WarpY + math.random(-7, 7)
+	)
+end
+
+MissionRoom1_BlockedPos =
+{
+	{19,38},
+	{20,38},
+	{20,37},
+	{21,36},
+	
+	{23,34},
+	{24,34},
+	{24,33},
+	{25,32},	
+	
+	{28, 29},
+	{29, 28},
+	{29, 29},
+	
+	{32, 25},
+	{33, 24},
+	{33, 25}
+}
+
+MissionRoom2_BlockedPos =
+{
+	{31,50},
+	{32,49},
+
+	{35,46},
+	{36,45},
+	
+	{39,42},
+	{39,42},
+	{40,41},
+	
+	{44,37}
+
+}
+
+MissionRoom1_MonsterPos = 
+{
+	{
+		MonsterInfo = ChiefShamanOaf,
+		MonsterPos = 
+		{
+			{23,14},
+			{31,22},
+			{25,28},
+			{19,19},
+			{12,26},
+			{17,33}
+		}
+	},
+	{
+		MonsterInfo = ChiefMumRimmon_1,
+		MonsterPos =
+		{
+			{22,14},
+			{30,23},
+			{24,27},
+			{20,20},
+			{13,27},
+			{18,23}
+		}
+	},
+	{
+		MonsterInfo = Pusca,
+		MonsterPos =
+		{
+			{21,15},
+			{31,23},
+			{23,29},
+			{18,20},
+			{12,28},
+			{16,24}
+		}
+	},
+	{
+		MonsterInfo = Trasla,
+		MonsterPos =
+		{
+			{22,15},
+			{32,24},
+			{24,30},
+			{19,21},
+			{11,27},
+			{18,32}
+		}
+	},
+	{
+		MonsterInfo = NodCopila_1,
+		MonsterPos =
+		{
+			{23,15},
+			{32,24},
+			{25,30},
+			{20,21},
+			{13,25},
+			{16,32}
+		}
+	},
+	{
+		MonsterInfo = Razor_1,
+		MonsterPos =
+		{
+			{23,16},
+			{30,24},
+			{26,29},
+			{21,20},
+			{13,28},
+			{17,35}
+		}
+	}
+}
+
+MissionRoom2_MonsterPos = 
+{
+	{
+		MonsterInfo = ChiefGiantOs,
+		MonsterPos = 
+		{
+			{37,31},
+			{32,36}
+		}
+	},
+	{
+		MonsterInfo = ChiefMountCrag,
+		MonsterPos = 
+		{
+			{33,31},
+			{35,39},
+			{38,36}
+		}
+	}
+}
+
+MissionRoom3_MonsterPos = 
+{
+	{
+		MonsterInfo = ChiefLichJel,
+		MonsterPos = 
+		{
+			{48,43}
+		}
+	},
+	{
+		MonsterInfo = ChiefMumRimmon_2,
+		MonsterPos = 
+		{
+			{43,43},
+			{50,50},
+			{41,50}
+		}
+	},
+	{
+		MonsterInfo = NodCopila_2,
+		MonsterPos = 
+		{
+			{44,42},
+			{42,44},
+			{40,49},
+			{42,51},
+			{49,49},
+			{51,51}
+		}
+	},
+	{
+		MonsterInfo = Razor_2,
+		MonsterPos = 
+		{
+			{42,42},
+			{44,44},
+			{42,49},
+			{40,51},
+			{51,49},
+			{49,51}
+		}
+	}
+}
+
+MissionRoom4_MonsterPos = 
+{
+	{
+		MonsterInfo = RuinGuardian,
+		MonsterPos = 
+		{
+			{45,55},
+			{48,47}
+		}
+	},
+	{
+		MonsterInfo = GenuineEstroider,
+		MonsterPos = 
+		{
+			{47,42},
+			{47,44},
+			{49,44}
+		}
+	},
+	{
+		MonsterInfo = LordAbyss,
+		MonsterPos = 
+		{
+			{46,45},
+			{44,43},
+			{48,48}
+		}
+	}
+}
+	
+MissionRoom1MonsterList = {}
+MissionRoom2MonsterList = {}
+MissionRoom3MonsterList = {}
+MissionRoom4MonsterList = {}
+
+GenuineBathoryInfo = nil
+
+WaitingTimeAfterMissionClear = 100	-- 클리어 이후 대기 최대 시간
+
+CurrentMissionRoom = 0
+DoungeonStartTime = 0
+--DoungeonPlayTime = 60 * 60	-- 60 minutes * 60 seconds
+DoungeonPlayTime = 60 * 5	-- 60 minutes * 60 seconds
+
+function StartMissionRoom1()
+
+	CurrentMissionRoom = 1
+	
+	for i, MonsterArrangeInfo in pairs(MissionRoom1_MonsterPos) do
+		AddMonsterInfo = MonsterArrangeInfo.MonsterInfo
+		
+		for index, MonsterPos in ipairs(MonsterArrangeInfo.MonsterPos) do
+			AddMonsterInfo.X = MonsterPos[1]
+			AddMonsterInfo.Y = MonsterPos[2]
+			
+			AddedMonster = DEScriptZone:AddMonster(AddMonsterInfo)
+			
+			table.insert(MissionRoom1MonsterList, AddedMonster.ObjectID)
+		end	
+	end
+end
+
+function StartMissionRoom2()
+	OpenGate(MissionRoom1_BlockedPos)
+	
+	CurrentMissionRoom = 2
+		
+	for i, MonsterArrangeInfo in pairs(MissionRoom2_MonsterPos) do
+		AddMonsterInfo = MonsterArrangeInfo.MonsterInfo
+		
+		for index, MonsterPos in ipairs(MonsterArrangeInfo.MonsterPos) do
+			AddMonsterInfo.X = MonsterPos[1]
+			AddMonsterInfo.Y = MonsterPos[2]
+			
+			AddedMonster = DEScriptZone:AddMonster(AddMonsterInfo)
+			
+			table.insert(MissionRoom2MonsterList, AddedMonster.ObjectID)
+		end	
+	end
+	
+end
+
+function StartMissionRoom3()
+	OpenGate(MissionRoom2_BlockedPos)
+	
+	CurrentMissionRoom = 3
+	
+	for i, MonsterArrangeInfo in pairs(MissionRoom3_MonsterPos) do
+		AddMonsterInfo = MonsterArrangeInfo.MonsterInfo
+		
+		for index, MonsterPos in ipairs(MonsterArrangeInfo.MonsterPos) do
+			AddMonsterInfo.X = MonsterPos[1]
+			AddMonsterInfo.Y = MonsterPos[2]
+			
+			AddedMonster = DEScriptZone:AddMonster(AddMonsterInfo)
+			
+			table.insert(MissionRoom3MonsterList, AddedMonster.ObjectID)
+		end	
+	end
+	
+end
+
+function SummonMissionRoom4()
+	
+	if ( table.getn(MissionRoom4MonsterList) > 200 ) then
+		return
+	end
+	
+	for i, MonsterArrangeInfo in pairs(MissionRoom4_MonsterPos) do
+		AddMonsterInfo = MonsterArrangeInfo.MonsterInfo
+		
+		for index, MonsterPos in ipairs(MonsterArrangeInfo.MonsterPos) do
+			if GenuineBathoryInfo == nil then
+				AddMonsterInfo.X = MonsterPos[1]
+				AddMonsterInfo.Y = MonsterPos[2]			
+			else
+				AddMonsterInfo.X = GenuineBathoryInfo.X + math.random(0, 3) - 3
+				AddMonsterInfo.Y = GenuineBathoryInfo.Y + math.random(0, 3) - 3
+			end
+			
+			AddedMonster = DEScriptZone:AddMonster(AddMonsterInfo)
+			
+			table.insert(MissionRoom4MonsterList, AddedMonster.ObjectID)
+		end	
+	end
+end
+
+function StartMissionRoom4()
+	CurrentMissionRoom = 4
+
+	SummonMissionRoom4()
+
+	AddMonsterInfo = CloneGussion
+	AddMonsterInfo.X = 49
+	AddMonsterInfo.Y = 45
+	
+	AddedMonster = DEScriptZone:AddMonster(CloneGussion)	
+	table.insert(MissionRoom4MonsterList, AddedMonster.ObjectID)
+
+	AddMonsterInfo = GenuineBathory
+	AddMonsterInfo.X = 48
+	AddMonsterInfo.Y = 43
+	
+	GenuineBathoryInfo = DEScriptZone:AddMonster(AddMonsterInfo)
+	table.insert(MissionRoom4MonsterList, GenuineBathoryInfo.ObjectID)
+	
+	DEScriptZone:SetTimer(2, 1000 * 30, 1)	-- 보스 있는 동안 부하 몹 소환
+		
+end
+
+function FinishHiddenStage()
+
+	OnTraverseCreature = OnSendRemainTime100
+	DEScriptZone:TraverseCreature()
+			
+	DEScriptZone:SetTimer(10, 1000 * 1, 1)
+end
+
+function OnInitialize()
+	
+	CloseGate(MissionRoom1_BlockedPos)
+	CloseGate(MissionRoom2_BlockedPos)
+	
+	DoungeonStartTime = DEScript:GetCurrentTime()
+
+	DEScriptZone:SetTimer(1, 1000 * 15, 1)
+	DEScriptZone:SetTimer(3, 1000 * DoungeonPlayTime, 1)
+	
+end
+
+function OnTerminate()
+	
+end
+
+function OnBeforeEnterZone(Creature)
+
+	PlayerLevel = DEScript:GetLevel(Creature)
+	AdvLevel = DEScript:GetAdvancementClassLevel(Creature)
+	
+	if (PlayerLevel + AdvLevel ) <= 100 then
+		DEScriptZone:SendSystemMessage(Creature, 0, "Your level is too low to enter.")
+		
+		return false
+	end
+	
+	HaveItemInfo1 = 
+	{
+		-- 손상된 가죽
+		ItemClass = 91,
+		ItemType = 5,
+		ItemCount = 20
+	}
+	
+	HaveItemInfo2 = 
+	{
+		-- 바토리 펜던트
+		ItemClass = 46,
+		ItemType = 1,
+		ItemCount = 1
+	}
+	
+	if DEScriptZone:HaveItem(Creature, HaveItemInfo1) and DEScriptZone:HaveItem(Creature, HaveItemInfo2) then
+		TakeItemInfo1 = {}
+		TakeItemInfo1 = HaveItemInfo1
+		
+		TakeItemInfo2 = {}
+		TakeItemInfo2 = HaveItemInfo2
+		
+		DEScriptZone:TakeItem(Creature, TakeItemInfo1)
+		DEScriptZone:TakeItem(Creature, TakeItemInfo2)
+		
+		return true
+	end
+	
+	DEScriptZone:SendSystemMessage(Creature, 0, "You need more item for enter.")
+	
+	return false;	
+end
+
+function OnAfterEnterZone(Creature)
+	DEScriptZone:AddEffectToScreen(EffectLightCreateInfo, Creature)
+
+	DoungeonRemainTime = DoungeonPlayTime - ( DEScript:GetCurrentTime() - DoungeonStartTime )
+	
+	SendRemainTime(Creature, DoungeonRemainTime * 10)
+	
+end
+
+function OnBeforeLeaveZone(Creature)
+	SendRemainTime(Creature, 0)
+end
+
+function OnAfterLeaveZone(Creature)
+
+end
+
+function OnAttackCreature(AttackerCreature, DefenderCreature)
+	if GenuineBathoryInfo ~= nil then
+		if DefenderCreature ~= nil and DefenderCreature.ObjectID == GenuineBathoryInfo.ObjectID then
+			GenuineBathoryInfo.X = DefenderCreature.X
+			GenuineBathoryInfo.Y = DefenderCreature.Y
+		end
+	end
+end
+
+function OnKillCreature(AttackerCreature, DeadCreature)
+
+	if CurrentMissionRoom == 1 then
+		if CheckMissionAllKill(DeadCreature.ObjectID, MissionRoom1MonsterList) then
+		
+			StartMissionRoom2()
+		end
+	end
+	
+	if CurrentMissionRoom == 2 then
+		if CheckMissionAllKill(DeadCreature.ObjectID, MissionRoom2MonsterList) then
+		
+			StartMissionRoom3()
+		end
+	end
+	
+	if CurrentMissionRoom == 3 then
+		if CheckMissionAllKill(DeadCreature.ObjectID, MissionRoom3MonsterList) then
+		
+			OnTraverseCreature = OnBroadcastEffectShakeToScreen
+			DEScriptZone:TraverseCreature()
+		
+			StartMissionRoom4()
+		end
+	end
+	
+	if CurrentMissionRoom == 4 then
+		if CheckMissionAllKill(DeadCreature.ObjectID, MissionRoom4MonsterList) then
+
+			OnTraverseCreature = OnSendRemainTime100
+			DEScriptZone:TraverseCreature()
+					
+			DEScriptZone:SetTimer(10, 1000 * 1, 1)
+		end
+	end
+
+	if CurrentMissionRoom == 4 and GenuineBathoryInfo ~= nil and GenuineBathoryInfo.ObjectID == DeadCreature.ObjectID then
+		DEScriptZone:KillTimer(2)
+		
+		GenuineBathoryInfo = nil
+	end
+end
+
+function OnAddMonster(Monster)
+
+end
+
+function OnResurrectCreature(CreatureInfo, ZoneCoordInfo)
+	
+	ZoneCoordInfo.ZoneID = DEScriptZone:GetZoneID()
+	ZoneCoordInfo.X = 20
+	ZoneCoordInfo.Y = 20
+	return true;
+
+	--return false;	-- 설정된 부활 위치로 이동
+	
+end
+
+function OnSay(CreatureInfo, Mesg)
+
+	return true
+end
+
+function OnTimer(TimerID)
+	if TimerID == 1 then
+		DEScriptZone:KillTimer(1)
+		
+		StartMissionRoom1()
+	end
+	
+	if TimerID == 2 then
+		SummonMissionRoom4()
+	end
+
+	if TimerID == 3 then
+		-- 시간 초과되어 던전 밖으로 보냄
+		OnTraverseCreature = OnWarpToGetOut
+		DEScriptZone:TraverseCreature()
+	end
+		
+	if TimerID == 10 then
+		WaitingTimeAfterMissionClear = WaitingTimeAfterMissionClear - 1
+		
+		if WaitingTimeAfterMissionClear == 35 then
+			DEScriptZone:SetTimer(11, 1000 * 5, 1)
+		end
+		
+		if WaitingTimeAfterMissionClear == 10 then
+			DEScriptZone:SetTimer(12, 1000 * 1, 1)
+		end
+		
+		if WaitingTimeAfterMissionClear <= 0 then
+			OnTraverseCreature = OnWarpToGetOut
+			DEScriptZone:TraverseCreature()
+		
+			DEScriptZone:KillTimer(10)
+			DEScriptZone:KillTimer(11)
+			DEScriptZone:KillTimer(12)
+		end
+	end
+	
+	if TimerID == 11 then
+		OnTraverseCreature = OnBroadcastEffectShakeToScreen
+		DEScriptZone:TraverseCreature()	
+	end
+	
+	if TimerID == 12 then
+		
+		for i = 0, 30 do
+			InstallTrap(math.random(5, 50), math.random(10,60), math.random(0, 30), 30)
+		end 
+	end
+	
+	
+end
+
+function OnUseItemInGear(Creature, ItemClass, ItemType)
+	return true
+end
+
+function OnUseItemInQuick(Creature, ItemClass, ItemType)
+	return true
+end
+
+function OnUseItemInInventory(Creature, ItemClass, ItemType)
+	return true
+end
+
+function OnUseInventorySkill(Creature, SkillType)
+	return true
+end
+
+function OnUseObjectSkill(Creature, SkillType)
+	return true
+end
+
+function OnUseNamedSkill(Creature, SkillType)
+	return true
+end
+
+function OnUseSelfSkill(Creature, SkillType)
+	return true
+end
+
+function OnUseTileSkill(Creature, SkillType)
+	return true
+end
+
